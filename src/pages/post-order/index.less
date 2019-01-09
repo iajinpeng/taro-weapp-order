@@ -1,0 +1,335 @@
+@import "../../minxin";
+
+.post-order{
+  .scroll-view{
+    margin-top: 40px;
+    height: ~"calc(100vh - 40px)";
+    box-sizing: border-box;
+    &.iphonex{
+      padding-bottom: 60px;
+    }
+    .content{
+      box-sizing: border-box;
+      padding: 0 20px 136px;
+      .order-type{
+        .tab{
+          height: 96px;
+          line-height: 96px;
+          font-size: 34px;
+          text-align: center;
+          display: flex;
+          align-items: flex-end;
+          font-weight: bold;
+          .wrap{
+            width: 50%;
+            background: #fff;
+            border-radius: 20px 20px 0 0;
+            height: 96px;
+            color: @c-666;
+            image{
+              width: 44px;
+              height: 40px;
+              margin-right: 32px;
+              position: relative;
+              top: 10px;
+            }
+            &.un-active{
+              background: @c-ccc;
+              line-height: 80px;
+              height: 80px;
+              border-radius: 20px 0 20px 0;
+              font-weight: normal;
+            }
+          }
+          .wrap-2{
+            image{
+              height: 34px;
+              top: 8px;
+            }
+            &.un-active{
+              border-radius: 0 20px 0 20px;
+            }
+          }
+        }
+        .info{
+          background: #fff;
+          padding: 0 32px 40px;
+          border-radius: 0 0 20px 20px;
+          .name{
+            font-size: 38px;
+            padding: 40px 0;
+            font-weight: bold;
+            color: @c-40;
+            width: 100%;
+          }
+          .time{
+            font-size: 30px;
+            display: flex;
+            justify-content: space-between;
+            color: @c-666;
+            .c-40{
+              color: @c-40;
+            }
+            image{
+              width: 32px;
+              height: 28px;
+              margin-left: 24px;
+              position: relative;
+              top: 6px;
+            }
+          }
+          .mobile{
+            margin-top: 42px;
+            display: flex;
+            align-items: center;
+            font-size: 26px;
+            color: @c-999;
+            image{
+              width: 30px;
+              height: 50px;
+            }
+            input{
+              flex: 1;
+              margin-left: 32px;
+            }
+          }
+          .btn-box{
+            padding-top: 50px;
+            display: flex;
+            justify-content: space-between;
+            button{
+              width: 278px;
+              height: 88px;
+              line-height: 88px;
+              border-radius: 44px;
+              font-size: 32px;
+              background: #f2f2f2;
+              color: @c-999;
+              &.active{
+                color: #fff;
+              }
+              image{
+                margin-right: 20px;
+              }
+              .icon-drink{
+                width: 40px;
+                height: 50px;
+                transform: translateY(12px);
+              }
+              .icon-bag{
+                width: 38px;
+                height: 38px;
+                transform: translateY(12px);
+              }
+            }
+          }
+          .address{
+            height: 238px;
+            padding-top: 40px;
+            &-none{
+              font-size: 36px;
+              color: @c-999;
+              font-weight: bold;
+            }
+            &-msg{
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              color: @c-40;
+              .desc{
+                font-size: 36px;
+                font-weight: bold;
+              }
+              .user{
+                font-size: 24px;
+                margin-top: 30px;
+                text:first-child{
+                  margin-right: 30px;
+                }
+              }
+            }
+          }
+        }
+      }
+
+      .block{
+        .title{
+          height: 92px;
+          font-size: 30px;
+          line-height: 110px;
+          text-indent: 20px;
+          color: @c-666;
+        }
+        &-content{
+          padding: 30px 24px;
+          border-radius: 20px;
+          background: #fff;
+          .good{
+            display: flex;
+            margin-bottom: 54px;
+            .pic{
+              width: 116px;
+              height: 116px;
+              background: @default-color;
+              border-radius: 12px;
+              margin-right: 18px;
+            }
+            .info{
+              width: 280px;
+              display: flex;
+              flex-wrap: wrap;
+              align-items: stretch;
+              .name{
+                font-size: 28px;
+                font-weight: bold;
+                color: @c-666;
+              }
+              .standard{
+                font-size: 24px;
+                color: @c-999;
+              }
+            }
+            .num{
+              margin: 0 78px 0 54px;
+              line-height: 2.2;
+              color: @c-666;
+            }
+            .price{
+              display: flex;
+              flex-wrap: wrap;
+              align-items: flex-end;
+              justify-content: flex-end;
+              padding-bottom: 40px;
+              .pre{
+                font-size: 28px;
+                margin-bottom: 20px;
+                text-decoration: line-through;
+                color: @c-999;
+                text{
+                  font-size: 24px;
+                }
+              }
+              .cur{
+                font-size: 36px;
+                font-weight: bold;
+                color: @c-666;
+                text{
+                  font-size: 28px;
+                  font-weight: normal;
+                }
+              }
+            }
+          }
+          .pack-fee{
+            display: flex;
+            color: @c-666;
+            font-size: 30px;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 54px;
+            font-weight: bold;
+            .price{
+              font-size: 36px;
+              text{
+                font-size: 28px;
+                font-weight: normal;
+              }
+            }
+          }
+          .ticket{
+            display: flex;
+            justify-content: space-between;
+            font-size: 30px;
+            color: @c-666;
+            font-weight: bold;
+            image{
+              width: 36px;
+              height: 30px;
+              margin-right: 18px;
+              transform: translateY(6px);
+            }
+            .handle{
+              font-size: 28px;
+              color: @c-999;
+            }
+          }
+
+          .subtotal{
+            font-size: 30px;
+            color: @c-666;
+            text-align: right;
+            padding: 50px 0 10px;
+            .price{
+              font-size: 42px;
+              font-weight: bold;
+              text{
+                font-size: 28px;
+                font-weight: normal;
+              }
+            }
+          }
+          &.memo{
+            padding: 0;
+            height: 172px;
+            position: relative;
+            .textarea{
+              width: 100%;
+              height: 100%;
+              padding: 30px 24px;
+              box-sizing: border-box;
+              font-size: 28px;
+              color: @c-ccc;
+              line-height: 1.2;
+            }
+            .textarea-placeholder{
+              color: @c-ccc;
+            }
+            &>text{
+              position: absolute;
+              bottom: 24px;
+              right: 25px;
+              font-size: 26px;
+              color: @c-ccc;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .footer{
+    height: 96px;
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    &.iphonex{
+      bottom: 60px;
+    }
+    .price{
+      flex: 1;
+      font-size: 30px;
+      background: @c-40;
+      border-top-left-radius: 20px;
+      color: #fff;
+      display: flex;
+      justify-content: space-between;
+      line-height: 96px;
+      padding: 0 40px 0 32px;
+      .total{
+        text{
+          font-size: 40px;
+        }
+      }
+    }
+    button{
+      width: 208px;
+      height: 100%;
+      font-size: 36px;
+      border-radius: 0 20px 0 0;
+      font-weight: bold;
+      color: #fff;
+    }
+  }
+}

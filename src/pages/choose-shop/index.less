@@ -1,0 +1,205 @@
+@import "../../minxin";
+@import "../../app";
+
+.choose-page{
+  padding-top: 30px;
+  .header{
+    display: flex;
+    height: 68px;
+    line-height: 68px;
+    .city{
+      font-size: 30px;
+      padding: 0 24px;
+      .transition(400ms);
+      min-width: 72px;
+      color: @c-666;
+      .at-icon{
+        position: relative;
+        top: -1px;
+      }
+      &.hide-in{
+        width: 0;
+        min-width: 0;
+        padding: 0;
+        overflow: hidden;
+      }
+    }
+    .search-box{
+      flex: 1;
+      background: #ffffff;
+      border-radius: 34px;
+      margin: 0 20px;
+      padding: 0 10px 0 30px;
+      display: flex;
+      align-items: center;
+      &.full{
+        animation: search linear 200ms;
+      }
+      .search-icon{
+        width: 36px;
+        height: 36px;
+        color: @c-999;
+      }
+      input, .input-alias{
+        font-size: 30px;
+        margin: 2px 20px 0 30px;
+        flex: 1;
+      }
+      .placeholder, .input-alias{
+        color: @c-ccc;
+      }
+      .search-cancel{
+        padding: 0 30px 0 16px;
+      }
+      &.real-box{
+        animation: search linear 400ms;
+      }
+    }
+  }
+  .map{
+    width: 100%;
+    height: 480px;
+    margin-top: 30px;
+  }
+  .hide-map{
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    Text{
+      content: '';
+      display: inline-block;
+      width: 100px;
+      height: 10px;
+      background: @c-bf;
+    }
+  }
+  .shop-list{
+    &.iphonex{
+      height: ~"calc(100vh - 728px)";
+      &.long{
+        height: ~"calc(100vh - 218px)";
+      }
+    }
+    &.long{
+      height: ~"calc(100vh - 148px)";
+    }
+    height: ~"calc(100vh - 658px)";
+    box-sizing: border-box;
+    .shop-item{
+      background: #fff;
+      border-radius: 10px;
+      padding: 24px 32px 32px;
+      margin: 0 20px 30px;
+      color: @c-666;
+      .title{
+        display: flex;
+        &>View{
+          flex: 1;
+          .name{
+            font-size: 30px;
+            margin-right: 26px;
+            font-weight: bold;
+            color: @c-40;
+          }
+          .tag{
+            font-size: 24px;
+            display: inline-block;
+            color: @c-40;
+            padding: 4px 10px;
+            border: 1px solid @c-bf;
+            border-radius: 8px;
+            margin-right: 26px;
+          }
+        }
+        .distance{
+          font-size: 22px;
+          margin-top: 12px;
+        }
+      }
+      .address{
+        margin: 24px 0;
+        font-size: 31px;
+      }
+      .info{
+        font-size: 24px;
+        &>view{
+          margin-bottom: 8px;
+        }
+      }
+      button{
+        margin-top: 24px;
+        height: 80px;
+        line-height: 80px;
+        border-radius: 40px;
+        font-size: 30px;
+        color: #fff;
+        font-weight: bold;
+        &[disabled]{
+          font-size: @c-999!important;
+          background: #E6E6E6!important;
+        }
+      }
+    }
+  }
+
+  .select-city{
+    margin-top: 30px;
+    height: ~"calc(100vh - 128px)";
+    .at-indexes__menu{
+      top: 59%;
+    }
+    .city-block{
+      background: #fff;
+      padding: 0 24px;
+      position: relative;
+      .title{
+        font-size: 26px;
+        padding: 30px 0;
+      }
+      .item{
+        padding: 30px 0;
+        font-size: 32px;
+      }
+      .re-position{
+        font-size: 28px;
+        position: absolute;
+        right: 30px;
+        bottom: 30px;
+      }
+    }
+  }
+  .keyword-tips{
+    padding: 0 50px;
+    height: ~"calc(100vh - 98px)";
+    .item{
+      margin: 30px 0;
+      position: relative;
+      .name{
+        font-size: 32px;
+      }
+      .address{
+        font-size: 26px;
+      }
+      .distance{
+        position: absolute;
+        right: 80px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 24px;
+      }
+    }
+  }
+
+}
+
+@keyframes search {
+  from{
+    margin-left: 200px;
+  }
+  to{
+    margin-left: 20px;
+  }
+}
+
+

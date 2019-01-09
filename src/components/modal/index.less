@@ -1,0 +1,41 @@
+@import "../../minxin";
+@import "../../app";
+
+.modal-wrap{
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  background: rgba(0, 0, 0, .3);
+  left: 0;
+  top: 0;
+  opacity: 0;
+  transition: opacity 200ms ease-in;
+  visibility: hidden;
+  z-index: 101;
+  &.modal-fade{
+    opacity: 1;
+    visibility: visible;
+  }
+  .modal{
+    width: 630px;
+    background: #fff;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 20px;
+    padding: 36px 0 0;
+    .title{
+      font-size: 36px;
+      margin: 0 32px;
+      font-weight: bold;
+      color: @c-40;
+      .icon-close{
+        position: absolute;
+        top: 32px;
+        right: 26px;
+      }
+    }
+  }
+}
+

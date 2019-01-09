@@ -1,0 +1,193 @@
+@import "../../minxin";
+
+scroll-view{
+  height: ~"calc(100vh)";
+}
+.order-detail{
+  padding: 50px 36px 50px;
+  &.iphonex{
+    padding-bottom: 100px;
+  }
+  .status{
+    margin-bottom: 50px;
+    position: relative;
+    &-text{
+      font-size: 40px;
+      font-weight: bold;
+    }
+    &-memo{
+      font-size: 28px;
+      margin-top: 20px;
+      color: @c-666;
+      .take-meal{
+        color: @c-40;
+      }
+    }
+    &>button{
+      position: absolute;
+      top: 10px;
+      right: 0;
+      width: 240px;
+      height: 88px;
+      line-height: 88px;
+      border-radius: 44px;
+      font-size: 36px;
+      font-weight: bold;
+      color: #fff;
+    }
+  }
+  .btn{
+    display: flex;
+    margin: 40px 0;
+    justify-content: space-between;
+    button{
+      height: 88px;
+      line-height: 88px;
+      font-size: 36px;
+      border-radius: 44px;
+      width: 303px;
+      margin: 0;
+      &.ok{
+        background: @default-color;
+      }
+    }
+  }
+
+  .order-info{
+    background: #fff;
+    border-radius: 10px 10px 0 0;
+    box-shadow: 0 0 20px #ddd;
+    padding: 0 38px;
+    position: relative;
+
+    .gap{
+      .gap(0 42px);
+    }
+
+    .header{
+      display: flex;
+      justify-content: space-between;
+      font-size: 24px;
+      padding: 36px 0 30px;
+      height: 92px;
+      color: @c-999;
+      .name{
+        font-size: 36px;
+        font-weight: bold;
+        color: @c-40;
+      }
+      &>view{
+        height: 100%;
+        &>view:first-child{
+          height: 60px;
+        }
+        &:nth-child(2){
+          text-align: right;
+        }
+      }
+    }
+
+    .content{
+      .good{
+        padding: 20px 0;
+        .main{
+          display: flex;
+          justify-content: space-between;
+          color: @c-999;
+          .name{
+            width: 322px;
+            font-size: 32px;
+            color: @c-40;
+            font-weight: bold;
+          }
+          .price{
+            width: 300px;
+            text-align: right;
+            .pre{
+              text-decoration: line-through;
+              font-size: 24px;
+              color: @c-999;
+            }
+            .cur{
+              font-size: 32px;
+              margin-left: 27px;
+              color: @c-40;
+              text{
+                font-size: 26px;
+                color: @c-666;
+              }
+            }
+          }
+        }
+        .extra{
+          display: flex;
+          justify-content: space-between;
+          font-size: 28px;
+          margin-top: 16px;
+          color: @c-999;
+          .name{
+            width: 322px;
+          }
+          .num {
+            width: 300px;
+            text-align: right;
+          }
+        }
+
+      }
+      .other{
+        font-size: 28px;
+        display: flex;
+        justify-content: space-between;
+        height: 118px;
+        line-height: 130px;
+        border-bottom: 1px dashed rgba(230,230,230,1);
+        color: @c-666;
+        .price{
+          font-size: 24px;
+          font-weight: bold;
+          text{
+            font-weight: normal;
+          }
+        }
+      }
+    }
+
+    .info{
+      .item{
+        height: 98px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 28px;
+        color: @c-999;
+        &>text:first-child{
+          font-size: 32px;
+          color: @c-666;
+          font-weight: bold;
+        }
+      }
+    }
+
+    .footer{
+      height: 130px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 32px;
+      font-weight: bold;
+      color: @c-999;
+      .price{
+        font-size: 48px;
+        &>text{
+          font-size: 28px;
+          position: relative;
+          top: -10px;
+          margin-right: 10px;
+          font-weight: normal;
+          color: @c-999!important;
+        }
+      }
+    }
+  }
+}

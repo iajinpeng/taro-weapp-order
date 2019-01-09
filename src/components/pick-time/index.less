@@ -1,0 +1,80 @@
+
+@import "../../minxin";
+.mask{
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, .3);
+  z-index: 97;
+}
+.pick-time{
+  position: fixed;
+  width: 100%;
+  left: 0;
+  bottom: -100%;
+  z-index: 97;
+  .transition();
+  &.active{
+    bottom: 0;
+  }
+  .title{
+    text-align: center;
+    font-size: 28px;
+    height: 80px;
+    line-height: 80px;
+    border-radius: 20px 20px 0 0;
+    background: #F5F5F5;
+    color: @c-40;
+    position: relative;
+    .cacel{
+      font-size: 28px;
+      color: @c-666;
+      position: absolute;
+      left: 42px;
+      top: 0;
+    }
+  }
+  .picker{
+    height: 622px;
+    display: flex;
+    .day-list{
+      width: 270px;
+      background: #F5F5F5;
+      overflow-y: auto;
+      &:last-child{
+        padding-bottom: 200px;
+      }
+      .day-item{
+        height: 90px;
+        line-height: 90px;
+        text-align: center;
+        font-size: 26px;
+        color: @c-666;
+        &.active{
+          background: #fff;
+          font-weight: bold;
+        }
+      }
+    }
+    .time-list{
+      flex: 1;
+      background: #fff;
+      overflow-y: auto;
+      .time-item{
+        height: 90px;
+        line-height: 90px;
+        text-align: center;
+        font-size: 30px;
+        color: @c-666;
+        &.active{
+          font-weight: bold;
+        }
+        &:last-child{
+          padding-bottom: 200px;
+        }
+      }
+    }
+  }
+}

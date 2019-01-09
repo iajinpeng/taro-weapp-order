@@ -1,0 +1,114 @@
+@import "../../minxin";
+
+.coupon{
+  .title{
+    height: 98px;
+    position: relative;
+    margin-top: 40px;
+    &>view{
+      font-size: 28px;
+      line-height: 98px;
+      position: absolute;
+      height: 100%;
+      width: 100px;
+      text-align: center;
+      .transition();
+      &.active{
+        font-size: 45px;
+        width: 180px;
+        left: ~"calc(50% - 90px)";
+      }
+    }
+    .normal{
+      top: 0;
+      left: ~"calc(50% - 200px)";
+    }
+    .useless{
+      top: 0;
+      left: ~"calc(50% + 100px)";
+    }
+  }
+
+  .content{
+    height: ~"calc(100vh - 138px)";
+    .null{
+      padding-top: 290px;
+      image{
+        width: 248px;
+        height: 248px;
+        display: block;
+        margin: 0 auto;
+      }
+      View{
+        font-size: 34px;
+        text-align: center;
+        margin-top: 44px;
+      }
+    }
+    .coupon-list{
+      width: 678px;
+      margin: 30px auto 50px;
+      .item{
+        .entity{
+          display: flex;
+          height: 200px;
+          border-radius: 24px;
+          box-shadow: 0 0 20px #ddd;
+          position: relative;
+          .deno{
+            background: @default-color;
+            width: 240px;
+            font-size: 28px;
+            text-align: center;
+            border-radius: 24px 0 0 24px;
+            .price{
+              font-size: 46px;
+              margin: 40px 0 16px;
+              &>text{
+                font-size: 24px;
+              }
+            }
+          }
+          .desc{
+            width: 390px;
+            background: #fff;
+            padding: 0 36px;
+            box-sizing: border-box;
+            font-size: 36px;
+            .name{
+              margin-top: 36px;
+            }
+            .time{
+              font-size: 18px;
+              margin: 6px 0 10px;
+            }
+            .btn{
+              font-size: 24px;
+            }
+          }
+          .handle{
+            writing-mode: tb-rl;
+            background: @default-color;
+            font-size: 28px;
+            letter-spacing: 15px;
+            text-align: center;
+            width: 48px;
+            line-height: 48px;
+            color: #fff;
+            border-radius: 0 24px 24px 0;
+          }
+        }
+        .condi{
+          font-size: 24px;
+          background: #fff;
+          margin-top: -40px;
+          padding: 50px 0 20px 27px;
+          border-radius: 0 0 24px 24px;
+          &>view{
+            margin: 16px 0;
+          }
+        }
+      }
+    }
+  }
+}

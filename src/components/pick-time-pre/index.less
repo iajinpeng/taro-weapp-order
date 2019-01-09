@@ -1,0 +1,42 @@
+
+@import "../../minxin";
+.mask{
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, .3);
+  z-index: 97;
+}
+.pick-time{
+  position: fixed;
+  width: 100%;
+  left: 0;
+  background: #E6E6E6;
+  bottom: -100%;
+  z-index: 97;
+  &.active{
+    bottom: 0;
+  }
+  .title{
+    text-align: center;
+    font-size: 28px;
+    height: 80px;
+    line-height: 80px;
+    border-radius: 20px 20px 0 0;
+    background: #F5F5F5;
+    color: @c-40;
+  }
+  .picker{
+    height: 622px;
+    .col-item{
+      line-height: 90px;
+      height: 90px;
+      font-size: 26px;
+      font-weight: bold;
+      color: @c-666;
+      text-align: center;
+    }
+  }
+}

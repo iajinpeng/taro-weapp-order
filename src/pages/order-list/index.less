@@ -1,0 +1,174 @@
+@import "../../minxin";
+@import "../../app";
+
+.order-list{
+  .title{
+    height: 98px;
+    position: relative;
+    margin-top: 40px;
+    &>view{
+      font-size: 28px;
+      line-height: 98px;
+      position: absolute;
+      height: 100%;
+      width: 120px;
+      text-align: center;
+      .transition();
+      transition-property: left, font-size, width;
+      &.active{
+        font-size: 45px;
+        width: 200px;
+        left: ~"calc(50% - 100px)";
+      }
+    }
+    .normal{
+      top: 0;
+      left: ~"calc(50% - 240px)";
+    }
+    .useless{
+      top: 0;
+      left: ~"calc(50% + 120px)";
+    }
+  }
+
+  .content{
+    height: ~"calc(100vh - 138px)";
+    padding-top: 40px;
+    box-sizing: border-box;
+    .null{
+      padding-top: 220px;
+      .image-wrap{
+        width: 278px;
+        height: 240px;
+        margin: 0 auto;
+        position: relative;
+        padding-top: 38px;
+        image{
+          width: 100%;
+          height: 100%;
+          display: block;
+          margin: 0 auto;
+          position: absolute;
+          left: 0;
+          top: 0;
+        }
+        &>view{
+          width: 154px;
+          height: 30px;
+          box-sizing: border-box;
+          border: 8px solid #cccccc;
+          border-radius: 15px;
+          margin: 0 auto 38px;
+          &.short{
+            width: 98px;
+          }
+        }
+      }
+      View{
+        font-size: 34px;
+        text-align: center;
+        margin-top: 44px;
+        color: #cccccc;
+        font-weight: bold;
+      }
+    }
+    .order-li{
+      padding: 40px 30px 0;
+
+    }
+    .order-item{
+      padding: 34px 40px 10px;
+      background: #fff;
+      box-shadow: 0 0 20px #ddd;
+      margin:0 30px 60px;
+      border-radius: 10px 10px 0 0;
+      position: relative;
+      .order-title{
+        font-size: 30px;
+        display: flex;
+        justify-content: space-between;
+        .status{
+          font-weight: bold;
+        }
+        .icon{
+          display: inline-block;
+          width: 30px;
+          height: 30px;
+          line-height: 28px;
+          color: #fff;
+          border-radius: 50%;
+          text-align: center;
+          font-weight: bold;
+          font-size: 34px;
+          margin-right: 14px;
+          &.rotate{
+            transform: rotate(45deg);
+          }
+        }
+      }
+      .order-type{
+        font-size: 28px;
+        display: flex;
+        justify-content: space-between;
+        margin: 40px 0 24px;
+        font-weight: 300;
+        align-items: center;
+        color: @c-666;
+        .tag{
+          border: 1px solid #999;
+          padding: 0 10px;
+          border-radius: 20px;
+          font-size: 24px;
+          height: 40px;
+          line-height: 40px;
+          font-weight: bold;
+        }
+      }
+      .good{
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 36px;
+        align-items: center;
+        &-info{
+          view:first-child{
+            font-size: 32px;
+            font-weight: bold;
+            color: @c-40;
+          }
+          view:last-child{
+            font-size: 26px;
+            color: @c-999;
+            margin-top: 20px;
+          }
+          button{
+            width: 208px;
+            height: 80px;
+            line-height: 80px;
+            border-radius: 40px;
+            font-size: 32px;
+            font-weight: bold;
+            color: #fff;
+          }
+        }
+        &>text{
+          font-size: 36px;
+          color: @c-40;
+        }
+
+      }
+      .remark{
+        display: flex;
+        justify-content: space-between;
+      }
+      .order-price{
+        font-size: 48px;
+        .yen{
+          font-size: 28px;
+          color: @c-999;
+          position: relative;
+          top: -12px;
+        }
+      }
+    }
+  }
+}
