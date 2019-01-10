@@ -20,7 +20,9 @@ class App extends Component {
       'pages/order-list/index',
       'pages/order-detail/index',
       'pages/post-order/index',
-      'pages/present-good/index'
+      'pages/present-good/index',
+      'pages/add-address/index',
+      'pages/add-address/select'
 
     ],
     permission: {
@@ -32,7 +34,7 @@ class App extends Component {
       backgroundTextStyle: 'light',
       navigationBarBackgroundColor: '#f5f5f5',
       navigationBarTitleText: '🐎',
-      navigationBarTextStyle: 'black'
+      navigationBarTextStyle: 'black',
     },
   }
 

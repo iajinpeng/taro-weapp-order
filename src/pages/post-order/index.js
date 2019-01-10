@@ -32,7 +32,8 @@ class Order extends Component {
     isShowTextarea: false,
     memo: '',
     reserveTime: [],
-    dayTimeIndexs: [0, 0]
+    dayTimeIndexs: [0, 0],
+    userPhoneNum: ''
   }
 
   componentWillMount() {
@@ -99,7 +100,7 @@ class Order extends Component {
 
   handleScroll = e => {
     const top = e.detail.scrollTop
-    this.setState({isShowTextarea: top >= 135})
+    this.setState({isShowTextarea: top >= 35})
   }
 
   handleMemoChange = e => {
@@ -115,15 +116,22 @@ class Order extends Component {
     this.setState({isShowAddress: false})
   }
 
-  autoInputMobile = () => {
-    const { encryptedData, iv } = this.props.userInfo
+  autoInputMobile = (e) => {
+    const { encryptedData, iv } = e.detail
     this.props.dispatch({
       type: 'common/getUserMobile',
       payload: {
         encryptedData, iv
       }
+    }).then(res => {
+      this.setState({userPhoneNum: res})
     })
   }
+
+  phoneNumInput = e => {
+    this.setState({userPhoneNum: e.target.value})
+  }
+
 
   chooseReserveTime = () => {
     const {localInfo} = this.props
@@ -148,7 +156,7 @@ class Order extends Component {
     const {theme, carts} = this.props
     const {orderType, isShowPicker, takeType, store, memo,
       couponList, userAddress, amount, isShowTextarea, reserveTime,
-      dayTimeIndexs, isShowAddress} = this.state
+      dayTimeIndexs, isShowAddress, userPhoneNum} = this.state
     const goods = carts[this.$router.params.store_id] || []
 
     const isIphoneX = !!(this.props.systemInfo.model &&
@@ -175,6 +183,7 @@ class Order extends Component {
                   <Image src={require('../../images/icon-bike.png')}/>
                   <Text>外卖配送</Text>
                 </View>
+
               </View>
               {
                 orderType === 0 &&
@@ -195,8 +204,11 @@ class Order extends Component {
                   </View>
                   <View className='mobile'>
                     <Image src={require('../../images/icon-mobile.png')}/>
-                    <Input placeholder='请输入手机号'/>
-                    <Text onClick={this.autoInputMobile} className={'theme-c-' + theme}>自动填写</Text>
+                    <Input value={userPhoneNum} onInput={this.phoneNumInput} placeholder='请输入手机号'/>
+                    <Button open-type="getPhoneNumber" onGetphonenumber={this.autoInputMobile}>
+                      <Text className={'theme-c-' + theme}>自动填写</Text>
+                    </Button>
+
                   </View>
                   <View className='btn-box'>
                     <Button

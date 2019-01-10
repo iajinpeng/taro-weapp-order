@@ -22,7 +22,7 @@ class ShopIndex extends Component {
     group: [],
     curGroupId: '',
     curGroupGoodId: '',
-    curClassifyIndex: 1,
+    curClassifyIndex: 0,
     isShowCart: false,
     isGoodNull: false,
     isShowDetail: false,
@@ -53,12 +53,13 @@ class ShopIndex extends Component {
     }).then(({banner, group}) => {
       if (!group || group.length === 0) {
         Taro.showToast({
-          title: '当前店铺尚未上架任何商品!'
+          title: '当前店铺尚未上架任何商品!',
+          icon: 'none'
         })
 
         setTimeout(() => {
           Taro.navigateBack()
-        }, 1500)
+        }, 2500)
 
         return
       }
@@ -198,7 +199,9 @@ class ShopIndex extends Component {
     }
 
     this.setState({isShowOptions: false})
-    this.setOneCartItem({...good, ...curCart})
+    if (curCart.num && curCart.num > 0) {
+      this.setOneCartItem({...good, ...curCart})
+    }
   }
 
   toChooseStan = () => {
@@ -642,11 +645,11 @@ class ShopIndex extends Component {
                 <View className={classnames('price', 'theme-c-' + theme)}>
                   <Text>&yen;</Text>
                   {
-                    +curGood.g_price + (stanInfo.norm &&
+                    (+curGood.g_price + (stanInfo.norm &&
                       stanInfo.norm.optional.reduce((total, item, index) => {
                         total += +item.list[optionalTagIndex[index]].gn_price
-                        return total.toFixed(2)
-                      }, 0))
+                        return total
+                      }, 0))).toFixed(2)
                   }
                 </View>
                 <View className='pre-price'>

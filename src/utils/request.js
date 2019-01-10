@@ -4,7 +4,7 @@ import store from '../store'
 
 const request_data = {
   channel: 'wxapp',
-  accOpenid: 'aGzD0Jmq',
+  accOpenid: 'ZWFvxKSRpQ',
 };
 
 

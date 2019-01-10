@@ -1,9 +1,9 @@
-import { getOrderList, getOrderDetail, getPreOrderInfo, getReserveTime} from '../services/order'
+import {getOrderList, getOrderDetail, getPreOrderInfo, getReserveTime} from '../services/order'
 
 export default {
   namespace: 'order',
   state: {
-
+    curAddress: {}
   },
 
   effects: {

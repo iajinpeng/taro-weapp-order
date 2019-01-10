@@ -22,7 +22,7 @@ class OrderList extends Component {
 
   canRequestMore = true
 
-  componentDidShow() {
+  componentWillMount() {
     this.requestOrderList().then(({total, rows}) => {
       this.setState({total, lists: rows})
     })
@@ -46,7 +46,7 @@ class OrderList extends Component {
     const {type, page, page_size} = this.state
 
     return this.props.dispatch({
-      type: 'post-order/getOrderList',
+      type: 'order/getOrderList',
       payload: {
         type,
         page,

@@ -18,7 +18,7 @@ export default {
     * requestLogin({}, {put, call}) {
       const wxLoginInfo = yield Taro.login()
       const res =  yield call(requestLogin, {
-        accOpenid: 'aGzD0Jmq',
+        accOpenid: 'ZWFvxKSRpQ',
         code: wxLoginInfo.code
       })
 
@@ -53,7 +53,7 @@ export default {
     setLocalInfo(state, {payload}) {
       return {...state, localInfo: payload};
     },
-  },
+},
 
   subscriptions: {
     setup() {

@@ -27,6 +27,11 @@ class ChooseAddress extends Component {
     this.props.onClose()
   }
 
+  toAddressPage = () => {
+    Taro.navigateTo({
+      url: '/pages/add-address/index'
+    })
+  }
 
   render() {
     const {show, theme} = this.props
@@ -36,10 +41,10 @@ class ChooseAddress extends Component {
         <View className='mask' style={{display: show ? 'block' : 'none'}} onClick={this.handleClose}/>
         <View className={classnames('choose-address', show ? 'active' : '')}>
           <View className='title'>选择收货地址
-            <Text className="cacel" onClick={this.handleClose}>取消</Text>
+            <Text className='cacel' onClick={this.handleClose}>取消</Text>
           </View>
           <View className='content'>
-            <View className="null">
+            <View className='null' onClick={this.toAddressPage}>
               <View className={classnames('icon', 'theme-grad-bg-' + theme)}>+</View>
               <View className={classnames('text', 'theme-c-' + theme)}>新增收货地址</View>
             </View>

@@ -89,7 +89,7 @@ class Index extends Component {
 
   toOrderListPage = () => {
     Taro.navigateTo({
-      url: '/pages/post-order-list/index'
+      url: '/pages/order-list/index'
     })
   }
 
@@ -192,7 +192,7 @@ class Index extends Component {
 
                 <Button
                   class={classnames('do', 'theme-grad-bg-' + theme)}
-                  style={{display: user_full_num === full_num ? 'block' : 'none'}}
+                  style={{display: (user_full_num === full_num && full_num !== 0) ? 'block' : 'none'}}
                   onClick={this.toChoosePage.bind(this, 'present')}
                 >
                   去下单
