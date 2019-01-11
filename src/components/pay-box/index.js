@@ -11,7 +11,8 @@ import './index.less'
 class PayBox extends Component {
 
   static defaultProps = {
-    carts: []
+    carts: [],
+    themeInfo: {}
   }
 
   toPostOrder = () => {
@@ -37,7 +38,7 @@ class PayBox extends Component {
                 let price = good.g_price * good.num
                 good.optional && (price +=
                   good.optional.reduce((t, item, i) => {
-                    return t += +item.list[good.optionalTagIndex[i]].gn_price
+                    return t += +item.list[good.optionalTagIndex[i]].gn_price * good.num
                   }, 0))
                 good.num && (total += +price)
                 return total

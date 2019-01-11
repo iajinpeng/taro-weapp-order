@@ -176,7 +176,6 @@ class ShopIndex extends Component {
         goods_id: good.g_id
       }
     }).then(res => {
-
       this.setState({
         stanInfo: res,
         propertyTagIndex: Array.from({length: res.property.length}, () => 0),
@@ -192,13 +191,15 @@ class ShopIndex extends Component {
       ...good,
       property: stanInfo.property,
       optional: stanInfo.norm.optional,
+      optionalstr: optionalTagIndex.join(''),
       propertyTagIndex,
-      optionalTagIndex
+      optionalTagIndex,
+      ...curCart
     }
 
     this.setState({isShowOptions: false})
     if (curCart.num && curCart.num > 0) {
-      this.setOneCartItem({...good, ...curCart})
+      this.setOneCartItem(good)
     }
   }
 
@@ -238,7 +239,7 @@ class ShopIndex extends Component {
       type: 'cart/setOneCartItem',
       payload: {
         id: +this.$router.params.id || 2,
-        good,
+        good
       }
     })
 
@@ -248,6 +249,7 @@ class ShopIndex extends Component {
     const curCart = JSON.parse(JSON.stringify(this.state.curCart))
     !curCart.num && (curCart.num = 0)
     curCart.num += num
+    curCart.optionalstr = this.state.optionalTagIndex.join('')
     this.setState({curCart})
   }
 
@@ -657,7 +659,7 @@ class ShopIndex extends Component {
                 </View>
               </View>
               {
-                (!curCart.num || curCart.num === 0) &&
+                (!curCart.num || curCart.num === 0 || curCart.optionalstr !== optionalTagIndex.join('')) &&
                 <Button
                   className={'theme-grad-bg-' + theme} onClick={this.setLocalCart.bind(this, 1)}
                 >
@@ -666,7 +668,7 @@ class ShopIndex extends Component {
               }
               {
                 curCart.num &&
-                curCart.num !== 0 &&
+                curCart.num !== 0 && curCart.optionalstr === optionalTagIndex.join('') &&
                 <View className='num-box'>
                   <AtIcon
                     value='subtract-circle' size={26}

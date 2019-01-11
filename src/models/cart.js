@@ -46,12 +46,19 @@ export default {
       const {id, good} = payload
       let curCart = state.carts[id] || []
 
-      let index = curCart.findIndex(item => item.g_id === good.g_id)
-      if (index > -1) {
-        curCart[index] = good
-      } else {
+      let idAlikes = curCart.filter(item => item.g_id === good.g_id)
+
+      if (idAlikes.length === 0) {
         curCart.push(good)
+      } else{
+        let index = curCart.findIndex(item => item.optional.join('') === good.optional.join(''))
+        if (index > -1) {
+          curCart[index] = good
+        } else {
+          curCart.push(good)
+        }
       }
+
       state.carts[id] = curCart
 
       Taro.setStorageSync('carts', state.carts)
