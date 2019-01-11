@@ -214,7 +214,7 @@ class Index extends Component {
                   totStarsArr.map((item, index) => (
                     <Image
                       className={full_num === 3 ? 'big' : ''}
-                      src={(user_full_num >= index + 1) ? baseUrl + full_logo_no : baseUrl + full_logo} key={index}
+                      src={(user_full_num >= index + 1) ? baseUrl + full_logo : baseUrl + full_logo_no} key={index}
                     />
                   ))
                 }

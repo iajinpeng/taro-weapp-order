@@ -11,8 +11,7 @@ import './index.less'
 class PayBox extends Component {
 
   static defaultProps = {
-    carts: [],
-    themeInfo: {}
+    carts: []
   }
 
   toPostOrder = () => {

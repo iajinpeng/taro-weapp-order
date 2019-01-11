@@ -39,9 +39,12 @@
   .content{
     height: 622px;
     background: #fff;
+    overflow-y: auto;
     .null{
       padding-top: 210px;
       font-weight: bold;
+      box-sizing: border-box;
+      height: 100%;
       .icon{
         font-size: 120px;
         color: #fff;
@@ -56,6 +59,53 @@
         margin: 20px auto 0;
         text-align: center;
         font-size: 36px;
+      }
+    }
+    .address-item{
+      display: flex;
+      height: 144px;
+      align-items: center;
+      padding: 30px 40px;
+      box-sizing: border-box;
+      image{
+        width: 40px;
+        height: 40px;
+        margin-right: 36px;
+      }
+      .alias{
+        width: 40px;
+        height: 40px;
+        box-sizing: border-box;
+        border: 1px solid @c-666;
+        border-radius: 50%;
+        margin-right: 36px;
+      }
+      .info{
+        flex: 1;
+        color: @c-40;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: stretch;
+        height: 100%;
+        view{
+          width: 100%;
+        }
+        .addr{
+          font-size: 30px;
+          font-weight: bold;
+        }
+        .user{
+          font-size: 28px;
+        }
+      }
+      .edit{
+        width: 48px;
+        height: 48px;
+        padding-left: 36px;
+        image{
+          width: 100%;
+          height: 100%;
+        }
       }
     }
   }

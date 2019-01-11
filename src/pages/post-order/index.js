@@ -19,13 +19,14 @@ class Order extends Component {
   }
 
   state = {
-    orderType: 0,  // 0: 自取   1：外卖
+    orderType: 1,  // 1: 自取   3：外卖
     takeType: 1,
+    s_take: [1, 2, 3],
 
     isShowPicker: false,
     isShowAddress: false,
 
-    store: [],
+    store: {},
     couponList: [],
     userAddress: [],
     amount: '',
@@ -33,7 +34,8 @@ class Order extends Component {
     memo: '',
     reserveTime: [],
     dayTimeIndexs: [0, 0],
-    userPhoneNum: ''
+    userPhoneNum: '',
+    selectedAddress: null,
   }
 
   componentWillMount() {
@@ -41,7 +43,11 @@ class Order extends Component {
   }
 
   changeOrderType = orderType => {
+    if (this.state.s_take.indexOf(orderType) === -1) return
+
     this.setState({orderType})
+
+    this.getPreOrderInfo(orderType)
   }
 
   changeTakeType = takeType => {
@@ -56,7 +62,7 @@ class Order extends Component {
 
   }
 
-  getPreOrderInfo = () => {
+  getPreOrderInfo = (take_type) => {
     const {carts, localInfo} = this.props
 
     const goods = carts[this.$router.params.store_id].map(cart => {
@@ -91,10 +97,14 @@ class Order extends Component {
         store_id: this.$router.params.store_id,
         goods,
         lat: localInfo.latitude,
-        lng: localInfo.longitude
+        lng: localInfo.longitude,
+        take_type
       }
     }).then(({store, couponList, userAddress, amount}) => {
-      this.setState({store, couponList, userAddress, amount})
+      this.setState({
+        store, couponList, userAddress, amount,
+        s_take: store.s_take.map(v => +v)
+      })
     })
   }
 
@@ -112,8 +122,11 @@ class Order extends Component {
     this.setState({isShowAddress: true})
   }
 
-  hideAddress = () => {
-    this.setState({isShowAddress: false})
+  hideAddress = (address) => {
+    this.setState({
+      isShowAddress: false,
+      selectedAddress: address ? address : this.state.selectedAddress
+    })
   }
 
   autoInputMobile = (e) => {
@@ -154,13 +167,15 @@ class Order extends Component {
 
   render() {
     const {theme, carts} = this.props
-    const {orderType, isShowPicker, takeType, store, memo,
+    const {orderType, isShowPicker, takeType, store, memo, s_take,
       couponList, userAddress, amount, isShowTextarea, reserveTime,
-      dayTimeIndexs, isShowAddress, userPhoneNum} = this.state
+      dayTimeIndexs, isShowAddress, userPhoneNum, selectedAddress} = this.state
     const goods = carts[this.$router.params.store_id] || []
 
     const isIphoneX = !!(this.props.systemInfo.model &&
       this.props.systemInfo.model.replace(' ', '').toLowerCase().indexOf('iphonex') > -1)
+
+    const useAddress = selectedAddress || userAddress.find(item => item.optional)
 
     return (
       <View className='post-order'>
@@ -172,23 +187,25 @@ class Order extends Component {
             <View className='order-type'>
               <View className='tab'>
                 <View
-                  className={classnames('wrap', orderType !== 0 ? 'un-active' : 'theme-c-' + theme)}
-                  onClick={this.changeOrderType.bind(this, 0)}>
+                  className={classnames('wrap', orderType !== 1 ? 'un-active' : 'theme-c-' + theme,
+                    s_take.indexOf(1) > -1 ? '' : 'disabled')}
+                  onClick={this.changeOrderType.bind(this, 1)}>
                   <Image src={require('../../images/icon-shop.png')}/>
                   <Text>到店取餐</Text>
                 </View>
                 <View
-                  className={classnames('wrap wrap-2', orderType !== 1 ? 'un-active' : 'theme-c-' + theme)}
-                  onClick={this.changeOrderType.bind(this, 1)}>
+                  className={classnames('wrap wrap-2', orderType !== 3 ? 'un-active' : 'theme-c-' + theme,
+                    s_take.indexOf(3) > -1 ? '' : 'disabled')}
+                  onClick={this.changeOrderType.bind(this, 3)}>
                   <Image src={require('../../images/icon-bike.png')}/>
                   <Text>外卖配送</Text>
                 </View>
 
               </View>
               {
-                orderType === 0 &&
+                orderType === 1 &&
                 <View className='info'>
-                  <View className='name'>{store.s_area + store.s_address}</View>
+                  <View className='name'>{store.s_area ? store.s_area + store.s_address : ''}</View>
                   <View className='time' onClick={this.chooseReserveTime}>
                     <Text>自取时间</Text>
                     <View>
@@ -235,24 +252,24 @@ class Order extends Component {
                 </View>
               }
               {
-                orderType === 1 &&
+                orderType === 3 &&
                 <View className='info'>
-                  <View className='address'>
+                  <View className='address' onClick={this.showAddress.bind(this, true)}>
                     {
-                      userAddress.length === 0 &&
-                      <View className='address-none' onClick={this.showAddress.bind(this, true)}>
+                      !useAddress &&
+                      <View className='address-none'>
                         选择收货地址
                         <AtIcon value='chevron-right' size='16'/>
                       </View>
                     }
                     {
-                      userAddress.length > 0 &&
+                      useAddress &&
                       <View className='address-msg'>
                         <View className='left'>
-                          <View className='desc'>{userAddress.address + ' ' + userAddress.address_detail}</View>
+                          <View className='desc'>{useAddress.address + ' ' + useAddress.address_detail}</View>
                           <View className='user'>
-                            <Text>{userAddress.user_name}</Text>
-                            <Text>{userAddress.user_telephone}</Text>
+                            <Text>{useAddress.user_name}</Text>
+                            <Text>{useAddress.user_telephone}</Text>
                           </View>
                         </View>
                         <View className='right'>
@@ -413,7 +430,7 @@ class Order extends Component {
 
         <PickTime show={isShowPicker} reserveTime={reserveTime} theme={theme} onClose={this.closeTimePicker}/>
 
-        <ChooseAddress show={isShowAddress} theme={theme} onClose={this.hideAddress} />
+        <ChooseAddress show={isShowAddress} address={userAddress} theme={theme} onClose={this.hideAddress} />
 
       </View>
     )

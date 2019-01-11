@@ -41,7 +41,7 @@ class AddAddress extends Component {
     const {curAddress} = this.props
     const {address_detail, user_name, user_telephone} = this.state
     const [address_lng, address_lat] = curAddress.location.split(',')
-    const address = curAddress.name
+    const {name, pname, cityname, adname, address } = curAddress
 
     if (!/^1(?:3\d|4[4-9]|5[0-35-9]|6[67]|7[013-8]|8\d|9\d)\d{8}$/.test(user_telephone)){
       Taro.showToast({
@@ -54,7 +54,7 @@ class AddAddress extends Component {
     this.props.dispatch({
       type: 'address/postAddress',
       payload: {
-        address,
+        address: [name, pname, cityname, adname, address].join('|'),
         address_detail,
         address_lng,
         address_lat,

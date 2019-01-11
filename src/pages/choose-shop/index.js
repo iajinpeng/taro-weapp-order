@@ -29,9 +29,9 @@ class Choose extends Component {
     isShowNullWarn: false,
     isShowMap: true,
     keyword: '',
-    keywordTips: [],
     markers: [],
     store: [],
+    storeFilter: [],
     selectedStoreIndex: 0,
     warnDistance: '',
     scrollStoreId: ''
@@ -61,7 +61,7 @@ class Choose extends Component {
 
   }
 
-  componentDidShow () {
+  componentDidShow() {
     // this.state.longitude && this.getStoreList()
   }
 
@@ -102,32 +102,25 @@ class Choose extends Component {
 
   inputChange = e => {
     let value = e.target.value
-    let _this = this
 
-    this.setState({keyword: value})
-    this.myAmapFun.getInputtips({
-      keywords: value,
-      location: this.state.location,
-      type: '050000',
-      success({tips}) {
-        tips.map(tip => (
-          tip.distance = _this.calcDistance(tip.location)
-        ))
-        tips = tips.sort((a, b) => (
-          +a.distance > +b.distance
-        ))
-        _this.setState({
-          keywordTips: tips
-        })
-      }
+    let storeFilter = this.state.store.filter(item => (
+      item.s_title.indexOf(value) > -1 || item.s_province.indexOf(value) > -1 ||
+      item.s_city.indexOf(value) > -1 || item.s_area.indexOf(value) > -1 ||
+      item.s_address.indexOf(value) > -1
+    ))
+
+    this.setState({
+      keyword: value,
+      storeFilter
     })
-    value === '' && this.setState({keywordTips: []})
+
   }
 
   toSearch = () => {
     this.setState({
       isShowCitys: false,
-      isSearching: true
+      isSearching: true,
+      storeFilter: this.state.store
     })
   }
 
@@ -189,7 +182,7 @@ class Choose extends Component {
   }
 
   showShopMakers = ({brand, store}) => {
-    if(store.length === 0) return
+    if (store.length === 0) return
 
     let markers = []
 
@@ -243,6 +236,7 @@ class Choose extends Component {
       scrollStoreId: 'id' + item.s_id,
       longitude: item.s_address_lng,
       latitude: item.s_address_lat,
+      isSearching: false
     })
   }
 
@@ -308,9 +302,9 @@ class Choose extends Component {
 
     const {
       keyword, longitude, latitude, city, locationCity,
-      isShowCitys, isSearching, keywordTips, markers,
+      isShowCitys, isSearching, markers,
       store, selectedStoreIndex, isShowDistanceWarn, warnDistance,
-      isShowNullWarn, isShowMap, scrollStoreId
+      isShowNullWarn, isShowMap, scrollStoreId, storeFilter
     } = this.state
 
     const isIphoneX = !!(this.props.systemInfo.model &&
@@ -322,8 +316,10 @@ class Choose extends Component {
           {
             !isSearching &&
             <Block>
-              <View className='city'
-                    onClick={this.toggleShowCitys}>{city || locationCity || '定位中...'}
+              <View
+                className='city'
+                onClick={this.toggleShowCitys}
+              >{city || locationCity || '定位中...'}
                 <AtIcon value={isShowCitys ? 'chevron-up' : 'chevron-down'} size='18'/>
               </View>
               <View className={classnames('search-box', isSearching ? 'full' : '')}>
@@ -365,11 +361,11 @@ class Choose extends Component {
             scrollWithAnimation
           >
             {
-              keywordTips.map(tip => (
-                <View className='item' key={tip.id} onClick={this.chooseTip.bind(this, tip)}>
-                  <View className='name'>{tip.name}</View>
-                  <View className='address'>{tip.district}</View>
-                  <Text className='distance'>{tip.distance ? tip.distance + 'km' : ''}</Text>
+              storeFilter.map((s, i) => (
+                <View className='item' key={s.s_id} onClick={this.selectShop.bind(this, s, i)}>
+                  <View className='name'>{s.s_title}</View>
+                  <View className='address'>{s.s_address}</View>
+                  <Text className='distance'>{(s.distance / 1000).toFixed(2)}KM</Text>
                 </View>
               ))
             }
@@ -390,10 +386,10 @@ class Choose extends Component {
               onMarkerTap={this.handleMarkerClick}
               showLocation
             />
-            <View className='hide-map' onClick={this.toggleShowMap}><Text /></View>
+            <View className='hide-map' onClick={this.toggleShowMap}><Text/></View>
             <ScrollView
               scrollY scrollIntoView={scrollStoreId}
-              className={classnames('shop-list', isIphoneX ? 'iphonex' : '', !isShowMap ? 'long' :'')}>
+              className={classnames('shop-list', isIphoneX ? 'iphonex' : '', !isShowMap ? 'long' : '')}>
               {
                 store.map((item, index) => {
                   const isShowTheme = item.s_business === 1 && selectedStoreIndex === index
@@ -402,7 +398,7 @@ class Choose extends Component {
 
                   return (
                     <View id={'id' + item.s_id}
-                      className='shop-item' key={index} onClick={this.selectShop.bind(this, item, index)}>
+                          className='shop-item' key={index} onClick={this.selectShop.bind(this, item, index)}>
                       <View className='title'>
                         <View>
                           <Text className={classnames('name', theme_c)}>{item.s_title}</Text>
