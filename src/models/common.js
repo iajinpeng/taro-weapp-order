@@ -12,6 +12,9 @@ export default {
     systemInfo: {},
 
     localInfo: {},
+
+    menu_banner: [],
+    menu_cart: {},
   },
 
   effects: {
@@ -52,6 +55,9 @@ export default {
     },
     setLocalInfo(state, {payload}) {
       return {...state, localInfo: payload};
+    },
+    setThemeInfo(state, {payload}) {
+      return {...state, ...payload};
     },
 },
 

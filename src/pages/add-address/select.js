@@ -72,7 +72,7 @@ class SelectAddress extends Component {
   pageConfirm = () => {
     const {poisData, curIndex} = this.state
     this.props.dispatch({
-      type: 'address/curAddress',
+      type: 'address/setCurAddress',
       payload: poisData[curIndex]
     })
     Taro.navigateBack()

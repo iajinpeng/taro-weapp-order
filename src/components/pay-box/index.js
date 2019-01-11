@@ -3,6 +3,7 @@ import {View, Text, Button, Image} from '@tarojs/components'
 import {AtBadge} from 'taro-ui'
 import classnames from 'classnames'
 import PropTypes from 'prop-types'
+import {baseUrl} from '../../config'
 import '../../app.less'
 
 import './index.less'
@@ -10,7 +11,8 @@ import './index.less'
 class PayBox extends Component {
 
   static defaultProps = {
-    carts: []
+    carts: [],
+    themeInfo: {}
   }
 
   toPostOrder = () => {
@@ -20,14 +22,15 @@ class PayBox extends Component {
   }
 
   render () {
-    const {theme, carts, onOpenCart} = this.props
+    const {theme, carts, onOpenCart, themeInfo} = this.props
 
     return (
       <View className={classnames('pay-box', carts.length > 0 ? 'active' : '')}>
         <View className='info' onClick={onOpenCart}>
-          <AtBadge value={carts.length}>
-            <Image src={require('../../images/icon-coco.png')} />
-          </AtBadge>
+          <Image src={baseUrl + themeInfo.image} />
+          <View
+            className='badge' style={{color: themeInfo.text_color, backgroundColor: themeInfo.background_color}}
+          >{carts.length}</View>
           <View className='price'>
             <Text>&yen;</Text>
             {

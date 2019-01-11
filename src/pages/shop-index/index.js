@@ -18,7 +18,6 @@ class ShopIndex extends Component {
   }
 
   state = {
-    banner: [],
     group: [],
     curGroupId: '',
     curGroupGoodId: '',
@@ -50,7 +49,7 @@ class ShopIndex extends Component {
       payload: {
         store_id: +this.$router.params.id || 2
       }
-    }).then(({banner, group}) => {
+    }).then(({group}) => {
       if (!group || group.length === 0) {
         Taro.showToast({
           title: '当前店铺尚未上架任何商品!',
@@ -65,7 +64,6 @@ class ShopIndex extends Component {
       }
 
       this.setState({
-        banner,
         group
       }, this.calcAsideSize)
 
@@ -304,11 +302,11 @@ class ShopIndex extends Component {
 
 
   render() {
-    const {theme} = this.props
+    const {theme, menu_banner, menu_cart} = this.props
     const carts = this.props.carts[(+this.$router.params.id || 2)] || []
 
     const {
-      banner, group, curClassifyIndex, isShowCart, isGoodNull,
+      group, curClassifyIndex, isShowCart, isGoodNull,
       isShowDetail, isShowOptions, curGroupId, curGood, curCart,
       curGroupGoodId, isShowCartWarn, stanInfo, propertyTagIndex,
       optionalTagIndex, scrollCurGroupId
@@ -323,10 +321,11 @@ class ShopIndex extends Component {
             previous-margin='12px'
             next-margin='12px'
             circular
-            autoplay
+            autoplay={menu_banner.auto_play != 0}
+            interval={menu_banner.auto_play == 0 ? 5000 : menu_banner.auto_play * 1000}
           >
             {
-              banner.map((img, index) => (
+              menu_banner.banner.map((img, index) => (
                 <SwiperItem className='swiper-item' key={index}>
                   <View>
                     <Image className='swiper-img' src={baseUrl + img.image}/>
@@ -685,7 +684,11 @@ class ShopIndex extends Component {
           </View>
         </Modal>
 
-        <PayBox theme={theme} carts={carts} storeId={+this.$router.params.id} onOpenCart={this.showCart}/>
+        <PayBox
+          theme={theme} carts={carts} storeId={+this.$router.params.id}
+          themeInfo={menu_cart}
+          onOpenCart={this.showCart}
+        />
 
         <ConfirmModal
           show={isShowCartWarn}

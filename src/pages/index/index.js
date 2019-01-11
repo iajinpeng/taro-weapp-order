@@ -24,12 +24,13 @@ class Index extends Component {
     user_full_num: 8,
     full_num: 8,
     isShowModal: false,
-    banner: [],
+    home_banner: [],
     full_logo: '',
     full_logo_no: '',
     full_image: '',
     full_undefind: '',
     full_status: '',
+    home_button: {},
     norm: []
   }
 
@@ -52,6 +53,12 @@ class Index extends Component {
       }).then(res => {
         this.setState({
           ...res
+        })
+
+        const {menu_banner, menu_cart} = res
+        this.props.dispatch({
+          type: 'common/setThemeInfo',
+          payload: {menu_banner, menu_cart, theme: res.style_color}
         })
       })
     })
@@ -130,7 +137,7 @@ class Index extends Component {
     const {theme} = this.props
 
     const { user_full_num, full_num, isShowModal, activeBannerIndex,
-      banner, full_image, full_logo, full_logo_no,
+      home_banner, full_image, full_logo, full_logo_no, home_button,
       full_status, full_undefind, norm} = this.state
 
     const totStarsArr = new Array(full_num);
@@ -140,10 +147,14 @@ class Index extends Component {
         <View className='icon-help-wrap' onClick={this.toNoticePage}>
           <AtIcon value='help' size='14' />
         </View>
+
         <View className='banner'>
-          <Swiper circular autoplay onChange={this.handleBannerChange}>
+          <Swiper
+            circular autoplay={home_banner.auto_play != 0} onChange={this.handleBannerChange}
+            interval={home_banner.auto_play * 1000}
+          >
             {
-              banner.map((img, index) => (
+              home_banner.banner.map((img, index) => (
                 <SwiperItem className='swiper-item' key={index}>
                   <View>
                     <Image className='swiper-img' src={baseUrl + img.image} />
@@ -156,7 +167,7 @@ class Index extends Component {
         </View>
         <View className='banner-dot'>
           {
-            banner.map((img, index) => (
+            home_banner.banner.map((img, index) => (
               <Text className={index === activeBannerIndex ? 'active theme-bg-' + theme : ''} key={index} />
             ))
           }
@@ -171,11 +182,11 @@ class Index extends Component {
 
         <View className={classnames('icon-box clearfix', 'theme-c-' + theme)}>
           <View onClick={this.toOrderListPage}>
-            <Image src={require('../../images/icon-order.png')} />
+            <Image src={baseUrl + home_button.order_image} />
             <Text>订单</Text>
           </View>
           <View onClick={this.toCouponPage}>
-            <Image src={require('../../images/icon-ticket.png')} />
+            <Image src={baseUrl + home_button.coupon_image} />
             <Text>优惠券</Text>
           </View>
         </View>
