@@ -163,6 +163,7 @@ class ShopIndex extends Component {
     e && e.stopPropagation()
 
     this.setState({
+      isShowCart: false,
       isShowOptions: true,
       curGood: good,
 
@@ -190,6 +191,8 @@ class ShopIndex extends Component {
         propertyTagIndex,
         optionalTagIndex,
       })
+
+      console.log(curCart)
     })
   }
 
@@ -214,9 +217,6 @@ class ShopIndex extends Component {
       const curCart = JSON.parse(JSON.stringify(cartsAlike || {}))
 
       this.setState({curCart})
-      if (curCart.optionalstr !== optionalstr) {
-
-      }
     })
   }
 
@@ -248,32 +248,22 @@ class ShopIndex extends Component {
     })
   }
 
-  setOneCartItem = (good) => {
-    this.props.dispatch({
-      type: 'cart/setOneCartItem',
-      payload: {
-        id: +this.$router.params.id,
-        good
-      }
-    })
-
-  }
 
   setLocalCart = num => {
     const {curGood, stanInfo, propertyTagIndex, optionalTagIndex} = this.state
     const curCart = JSON.parse(JSON.stringify(this.state.curCart))
     !curCart.num && (curCart.num = 0)
     curCart.num += num
-    curCart.optionalstr = this.state.propertyTagIndex.join('') + this.state.optionalTagIndex.join('')
+    curCart.optionalstr = propertyTagIndex.join('') + optionalTagIndex.join('')
     this.setState({curCart})
 
     const good = {
       ...curGood,
       ...curCart,
-      property: stanInfo.property,
-      optional: stanInfo.norm.optional,
-      propertyTagIndex,
-      optionalTagIndex,
+      property: JSON.parse(JSON.stringify(stanInfo.property)),
+      optional: JSON.parse(JSON.stringify(stanInfo.norm.optional)),
+      propertyTagIndex: JSON.parse(JSON.stringify(propertyTagIndex)),
+      optionalTagIndex: JSON.parse(JSON.stringify(optionalTagIndex)),
       optionalstr: propertyTagIndex.join('') + optionalTagIndex.join(''),
     }
 
@@ -368,7 +358,7 @@ class ShopIndex extends Component {
 
         <View className='menu'>
           <View className='aside'>
-            <ScrollView
+            <ScrollView scrollWithAnimation
               scrollY={!isShowCart} className='item-wrap'
               onScroll={this.asideScroll} scrollIntoView={curGroupId}
               id='aside-scroll'>
@@ -398,7 +388,7 @@ class ShopIndex extends Component {
               <View className='null-block'/>
             </ScrollView>
           </View>
-          <ScrollView
+          <ScrollView scrollWithAnimation
             className='content'
             scrollY={!isShowCart} scrollIntoView={curGroupGoodId}
             onScroll={this.goodScroll}
@@ -695,8 +685,8 @@ class ShopIndex extends Component {
                 </Button>
               }
               {
-                curCart.num && curCart.num !== 0 &&
-                (curCart.optionalstr === (propertyTagIndex.join('') + optionalTagIndex.join(''))) &&
+                curCart.num && curCart.num !== 0 && curCart.optionalstr &&
+                // (curCart.optionalstr === (propertyTagIndex.join('') + optionalTagIndex.join(''))) &&
                 <View className='num-box'>
                   <AtIcon
                     value='subtract-circle' size={26}

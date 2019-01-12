@@ -1,7 +1,7 @@
 import Taro, {Component} from '@tarojs/taro'
 import {View, Text, Button, Image, ScrollView, Input, Textarea} from '@tarojs/components'
 import {connect} from '@tarojs/redux'
-import {AtIcon} from 'taro-ui'
+import {AtIcon, AtToast} from 'taro-ui'
 import classnames from 'classnames'
 
 import PickTime from '../../components/pick-time'
@@ -36,6 +36,8 @@ class Order extends Component {
     dayTimeIndexs: [0, 0],
     userPhoneNum: '',
     selectedAddress: null,
+    alertPhone: false,
+    alertPhoneText: '',
   }
 
   componentWillMount() {
@@ -177,6 +179,8 @@ class Order extends Component {
 
     const {orderType, takeType, userPhoneNum, reserveTime, dayTimeIndexs, memo} = this.state
 
+    console.log(carts[this.$router.params.store_id])
+
     const goods = carts[this.$router.params.store_id].map(cart => {
       let {g_id, num, send_goods} = cart
       let g_property = [], optional = []
@@ -203,7 +207,7 @@ class Order extends Component {
       return {g_id, num, send_goods, g_property, optional}
     })
 
-    this.props.dispatch({
+    return this.props.dispatch({
       type: 'order/requestSaveOrder',
       payload: {
         store_id: this.$router.params.store_id,
@@ -213,13 +217,11 @@ class Order extends Component {
         o_remark: memo,
         goods
       }
-    }).then(res => {
-      !res.pay && this.requestPayOrder(res.order_id)
     })
   }
 
   requestPayOrder = (order_id) => {
-    this.props.dispatch({
+    return this.props.dispatch({
       type: 'order/requestPayOrder',
       payload: {
         store_id: this.$router.params.store_id,
@@ -228,11 +230,63 @@ class Order extends Component {
     })
   }
 
+  stepPay = async () => {
+
+    const {userPhoneNum, orderType} = this.state
+
+    if (orderType !== 3) {
+      if (!userPhoneNum) {
+        this.setState({
+          alertPhone: true,
+          alertPhoneText: '你好像忘记告诉我手机号码哦~'
+        })
+
+        return
+      } else if (!/^1(?:3\d|4[4-9]|5[0-35-9]|6[67]|7[013-8]|8\d|9\d)\d{8}$/.test(userPhoneNum)) {
+        this.setState({
+          alertPhone: true,
+          alertPhoneText: '手机号码格式不正确哦~'
+        })
+
+        return
+      }
+    }
+
+    const {pay, order_id} = await this.requestSaveOrder()
+
+    if (order_id) {
+      this.props.dispatch({
+        type: 'cart/clearOneCart',
+        payload: {
+          id: this.$router.params.store_id
+        }
+      })
+    }
+
+    if (!pay) {
+      const res = await this.requestPayOrder(order_id)
+
+      Taro.requestPayment({
+        ...res,
+        timeStamp: res.timestamp
+      }).then(response => {
+        console.log(response)
+      })
+    }
+  }
+
+  alertPhoneClose = () => {
+    this.setState({
+      alertPhone: false,
+    })
+  }
+
   render() {
     const {theme, carts} = this.props
     const {orderType, isShowPicker, takeType, store, memo, s_take,
       couponList, userAddress, amount, isShowTextarea, reserveTime,
-      dayTimeIndexs, isShowAddress, userPhoneNum, selectedAddress} = this.state
+      dayTimeIndexs, isShowAddress, userPhoneNum, selectedAddress,
+      alertPhone, alertPhoneText} = this.state
     const goods = carts[this.$router.params.store_id] || []
 
     const isIphoneX = !!(this.props.systemInfo.model &&
@@ -493,12 +547,17 @@ class Order extends Component {
               <Text>{amount}</Text>
             </View>
           </View>
-          <Button className={'theme-grad-bg-' + theme} onClick={this.requestSaveOrder}>去支付</Button>
+          <Button className={'theme-grad-bg-' + theme} onClick={this.stepPay}>去支付</Button>
         </View>
 
         <PickTime show={isShowPicker} reserveTime={reserveTime} theme={theme} onClose={this.closeTimePicker}/>
 
         <ChooseAddress show={isShowAddress} address={userAddress} theme={theme} onClose={this.hideAddress} />
+
+        <AtToast
+          isOpened={alertPhone} text={alertPhoneText} iconSize={40} duration={2000}
+          icon='iphone' hasMask onClose={this.alertPhoneClose}
+        />
 
       </View>
     )

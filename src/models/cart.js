@@ -51,9 +51,10 @@ export default {
       if (idAlikes.length === 0) {
         curCart.push(good)
       } else{
-        let index = curCart.findIndex(item => item.optionalstr === good.optionalstr)
+        let index = idAlikes.findIndex(item => item.optionalstr === good.optionalstr)
         if (index > -1) {
           curCart[index] = good
+          curCart[index].num === 0 && curCart.splice(index, 1)
         } else {
           curCart.push(good)
         }

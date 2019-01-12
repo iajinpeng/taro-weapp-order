@@ -1,6 +1,7 @@
 import Taro, {Component} from '@tarojs/taro'
 import {View, Button, Text, Image, Input} from '@tarojs/components'
 import {connect} from '@tarojs/redux'
+import {AtToast} from 'taro-ui'
 import './index.less'
 
 @connect(({common, address}) => ({...common, ...address}))
@@ -14,6 +15,8 @@ class AddAddress extends Component {
     address_detail: '',
     user_name: '',
     user_telephone: '',
+    alertPhone: false,
+    alertPhoneText: '',
   }
 
   componentWillMount () {
@@ -46,9 +49,9 @@ class AddAddress extends Component {
     const {name, pname, cityname, adname, address } = curAddress
 
     if (!/^1(?:3\d|4[4-9]|5[0-35-9]|6[67]|7[013-8]|8\d|9\d)\d{8}$/.test(user_telephone)){
-      Taro.showToast({
-        title: '手机号格式错误',
-        icon: 'none'
+      this.setState({
+        alertPhone: true,
+        alertPhoneText: '手机号码格式不正确哦~'
       })
       return
     }
@@ -72,9 +75,15 @@ class AddAddress extends Component {
     })
   }
 
+  alertPhoneClose = () => {
+    this.setState({
+      alertPhone: false,
+    })
+  }
+
   render () {
     const {theme, curAddress} = this.props
-    const {address_detail, user_name, user_telephone} = this.state
+    const {address_detail, user_name, user_telephone, alertPhone, alertPhoneText} = this.state
 
     const isCanPost = curAddress.name && address_detail && user_name && user_telephone
 
@@ -114,6 +123,11 @@ class AddAddress extends Component {
           className={isCanPost ? 'theme-grad-bg-' + theme : 'disabled'} disabled={!isCanPost}
           onClick={this.postAddress}
         >确认保存</Button>
+
+        <AtToast
+          isOpened={alertPhone} text={alertPhoneText} iconSize={40} duration={2000}
+          icon='iphone' hasMask onClose={this.alertPhoneClose}
+        />
       </View>
     )
   }

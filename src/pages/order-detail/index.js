@@ -29,9 +29,9 @@ class OrderDetail extends Component {
 
   getOrderDetail = () => {
     this.props.dispatch({
-      type: 'post-order/getOrderDetail',
+      type: 'order/getOrderDetail',
       payload: {
-        id: this.$router.params.id || "29062"
+        id: this.$router.params.id
       }
     }).then((data) => {
       this.setState({data})
@@ -52,7 +52,7 @@ class OrderDetail extends Component {
       <ScrollView scrollY>
         {
           !!data.o_order_status &&
-          <View className={classnames('post-order-detail', isIphoneX ? 'iphonex' : '')}>
+          <View className={classnames('order-detail', isIphoneX ? 'iphonex' : '')}>
             <View className="status">
               <View className={classnames('status-text', 'theme-c-' + theme)}>{orderTypes[data.o_order_status.toString()[0]]}</View>
               <View className="status-memo">

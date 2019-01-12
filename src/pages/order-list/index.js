@@ -75,7 +75,7 @@ class OrderList extends Component {
 
   toOrderDetail = id => {
     Taro.navigateTo({
-      url: '/pages/post-order-detail/index?id=' + id
+      url: '/pages/order-detail/index?id=' + id
     })
   }
 
