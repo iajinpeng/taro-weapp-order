@@ -1,7 +1,6 @@
 import Taro, {Component} from '@tarojs/taro'
-import {View, Button, Text, Image, Input, Block, Map} from '@tarojs/components'
+import {View, Button, Text, Image, Input} from '@tarojs/components'
 import {connect} from '@tarojs/redux'
-import {AtIcon} from 'taro-ui'
 import './index.less'
 
 @connect(({common, address}) => ({...common, ...address}))
@@ -17,12 +16,15 @@ class AddAddress extends Component {
     user_telephone: '',
   }
 
-  componentDidMount () {
+  componentWillMount () {
 
-  }
+    if (this.props.curAddress.da_id) {
+      const {da_id, address_detail, user_name, user_telephone} = this.props.curAddress
 
-  componentDidShow() {
-
+      this.setState({
+        da_id, address_detail, user_name, user_telephone
+      })
+    }
   }
 
   toSelectPage = () => {
@@ -39,7 +41,7 @@ class AddAddress extends Component {
 
   postAddress = () => {
     const {curAddress} = this.props
-    const {address_detail, user_name, user_telephone} = this.state
+    const {da_id, address_detail, user_name, user_telephone} = this.state
     const [address_lng, address_lat] = curAddress.location.split(',')
     const {name, pname, cityname, adname, address } = curAddress
 
@@ -55,11 +57,18 @@ class AddAddress extends Component {
       type: 'address/postAddress',
       payload: {
         address: [name, pname, cityname, adname, address].join('|'),
+        da_id,
         address_detail,
         address_lng,
         address_lat,
         user_name, user_telephone
       }
+    }).then(() => {
+      Taro.showToast({
+        title: '保存成功'
+      })
+
+      setTimeout(Taro.navigateBack, 1500)
     })
   }
 

@@ -175,7 +175,7 @@ class Order extends Component {
     const isIphoneX = !!(this.props.systemInfo.model &&
       this.props.systemInfo.model.replace(' ', '').toLowerCase().indexOf('iphonex') > -1)
 
-    const useAddress = selectedAddress || userAddress.find(item => item.optional)
+    const useAddress = selectedAddress || (userAddress.length >0 ? userAddress.find(item => item.optional) : [])
 
     return (
       <View className='post-order'>
@@ -256,14 +256,14 @@ class Order extends Component {
                 <View className='info'>
                   <View className='address' onClick={this.showAddress.bind(this, true)}>
                     {
-                      !useAddress &&
+                      !useAddress.address &&
                       <View className='address-none'>
                         选择收货地址
                         <AtIcon value='chevron-right' size='16'/>
                       </View>
                     }
                     {
-                      useAddress &&
+                      useAddress.address &&
                       <View className='address-msg'>
                         <View className='left'>
                           <View className='desc'>{useAddress.address + ' ' + useAddress.address_detail}</View>
@@ -418,11 +418,16 @@ class Order extends Component {
         <View className={classnames('footer', isIphoneX ? 'iphonex' : '')}>
           <View className='price'>
             <View className='discount'>
-              已优惠￥5
+              已优惠￥
+              {
+                couponList.reduce((total, item) => {
+                  return total += +item.uc_price
+                }, 0)
+              }
             </View>
             <View className='total'>
               合计￥
-              <Text>27.5</Text>
+              <Text>{amount}</Text>
             </View>
           </View>
           <Button className={'theme-grad-bg-' + theme}>去支付</Button>

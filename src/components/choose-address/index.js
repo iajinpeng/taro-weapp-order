@@ -2,10 +2,12 @@ import Taro, {Component} from '@tarojs/taro'
 import {View, Block, Text, Image} from '@tarojs/components'
 import PropTypes from 'prop-types'
 import classnames from 'classnames'
+import {connect} from '@tarojs/redux'
 
 import './index.less'
 import '../../app.less'
 
+@connect(() => ({}))
 class ChooseAddress extends Component {
 
   static propTypes = {
@@ -37,9 +39,20 @@ class ChooseAddress extends Component {
     this.setState({defaultIndex: index})
   }
 
-  edit = (address, e) => {
+  edit = (addressInfo, e) => {
     e.stopPropagation()
 
+    const [name, pname, cityname, adname, address] = addressInfo.address.split('|')
+    const {address_lng, address_lat} = addressInfo
+    const location = address_lng + ',' + address_lat
+    this.props.dispatch({
+      type: 'address/setCurAddress',
+      payload: {
+        ...addressInfo,
+        address, pname, cityname, name, adname, location
+      }
+    })
+    this.toAddressPage()
   }
 
   render() {
@@ -47,7 +60,7 @@ class ChooseAddress extends Component {
 
     const {defaultIndex} = this.state
 
-    const useAddress = address.filter(v => v.optional)
+    const useAddress = address.length > 0 ? address.filter(v => v.optional) : []
 
     return (
       <Block>
@@ -70,26 +83,36 @@ class ChooseAddress extends Component {
 
             {
               useAddress.map((item, index) => (
-                <View className="address-item" key={index} onClick={this.choose.bind(this, index)}>
+                <View className='address-item' key={index} onClick={this.choose.bind(this, index)}>
                   {
                     defaultIndex === index ?
                     <Image src={require('../../images/icon-selected.png')} />
                       :
-                    <View className="alias" />
+                    <View className='alias' />
                   }
-                  <View className="info">
-                    <View className="addr">{item.address + ' ' + item.address_detail}</View>
-                    <View className="user">
+                  <View className='info'>
+                    <View className='addr'>{item.address + ' ' + item.address_detail}</View>
+                    <View className='user'>
                       {item.user_name + ' ' + item.user_telephone}
                     </View>
                   </View>
-                  <View className="edit" onClick={this.edit.bind(this, item)}>
+                  <View className='edit' onClick={this.edit.bind(this, item)}>
                     <Image src={require('../../images/icon-edit.png')} />
                   </View>
                 </View>
               ))
             }
+
+            {
+              show && useAddress.length > 0 &&
+              <View className='add' onClick={this.toAddressPage}>
+                <Text className={classnames('icon', 'theme-bg-' + theme)}>+</Text>
+                <Text>新增收货地址</Text>
+              </View>
+            }
+
           </View>
+
         </View>
       </Block>
     )
