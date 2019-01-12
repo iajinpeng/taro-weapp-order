@@ -1,4 +1,4 @@
-import {getOrderList, getOrderDetail, getPreOrderInfo, getReserveTime} from '../services/order'
+import {getOrderList, getOrderDetail, getPreOrderInfo, getReserveTime,requestSaveOrder, requestPayOrder} from '../services/order'
 
 export default {
   namespace: 'order',
@@ -18,6 +18,12 @@ export default {
     },
     * getReserveTime({payload}, {put, call}) {
       return yield call(getReserveTime, payload)
+    },
+    * requestSaveOrder({payload}, {put, call}) {
+      return yield call(requestSaveOrder, payload)
+    },
+    * requestPayOrder({payload}, {put, call}) {
+      return yield call(requestPayOrder, payload)
     },
   },
 

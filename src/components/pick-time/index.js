@@ -72,7 +72,16 @@ class PickTime extends Component {
                     className={classnames('time-item', timeIndex === index ? 'active theme-c-' + theme : '')}
                     key={index}
                     onClick={this.chooseTime.bind(this, index)}
-                  >{time.time}</View>
+                  >
+                    {
+                      index === 0 &&
+                        <Text>现在下单，</Text>
+                    }
+                    {
+                      index === 0 ? '预计' : ''
+                    }
+                    {time.time}
+                  </View>
                 ))
               }
             </View>

@@ -37,3 +37,21 @@ export const getReserveTime = data => request({
   method: 'POST',
   data
 })
+
+/**
+ * 保存订单
+ * */
+export const requestSaveOrder = data => request({
+  url: '/addons.diancan.api.order_saveOrder',
+  method: 'POST',
+  data
+})
+
+/**
+ * 支付订单
+ * */
+export const requestPayOrder = data => request({
+  url: '/addons.diancan.api.Order_preparatoryPayOrder',
+  method: 'POST',
+  data
+})

@@ -186,7 +186,7 @@ class OrderList extends Component {
                         <Text>
                           {order.o_refund_remark}
                           {
-                            order.o_order_status === 7 ? '\n ' + '退款成功：预计1-7工作日到账' : ''
+                            order.o_order_status === 6 ? '\n ' + '退款成功：预计1-7工作日到账' : ''
                           }
                         </Text>
                       </View>

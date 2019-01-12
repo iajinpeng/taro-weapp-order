@@ -47,7 +47,7 @@ class ShopIndex extends Component {
     this.props.dispatch({
       type: 'shop/getGoodsList',
       payload: {
-        store_id: +this.$router.params.id || 2
+        store_id: +this.$router.params.id
       }
     }).then(({group}) => {
       if (!group || group.length === 0) {
@@ -143,7 +143,7 @@ class ShopIndex extends Component {
   }
 
   showDetail = (good) => {
-    const carts = this.props.carts[(+this.$router.params.id || 2)] || []
+    const carts = this.props.carts[(+this.$router.params.id)] || []
     const curCart = JSON.parse(JSON.stringify(carts.find(item => item.g_id === good.g_id) || {}))
 
 
@@ -162,45 +162,62 @@ class ShopIndex extends Component {
   openOptions = (good, e) => {
     e && e.stopPropagation()
 
-    const carts = this.props.carts[(+this.$router.params.id || 2)] || []
-    const curCart = JSON.parse(JSON.stringify(carts.find(item => item.g_id === good.g_id) || {}))
     this.setState({
       isShowOptions: true,
       curGood: good,
-      curCart
+
     })
     this.props.dispatch({
       type: 'shop/getGoodsNorm',
       payload: {
-        store_id: +this.$router.params.id || 2,
+        store_id: +this.$router.params.id,
         goods_id: good.g_id
       }
     }).then(res => {
+      const propertyTagIndex = Array.from({length: res.property.length}, () => 0)
+      const optionalTagIndex = Array.from({length: res.norm.optional.length}, () => 0)
+
+      const carts = this.props.carts[(+this.$router.params.id)] || []
+      const optionalstr = propertyTagIndex.join('') + optionalTagIndex.join('')
+      const cartsAlike = carts.find(item => (
+        (item.g_id === good.g_id) && (item.optionalstr === optionalstr)
+      ))
+      const curCart = JSON.parse(JSON.stringify(cartsAlike || {}))
+
       this.setState({
         stanInfo: res,
-        propertyTagIndex: Array.from({length: res.property.length}, () => 0),
-        optionalTagIndex: Array.from({length: res.norm.optional.length}, () => 0),
+        curCart,
+        propertyTagIndex,
+        optionalTagIndex,
       })
     })
   }
 
-  closeOptions = (good) => {
-    const {stanInfo, propertyTagIndex, optionalTagIndex, curCart} = this.state
+  closeOptions = () => {
+    this.setState({
+      isShowOptions: false,
+    })
+  }
 
-    good = {
-      ...good,
-      property: stanInfo.property,
-      optional: stanInfo.norm.optional,
-      optionalstr: optionalTagIndex.join(''),
-      propertyTagIndex,
-      optionalTagIndex,
-      ...curCart
-    }
+  selectTag = (key, index, i) => {
 
-    this.setState({isShowOptions: false})
-    if (curCart.num && curCart.num > 0) {
-      this.setOneCartItem(good)
-    }
+    let stan = this.state[key]
+    stan[index] = i
+    this.setState({[key]: stan}, () => {
+      const { propertyTagIndex, optionalTagIndex, curGood} = this.state
+
+      const carts = this.props.carts[(+this.$router.params.id)] || []
+      const optionalstr = propertyTagIndex.join('') + optionalTagIndex.join('')
+      const cartsAlike = carts.find(item => (
+        (item.g_id === curGood.g_id) && (item.optionalstr === optionalstr)
+      ))
+      const curCart = JSON.parse(JSON.stringify(cartsAlike || {}))
+
+      this.setState({curCart})
+      if (curCart.optionalstr !== optionalstr) {
+
+      }
+    })
   }
 
   toChooseStan = () => {
@@ -224,21 +241,18 @@ class ShopIndex extends Component {
     this.props.dispatch({
       type: 'cart/setCart',
       payload: {
-        id: +this.$router.params.id || 2,
+        id: +this.$router.params.id,
         good,
         num
       }
     })
-    if (good.num + num === 0) {
-      this.setState({isShowCart: false})
-    }
   }
 
   setOneCartItem = (good) => {
     this.props.dispatch({
       type: 'cart/setOneCartItem',
       payload: {
-        id: +this.$router.params.id || 2,
+        id: +this.$router.params.id,
         good
       }
     })
@@ -246,11 +260,30 @@ class ShopIndex extends Component {
   }
 
   setLocalCart = num => {
+    const {curGood, stanInfo, propertyTagIndex, optionalTagIndex} = this.state
     const curCart = JSON.parse(JSON.stringify(this.state.curCart))
     !curCart.num && (curCart.num = 0)
     curCart.num += num
-    curCart.optionalstr = this.state.optionalTagIndex.join('')
+    curCart.optionalstr = this.state.propertyTagIndex.join('') + this.state.optionalTagIndex.join('')
     this.setState({curCart})
+
+    const good = {
+      ...curGood,
+      ...curCart,
+      property: stanInfo.property,
+      optional: stanInfo.norm.optional,
+      propertyTagIndex,
+      optionalTagIndex,
+      optionalstr: propertyTagIndex.join('') + optionalTagIndex.join(''),
+    }
+
+    this.props.dispatch({
+      type: 'cart/setOneCartItem',
+      payload: {
+        id: +this.$router.params.id,
+        good
+      }
+    })
   }
 
   showOrHideCartWarn = (bool) => {
@@ -261,7 +294,7 @@ class ShopIndex extends Component {
     this.props.dispatch({
       type: 'cart/clearOneCart',
       payload: {
-        id: +this.$router.params.id || 2,
+        id: +this.$router.params.id,
       }
     })
     this.setState({
@@ -270,15 +303,9 @@ class ShopIndex extends Component {
     })
   }
 
-  selectTag = (key, index, i) => {
-    let stan = this.state[key]
-    stan[index] = i
-    this.setState({[key]: stan})
-  }
-
   toStandardDetail = (id) => {
     Taro.navigateTo({
-      url: `/pages/standard-detail/index?store_id=${this.$router.params.id || 2}&id=${id}`
+      url: `/pages/standard-detail/index?store_id=${this.$router.params.id}&id=${id}`
     })
   }
 
@@ -305,7 +332,7 @@ class ShopIndex extends Component {
 
   render() {
     const {theme, menu_banner, menu_cart} = this.props
-    const carts = this.props.carts[(+this.$router.params.id || 2)] || []
+    const carts = this.props.carts[(+this.$router.params.id)] || []
 
     const {
       group, curClassifyIndex, isShowCart, isGoodNull,
@@ -455,9 +482,9 @@ class ShopIndex extends Component {
         </View>
 
         {
-          isShowCart && <Text className='mask' onClick={this.closeCart}/>
+          isShowCart && carts.length > 0 && <Text className='mask' onClick={this.closeCart}/>
         }
-        <View className={classnames('cart', isShowCart ? 'active' : '')}>
+        <View className={classnames('cart', isShowCart && carts.length > 0 ? 'active' : '')}>
           <View className='cart-head'>
             <Image src={require('../../images/icon-trash.png')}/>
             <Text onClick={this.showOrHideCartWarn.bind(this, true)}>清空购物车</Text>
@@ -659,7 +686,8 @@ class ShopIndex extends Component {
                 </View>
               </View>
               {
-                (!curCart.num || curCart.num === 0 || curCart.optionalstr !== optionalTagIndex.join('')) &&
+                (!curCart.num || curCart.num === 0 ||
+                  curCart.optionalstr !== (propertyTagIndex.join('') + optionalTagIndex.join(''))) &&
                 <Button
                   className={'theme-grad-bg-' + theme} onClick={this.setLocalCart.bind(this, 1)}
                 >
@@ -667,8 +695,8 @@ class ShopIndex extends Component {
                 </Button>
               }
               {
-                curCart.num &&
-                curCart.num !== 0 && curCart.optionalstr === optionalTagIndex.join('') &&
+                curCart.num && curCart.num !== 0 &&
+                (curCart.optionalstr === (propertyTagIndex.join('') + optionalTagIndex.join(''))) &&
                 <View className='num-box'>
                   <AtIcon
                     value='subtract-circle' size={26}

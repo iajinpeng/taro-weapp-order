@@ -40,6 +40,7 @@ class Order extends Component {
 
   componentWillMount() {
     this.getPreOrderInfo()
+    this.getReserveTime()
   }
 
   changeOrderType = orderType => {
@@ -147,9 +148,14 @@ class Order extends Component {
 
 
   chooseReserveTime = () => {
-    const {localInfo} = this.props
+    this.getReserveTime().then(() => {
+      this.setState({isShowPicker: true})
+    })
+  }
 
-    this.props.dispatch({
+  getReserveTime = () => {
+    const {localInfo} = this.props
+    return this.props.dispatch({
       type: 'order/getReserveTime',
       payload: {
         store_id: this.$router.params.store_id,
@@ -160,8 +166,65 @@ class Order extends Component {
     }).then(res => {
       this.setState({
         reserveTime: res,
-        isShowPicker: true
       })
+      return res
+    })
+  }
+
+  requestSaveOrder = () => {
+
+    const {carts} = this.props
+
+    const {orderType, takeType, userPhoneNum, reserveTime, dayTimeIndexs, memo} = this.state
+
+    const goods = carts[this.$router.params.store_id].map(cart => {
+      let {g_id, num, send_goods} = cart
+      let g_property = [], optional = []
+
+      if (cart.propertyTagIndex) {
+        cart.property.forEach((item, i) => {
+          g_property.push(item.list_name[cart.propertyTagIndex[i]])
+        })
+      }
+      if (cart.optionalTagIndex) {
+        cart.optional.forEach((item, i) => {
+          optional.push({
+            parent_id: item.parent_id,
+            list: {
+              [item.list[cart.optionalTagIndex[i]].gn_id]: {
+                gn_id: item.list[cart.optionalTagIndex[i]].gn_id,
+                gn_num: item.list[cart.optionalTagIndex[i]].gn_num,
+              }
+            }
+          })
+        })
+      }
+
+      return {g_id, num, send_goods, g_property, optional}
+    })
+
+    this.props.dispatch({
+      type: 'order/requestSaveOrder',
+      payload: {
+        store_id: this.$router.params.store_id,
+        take_type: orderType === 3 ? 3 : (takeType === 1 ? 1 : 2),
+        contact_mobile: userPhoneNum,
+        o_reserve_time: reserveTime[dayTimeIndexs[0]].date + ' ' + reserveTime[dayTimeIndexs[0]].time[dayTimeIndexs[1]].time,
+        o_remark: memo,
+        goods
+      }
+    }).then(res => {
+      !res.pay && this.requestPayOrder(res.order_id)
+    })
+  }
+
+  requestPayOrder = (order_id) => {
+    this.props.dispatch({
+      type: 'order/requestPayOrder',
+      payload: {
+        store_id: this.$router.params.store_id,
+        order_id
+      }
     })
   }
 
@@ -430,7 +493,7 @@ class Order extends Component {
               <Text>{amount}</Text>
             </View>
           </View>
-          <Button className={'theme-grad-bg-' + theme}>去支付</Button>
+          <Button className={'theme-grad-bg-' + theme} onClick={this.requestSaveOrder}>去支付</Button>
         </View>
 
         <PickTime show={isShowPicker} reserveTime={reserveTime} theme={theme} onClose={this.closeTimePicker}/>
