@@ -5,7 +5,7 @@ import {requestLogin, postUserInfo, requestHomeInfo, requestCouponList, postForm
 export default {
   namespace: 'common',
   state: {
-    theme: '',
+    theme: 1,
 
     userInfo: {},
 

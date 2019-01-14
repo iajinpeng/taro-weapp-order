@@ -64,7 +64,7 @@ class ChooseAddress extends Component {
 
     return (
       <Block>
-        <View
+        <View catchTouchMove
           className='mask' style={{display: show ? 'block' : 'none'}}
           onClick={this.handleClose.bind(this, true, useAddress[defaultIndex])}
         />

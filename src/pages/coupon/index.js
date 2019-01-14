@@ -5,90 +5,154 @@ import {AtIcon} from 'taro-ui'
 import classnames from 'classnames'
 import './index.less'
 
-@connect(() => ({}))
+@connect(({common}) => ({...common}))
 class Coupon extends Component {
   config = {
     navigationBarTitleText: '我的优惠'
   }
 
   state = {
-    activeIndex: 1,
+    type: 1,
     page: 1,
-    page_size: 10,
-    lists: []
+    page_size: 5,
+    lists: [],
+    total: 0,
+    openIndex: null
   }
 
+  canRequestMore = true
+
   componentDidShow() {
-    this.requestCouponList()
+    this.requestCouponList().then(({total, rows}) => {
+      this.setState({
+        lists: rows,
+        total
+      })
+    })
   }
 
   changeTab = i => {
-    if(this.state.activeIndex === i) return
+    if(this.state.type === i) return
 
-    this.setState({activeIndex: i})
+    this.setState({type: i}, () => {
+      this.requestCouponList().then(({total, rows}) => {
+        this.setState({
+          lists: rows,
+          total
+        })
+      })
+    })
 
-    this.requestCouponList()
   }
 
   requestCouponList = () => {
-    const {activeIndex, page, page_size, lists} = this.state
+    const {type, page, page_size} = this.state
 
-    this.props.dispatch({
+    return this.props.dispatch({
       type: 'common/requestCouponList',
       payload: {
-        type: activeIndex,
+        type: type,
         page,
         page_size
       }
     })
   }
 
+  requestMore = () => {
+    const {total, page, page_size} = this.state
+
+    if (!this.canRequestMore || page * page_size >= total) return
+
+    this.canRequestMore = true
+
+    this.setState({page: page + 1}, () => {
+      this.requestOrderList().then(({total, rows}) => {
+        this.setState({
+          lists: [...this.state.lists, ...rows],
+          total
+        })
+        this.canRequestMore = true
+      })
+    })
+  }
+
+  openCondition = index => {
+    const {openIndex} = this.state
+    this.setState({openIndex: openIndex !== index ? index : null})
+  }
+
+  toChooseShop = () => {
+    Taro.navigateTo({
+      url: '/pages/choose-shop/index'
+    })
+  }
+
   render() {
-    const {activeIndex} = this.state
+    const {theme} = this.props
+    const {type, lists, openIndex} = this.state
 
     return (
       <View className='coupon'>
-        <View className="title">
+        <View className='title'>
           <View
-            className={classnames('normal', activeIndex === 1 ? 'active' : '')}
+            className={classnames('normal', type === 1 ? 'active theme-c-' + theme : '')}
             onClick={this.changeTab.bind(this, 1)}>未过期</View>
           <View
-            className={classnames('useless', activeIndex === 2 ? 'active' : '')}
+            className={classnames('useless', type === 2 ? 'active theme-c-' + theme : '')}
             onClick={this.changeTab.bind(this, 2)}>已过期</View>
         </View>
 
         <ScrollView scrollY className='content'>
-          {/*<View className="null">*/}
-            {/*<Image src={require('../../images/icon-coupon-null.png')} />*/}
-            {/*<View>还没有任何优惠券哦~</View>*/}
-          {/*</View>*/}
-          <View className="coupon-list">
-            <View className="item">
-              <View className="entity">
-                <View className="deno">
-                  <View className="price">
-                    <Text>&yen;</Text>
-                    5.00
-                  </View>
-                  <View>满25元可用</View>
-                </View>
-                <View className="desc">
-                  <View className="name">进店有礼5</View>
-                  <View className="time">2018.10.10 23:59:59 至 2018.11.10 23:59:59</View>
-                  <View className="btn">使用条件
-                    <AtIcon value='chevron-down' size='19' />
-                  </View>
-                </View>
-                <View className="handle">去使用</View>
-              </View>
-              <View className="condi">
-                <View>优惠券使用条件</View>
-                <View>1、仅商品原价时可用</View>
-                <View>2、限每周一周六使用</View>
-                <View>3、部分商品可用：烧仙草奶茶、珍珠奶茶</View>
-              </View>
+          {
+            lists.length === 0 &&
+            <View className='null'>
+              <Image src={require('../../images/icon-coupon-null.png')} />
+              <View>还没有任何优惠券哦~</View>
             </View>
-          </View>
+          }
+          {
+            lists.length > 0 &&
+            <View className='coupon-list'>
+              {
+                lists.map((coupon, index) => (
+                  <View className='item' key={index}>
+                    <View className='entity'>
+                      <View className={classnames('deno', 'theme-bg-' + theme)}>
+                        <View className='price'>
+                          <Text>&yen;</Text>
+                          {coupon.uc_price}
+                        </View>
+                        <View>{coupon.uc_min_amount}</View>
+                      </View>
+                      <View className='desc'>
+                        <View className='name'>{coupon.uc_name}</View>
+                        <View className='time'>{coupon.uc_start_time} 至 {coupon.uc_end_time}</View>
+                        <View className='btn' onClick={this.openCondition.bind(this, index)}>使用条件
+                          <AtIcon value={openIndex === index ? 'chevron-up': 'chevron-down'} size='19' />
+                        </View>
+                      </View>
+                      <View
+                        className={classnames('handle', 'theme-bg-' + theme)}
+                        onClick={this.toChooseShop}
+                      >去使用</View>
+                    </View>
+                    {
+                      openIndex === index &&
+                      <View className='condi'>
+                        <View>优惠券使用条件</View>
+                        {
+                          coupon.norm.map((item, i) => (
+                            <View key={i}>{i + 1}, {item}</View>
+                          ))
+                        }
+                      </View>
+                    }
+                  </View>
+                ))
+              }
+
+            </View>
+          }
 
         </ScrollView>
       </View>

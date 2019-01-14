@@ -31,7 +31,7 @@ class ConfirmModal extends Component {
   render () {
     const { title, className, show, onOk, onCancel, theme, type, warnDistance } = this.props
     return (
-      <CoverView className={classnames('modal-wrap', show ? 'modal-fade' : '')}>
+      <CoverView className={classnames('modal-wrap', show ? 'modal-fade' : '')} catchTouchMove>
         <CoverView className={classnames('modal', className)}>
           <CoverView className='title'>{title}</CoverView>
           <CoverView className='content'>

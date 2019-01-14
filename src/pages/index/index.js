@@ -31,7 +31,9 @@ class Index extends Component {
     full_undefind: '',
     full_status: '',
     home_button: {},
-    norm: []
+    norm: [],
+    isShowCoupon: false,
+    curCoupon: {}
   }
 
   componentWillMount () {
@@ -51,15 +53,26 @@ class Index extends Component {
       this.props.dispatch({
         type: 'common/requestHomeInfo'
       }).then(res => {
+        const {coupon, menu_banner, menu_cart, ...useState} = res
+
         this.setState({
-          ...res
+          ...useState
         })
 
-        const {menu_banner, menu_cart} = res
         this.props.dispatch({
           type: 'common/setThemeInfo',
           payload: {menu_banner, menu_cart, theme: res.style_color}
         })
+
+        this.coupon = coupon
+        this.curCouponIndex = 0
+
+        if (coupon.length > 0) {
+          this.setState({
+            isShowCoupon: true,
+            curCoupon: coupon[0],
+          })
+        }
       })
     })
   }
@@ -133,12 +146,31 @@ class Index extends Component {
     this.setState({activeBannerIndex: e.detail.current})
   }
 
+  couponClose = () => {
+    const {curCouponIndex, coupon} = this
+
+    this.setState({
+      isShowCoupon: false
+    })
+
+    if (curCouponIndex + 2 <= coupon.length) {
+      this.curCouponIndex  ++
+      setTimeout(() => {
+        this.setState({
+          isShowCoupon: true,
+          curCoupon: coupon[this.curCouponIndex],
+        })
+      }, 1500)
+    }
+  }
+
   render () {
     const {theme} = this.props
 
     const { user_full_num, full_num, isShowModal, activeBannerIndex,
       home_banner, full_image, full_logo, full_logo_no, home_button,
-      full_status, full_undefind, norm} = this.state
+      full_status, full_undefind, norm, isShowCoupon,
+      curCoupon} = this.state
 
     const totStarsArr = new Array(full_num);
 
@@ -240,6 +272,12 @@ class Index extends Component {
             }
           </View>
         </Modal>
+
+        <CouponModal
+          show={isShowCoupon} coupon={curCoupon}
+          onClose={this.couponClose}
+        />
+
       </View>
     )
   }

@@ -47,7 +47,7 @@ class PickTime extends Component {
 
     return (
       <Block>
-        <View className='mask' style={{display: show ? 'block' : 'none'}} onClick={this.handleClose}/>
+        <View className='mask' style={{display: show ? 'block' : 'none'}} onClick={this.handleClose} catchTouchMove/>
         <View className={classnames('pick-time', show ? 'active' : '')}>
           <View className='title'>选择预约时间
             <Text className='cacel' onClick={this.props.onClose.bind(this, null)}>取消</Text>

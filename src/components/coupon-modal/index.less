@@ -1,10 +1,10 @@
-
+@import "../../minxin";
 
 .coupon-modal-content{
   width: 640px;
   margin: 0 auto;
   image{
-    width: 640px;
+    width: 599px;
     height: 408px;
     margin: 0 auto;
     display: block;
@@ -17,5 +17,85 @@
     margin: -30px auto 0;
     background: #CB394C;
     border-radius: 0 0 30px 30px;
+    .item{
+      width: 544px;
+      height: 180px;
+      margin: 0 auto 16px;
+      background: #fff;
+      border-radius: 24px;
+      display: flex;
+      .info{
+        width: 356px;
+        height: 100%;
+        box-sizing: border-box;
+        padding: 32px 42px 0;
+        .name{
+          font-size: 36px;
+          color: @c-40;
+          font-weight: bold;
+        }
+        .memo{
+          font-size: 26px;
+          color: @c-666;
+          margin-top: 24px;
+        }
+      }
+      .gap{
+        width: 20px;
+        position: relative;
+        height: 100%;
+        overflow: hidden;
+        .line{
+          width: 2px;
+          height: 100%;
+          background: @c-999;
+          position: absolute;
+          left: 50%;
+          top: 0;
+          transform: translate(-50%);
+        }
+        .dot{
+          width: 20px;
+          height: 20px;
+          background: #CB394C;
+          border-radius: 50%;
+          position: absolute;
+          left: 50%;
+          top: 0;
+          transform: translate(-50%, -50%);
+          &-b{
+            top: unset;
+            bottom: 0;
+            transform: translate(-50%, 50%);
+          }
+        }
+      }
+      .right{
+        display: flex;
+        flex: 1;
+        .price{
+          flex: 1;
+          text-align: center;
+          line-height: 180px;
+          font-size: 72px;
+          font-weight: bold;
+          color: #cf3e36;
+          text{
+            font-size: 32px;
+            font-weight: normal;
+          }
+        }
+        .handle{
+          writing-mode: tb-rl;
+          font-size: 28px;
+          letter-spacing: 15px;
+          text-align: center;
+          width: 48px;
+          line-height: 48px;
+          color: #fff;
+          border-radius: 0 24px 24px 0;
+        }
+      }
+    }
   }
 }
