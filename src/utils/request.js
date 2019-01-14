@@ -25,8 +25,11 @@ export default async (options = { method: 'GET', data: {} }) => {
     method: options.method.toUpperCase(),
   })
 
+  Taro.showNavigationBarLoading()
 
   let resp = await request();
+
+  Taro.hideNavigationBarLoading()
 
   return loopFetch(resp)
 

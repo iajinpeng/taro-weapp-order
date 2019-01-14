@@ -387,7 +387,7 @@ class Choose extends Component {
               showLocation
             />
             <View className='hide-map' onClick={this.toggleShowMap}><Text/></View>
-            <ScrollView
+            <ScrollView scrollWithAnimation
               scrollY scrollIntoView={scrollStoreId}
               className={classnames('shop-list', isIphoneX ? 'iphonex' : '', !isShowMap ? 'long' : '')}>
               {
@@ -442,6 +442,7 @@ class Choose extends Component {
 
                 })
               }
+              <View className='alias-space' />
             </ScrollView>
           </Block>
 

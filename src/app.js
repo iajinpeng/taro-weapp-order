@@ -22,7 +22,9 @@ class App extends Component {
       'pages/post-order/index',
       'pages/present-good/index',
       'pages/add-address/index',
-      'pages/add-address/select'
+      'pages/add-address/select',
+      'pages/choose-coupon/index',
+      'pages/alias/index'
 
     ],
     permission: {

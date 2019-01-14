@@ -2,6 +2,7 @@ import Taro, {Component} from '@tarojs/taro'
 import {View, Button, Text, Image, Input} from '@tarojs/components'
 import {connect} from '@tarojs/redux'
 import {AtToast} from 'taro-ui'
+import {baseUrl} from "../../config/index";
 import './index.less'
 
 @connect(({common, address}) => ({...common, ...address}))
@@ -71,6 +72,13 @@ class AddAddress extends Component {
         title: '保存成功'
       })
 
+      this.props.dispatch({
+        type: 'order/setKeyRefreshAddress',
+        payload: {
+          refreshAddress: true
+        }
+      })
+
       setTimeout(Taro.navigateBack, 1500)
     })
   }
@@ -95,7 +103,7 @@ class AddAddress extends Component {
             <View className='input' onClick={this.toSelectPage}>
               {curAddress.name || '点击选择'}
             </View>
-            <Image src={require('../../images/icon-down.png')} onClick={this.toSelectPage} />
+            <Image src={`${baseUrl}/static/addons/diancan/img/style/style_${theme}_3.png`} onClick={this.toSelectPage} />
           </View>
           <View className='item'>
             <View className='label'>门牌号</View>

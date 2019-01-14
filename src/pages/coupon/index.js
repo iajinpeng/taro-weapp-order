@@ -59,9 +59,9 @@ class Coupon extends Component {
   }
 
   requestMore = () => {
-    const {total, page, page_size} = this.state
+    const {page, page_size} = this.state
 
-    if (!this.canRequestMore || page * page_size >= total) return
+    if (!this.canRequestMore || page * page_size >= this.state.total) return
 
     this.canRequestMore = true
 
@@ -81,14 +81,33 @@ class Coupon extends Component {
     this.setState({openIndex: openIndex !== index ? index : null})
   }
 
-  toChooseShop = () => {
+  getedUserInfo = (res) => {
+    if (this.props.userInfo.userInfo) return
+    this.props.dispatch({
+      type: 'common/setUserInfo',
+      payload: res.detail
+    })
+    const { encryptedData, iv } = res.detail
+
+    this.props.dispatch({
+      type: 'common/postUserInfo',
+      payload: {
+        encryptedData, iv
+      }
+    })
+
+    this.toChoosePage()
+  }
+
+  toChoosePage = () => {
+    if (!this.props.userInfo.userInfo) return
     Taro.navigateTo({
       url: '/pages/choose-shop/index'
     })
   }
 
   render() {
-    const {theme} = this.props
+    const {theme, userInfo} = this.props
     const {type, lists, openIndex} = this.state
 
     return (
@@ -131,10 +150,13 @@ class Coupon extends Component {
                           <AtIcon value={openIndex === index ? 'chevron-up': 'chevron-down'} size='19' />
                         </View>
                       </View>
-                      <View
+                      <Button
+                        openType={userInfo.userInfo ? '' : 'getUserInfo'}
+                        onGetUserInfo={this.getedUserInfo}
+                        formType='submit'
+                        onClick={this.toChoosePage}
                         className={classnames('handle', 'theme-bg-' + theme)}
-                        onClick={this.toChooseShop}
-                      >去使用</View>
+                      >去使用</Button>
                     </View>
                     {
                       openIndex === index &&

@@ -192,7 +192,6 @@ class ShopIndex extends Component {
         optionalTagIndex,
       })
 
-      console.log(curCart)
     })
   }
 
@@ -207,7 +206,7 @@ class ShopIndex extends Component {
     let stan = this.state[key]
     stan[index] = i
     this.setState({[key]: stan}, () => {
-      const { propertyTagIndex, optionalTagIndex, curGood} = this.state
+      const {propertyTagIndex, optionalTagIndex, curGood} = this.state
 
       const carts = this.props.carts[(+this.$router.params.id)] || []
       const optionalstr = propertyTagIndex.join('') + optionalTagIndex.join('')
@@ -359,9 +358,9 @@ class ShopIndex extends Component {
         <View className='menu'>
           <View className='aside'>
             <ScrollView scrollWithAnimation
-              scrollY={!isShowCart} className='item-wrap'
-              onScroll={this.asideScroll} scrollIntoView={curGroupId}
-              id='aside-scroll'>
+                        scrollY={!isShowCart} className='item-wrap'
+                        onScroll={this.asideScroll} scrollIntoView={curGroupId}
+                        id='aside-scroll'>
               <View className='bg-alias'>
                 {
                   group.map((classify, index) => (
@@ -389,9 +388,9 @@ class ShopIndex extends Component {
             </ScrollView>
           </View>
           <ScrollView scrollWithAnimation
-            className='content'
-            scrollY={!isShowCart} scrollIntoView={curGroupGoodId}
-            onScroll={this.goodScroll}
+                      className='content'
+                      scrollY={!isShowCart} scrollIntoView={curGroupGoodId}
+                      onScroll={this.goodScroll}
           >
             {
               group.map((classify, index) => (
@@ -436,10 +435,11 @@ class ShopIndex extends Component {
                                             <Text className='num'>{cartGood.num}</Text>
                                           </Block>
                                         }
-                                        <Image onClick={this.setCart.bind(this, good, 1)}
-                                               className='add-circle'
-                                               src={require('../../images/icon-add-1.png')}
-                                        />
+                                        <View
+                                          onClick={this.setCart.bind(this, good, 1)}
+                                          className={classnames('add-circle', 'theme-bg-' + theme)}>
+                                          +
+                                        </View>
                                       </View>
                                     }
                                     {
@@ -496,7 +496,7 @@ class ShopIndex extends Component {
                         good.property.map((prop, i) => (
                           <Text key={i}>
                             {prop.list_name[good.propertyTagIndex[i]]}
-                            {i !== good.property.length -1 ? '+' : ''}
+                            {i !== good.property.length - 1 ? '+' : ''}
                           </Text>
                         ))
                       }
@@ -507,7 +507,7 @@ class ShopIndex extends Component {
                         good.optional.map((opt, i) => (
                           <Text key={i}>
                             {opt.list[good.optionalTagIndex[i]].gn_name}
-                            {i !== good.optional.length -1 ? '+' : ''}
+                            {i !== good.optional.length - 1 ? '+' : ''}
                           </Text>
                         ))
                       }
@@ -516,14 +516,14 @@ class ShopIndex extends Component {
                   <View class='item-center'>
                     <Text className={'theme-c-' + theme}>&yen;
                       {
-                        (+ good.g_price
-                        + (
-                          good.optional ?
-                            good.optional.reduce((total, item, i) => {
-                              return total += +item.list[good.optionalTagIndex[i]].gn_price
-                            }, 0)
-                            : 0
-                        )).toFixed(2)
+                        (+good.g_price
+                          + (
+                            good.optional ?
+                              good.optional.reduce((total, item, i) => {
+                                return total += +item.list[good.optionalTagIndex[i]].gn_price
+                              }, 0)
+                              : 0
+                          )).toFixed(2)
                       }
                     </Text>
                     <Text className='pre-price'>&yen;{good.g_original_price}</Text>
@@ -534,11 +534,10 @@ class ShopIndex extends Component {
                       onClick={this.this.setCart.bind(this, good, -1, good)}
                     />
                     <Text className='num'>{good.num}</Text>
-                    <Image
+                    <View
                       onClick={this.setCart.bind(this, good, 1)}
-                      className='add-circle'
-                      src={require('../../images/icon-add-1.png')}
-                    />
+                      className={classnames('add-circle', 'theme-bg-' + theme)}
+                    >+</View>
                   </View>
                 </View>
               ))
@@ -584,11 +583,10 @@ class ShopIndex extends Component {
                       onClick={this.setLocalCart.bind(this, -1)}
                     />
                     <Text className='num'>{curCart.num}</Text>
-                    <Image
+                    <View
                       onClick={this.setLocalCart.bind(this, 1)}
-                      className='add-circle'
-                      src={require('../../images/icon-add-1.png')}
-                    />
+                      className={classnames('add-circle', 'theme-bg-' + theme)}
+                    >+</View>
                   </View>
                 }
 
@@ -693,11 +691,10 @@ class ShopIndex extends Component {
                     onClick={this.setLocalCart.bind(this, -1)}
                   />
                   <Text className='num'>{curCart.num}</Text>
-                  <Image
+                  <View
                     onClick={this.setLocalCart.bind(this, 1)}
-                    className='add-circle'
-                    src={require('../../images/icon-add-1.png')}
-                  />
+                    className={classnames('add-circle', 'theme-bg-' + theme)}
+                  >+</View>
                 </View>
               }
             </View>

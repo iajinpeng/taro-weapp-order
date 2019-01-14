@@ -36,6 +36,7 @@
     height: ~"calc(100vh - 138px)";
     .null{
       padding-top: 290px;
+      color: @c-ccc;
       image{
         width: 248px;
         height: 248px;
@@ -51,72 +52,75 @@
     .coupon-list{
       width: 678px;
       margin: 30px auto 50px;
-      .item{
-        .entity{
-          display: flex;
-          height: 200px;
-          border-radius: 24px;
-          box-shadow: 0 0 20px #ddd;
-          position: relative;
-          .deno{
-            width: 240px;
-            font-size: 28px;
-            color: #fff;
-            text-align: center;
-            border-radius: 24px 0 0 24px;
-            .price{
-              font-size: 48px;
-              margin: 40px 0 16px;
-              font-weight: bold;
-              &>text{
-                font-size: 24px;
-                font-weight: normal;
-              }
-            }
-          }
-          .desc{
-            width: 390px;
-            background: #fff;
-            padding: 0 36px;
-            box-sizing: border-box;
-            font-size: 36px;
-            .name{
-              margin-top: 24px;
-              color: @c-40;
-              font-weight: bold;
-            }
-            .time{
-              font-size: 24px;
-              margin-top: 6px;
-              color: @c-666;
-            }
-            .btn{
-              padding-top: 6px;
-              font-size: 24px;
-              color: @c-999;
-            }
-          }
-          .handle{
-            writing-mode: tb-rl;
-            font-size: 28px;
-            letter-spacing: 15px;
-            text-align: center;
-            width: 48px;
-            line-height: 48px;
-            color: #fff;
-            border-radius: 0 24px 24px 0;
+
+    }
+  }
+
+  .item{
+    .entity{
+      display: flex;
+      height: 200px;
+      border-radius: 24px;
+      box-shadow: 0 0 20px #ddd;
+      position: relative;
+      .deno{
+        width: 240px;
+        font-size: 28px;
+        color: #fff;
+        text-align: center;
+        border-radius: 24px 0 0 24px;
+        .price{
+          font-size: 48px;
+          margin: 40px 0 16px;
+          font-weight: bold;
+          &>text{
+            font-size: 24px;
+            font-weight: normal;
           }
         }
-        .condi{
+      }
+      .desc{
+        width: 390px;
+        background: #fff;
+        padding: 0 36px;
+        box-sizing: border-box;
+        font-size: 36px;
+        .name{
+          margin-top: 24px;
+          color: @c-40;
+          font-weight: bold;
+        }
+        .time{
           font-size: 24px;
-          background: #fff;
-          margin-top: -40px;
-          padding: 50px 0 20px 27px;
-          border-radius: 0 0 24px 24px;
-          &>view{
-            margin: 16px 0;
-          }
+          margin-top: 6px;
+          color: @c-666;
         }
+        .btn{
+          padding-top: 6px;
+          font-size: 24px;
+          color: @c-999;
+        }
+      }
+      .handle{
+        writing-mode: tb-rl;
+        font-size: 28px;
+        letter-spacing: 15px;
+        text-align: center;
+        width: 48px;
+        line-height: 48px;
+        color: #fff;
+        border-radius: 0 24px 24px 0;
+        padding: 0;
+      }
+    }
+    .condi{
+      font-size: 24px;
+      background: #fff;
+      margin-top: -40px;
+      padding: 50px 0 20px 27px;
+      border-radius: 0 0 24px 24px;
+      &>view{
+        margin: 16px 0;
       }
     }
   }

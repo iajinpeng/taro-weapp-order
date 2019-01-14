@@ -3,7 +3,11 @@ import {getOrderList, getOrderDetail, getPreOrderInfo, getReserveTime,requestSav
 export default {
   namespace: 'order',
   state: {
-    curAddress: {}
+    curAddress: {},
+    couponOptions: [],
+    curCouponIndex: 0,
+
+    refreshAddress: false
   },
 
   effects: {
@@ -28,6 +32,14 @@ export default {
   },
 
   reducers: {
-
+    setKeyRefreshAddress(state, {payload}) {
+      return {...state, ...payload}
+    },
+    setCouponOptions(state, {payload}) {
+      return {...state, ...payload}
+    },
+    setCouponIndex(state, {payload}) {
+      return {...state, ...payload}
+    },
   }
 }

@@ -53,8 +53,8 @@ export default {
       } else{
         let index = idAlikes.findIndex(item => item.optionalstr === good.optionalstr)
         if (index > -1) {
-          curCart[index] = good
-          curCart[index].num === 0 && curCart.splice(index, 1)
+          curCart[index] = good;
+          (!curCart[index].num || curCart[index].num === 0) && curCart.splice(index, 1)
         } else {
           curCart.push(good)
         }

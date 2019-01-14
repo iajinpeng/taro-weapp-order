@@ -44,15 +44,17 @@ class Index extends Component {
         payload: res
       })
     })
-  }
-
-  componentWillUnmount () { }
-
-  componentDidShow () {
     this.setSessionId().then(() => {
       this.props.dispatch({
         type: 'common/requestHomeInfo'
       }).then(res => {
+
+        if (!res.under_review) {
+          Taro.redirectTo({
+            url: '/pages/alias/index'
+          })
+        }
+
         const {coupon, menu_banner, menu_cart, ...useState} = res
 
         this.setState({
@@ -77,6 +79,12 @@ class Index extends Component {
     })
   }
 
+  componentWillUnmount () { }
+
+  componentDidShow () {
+
+  }
+
   componentDidHide () { }
 
   showOrHideModal = (bool) => {
@@ -95,6 +103,7 @@ class Index extends Component {
   }
 
   toChoosePage = (present) => {
+    if (!this.props.userInfo.userInfo) return
     const url = present ? '/pages/choose-shop/index?type=' + present : '/pages/choose-shop/index'
     Taro.navigateTo({
       url
@@ -119,13 +128,8 @@ class Index extends Component {
     })
   }
 
-  toPresentPage = () => {
-    Taro.navigateTo({
-      url: '/pages/present-good/index'
-    })
-  }
-
   getedUserInfo = (res) => {
+    if (this.props.userInfo.userInfo) return
     this.props.dispatch({
       type: 'common/setUserInfo',
       payload: res.detail
@@ -165,7 +169,7 @@ class Index extends Component {
   }
 
   render () {
-    const {theme} = this.props
+    const {theme, userInfo} = this.props
 
     const { user_full_num, full_num, isShowModal, activeBannerIndex,
       home_banner, full_image, full_logo, full_logo_no, home_button,
@@ -175,7 +179,7 @@ class Index extends Component {
     const totStarsArr = new Array(full_num);
 
     return (
-      <View className='index-page'>
+      <View className='index-page' style={{display: home_banner.banner ? 'block' : 'none'}}>
         <View className='icon-help-wrap' onClick={this.toNoticePage}>
           <AtIcon value='help' size='14' />
         </View>
@@ -206,9 +210,10 @@ class Index extends Component {
         </View>
         <Button
           className={classnames('do-btn', 'theme-grad-bg-' + theme)}
-          openType='getUserInfo'
+          openType={userInfo.userInfo ? '' : 'getUserInfo'}
           onGetUserInfo={this.getedUserInfo}
           formType='submit'
+          onClick={this.toChoosePage.bind(this, null)}
         >
           开始点餐</Button>
 

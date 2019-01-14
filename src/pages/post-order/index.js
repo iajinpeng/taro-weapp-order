@@ -11,7 +11,7 @@ import {baseUrl} from '../../config'
 import './index.less'
 
 
-@connect(({common, cart, shop}) => ({...common, ...cart, ...shop}))
+@connect(({common, cart, shop, order}) => ({...common, ...cart, ...shop, ...order}))
 class Order extends Component {
 
   config = {
@@ -38,11 +38,28 @@ class Order extends Component {
     selectedAddress: null,
     alertPhone: false,
     alertPhoneText: '',
+    goods: []
   }
 
   componentWillMount() {
+    this.setState({
+      goods: this.props.carts[this.$router.params.store_id] || []
+    })
     this.getPreOrderInfo()
     this.getReserveTime()
+  }
+
+  componentDidShow() {
+    if (this.props.refreshAddress) {
+      this.getPreOrderInfo(this.state.orderType)
+
+      this.props.dispatch({
+        type: 'order/setKeyRefreshAddress',
+        payload: {
+          refreshAddress: false
+        }
+      })
+    }
   }
 
   changeOrderType = orderType => {
@@ -281,13 +298,28 @@ class Order extends Component {
     })
   }
 
+  toChooseCouponPage = () => {
+    const {couponList} = this.state
+    if (couponList.length === 0) return
+
+    this.props.dispatch({
+      type: 'order/setCouponOptions',
+      payload: {
+        couponOptions: couponList
+      }
+    })
+
+    Taro.navigateTo({
+      url: '/pages/choose-coupon/index'
+    })
+  }
+
   render() {
-    const {theme, carts} = this.props
+    const {theme, curCouponIndex} = this.props
     const {orderType, isShowPicker, takeType, store, memo, s_take,
       couponList, userAddress, amount, isShowTextarea, reserveTime,
       dayTimeIndexs, isShowAddress, userPhoneNum, selectedAddress,
-      alertPhone, alertPhoneText} = this.state
-    const goods = carts[this.$router.params.store_id] || []
+      alertPhone, alertPhoneText, goods} = this.state
 
     const isIphoneX = !!(this.props.systemInfo.model &&
       this.props.systemInfo.model.replace(' ', '').toLowerCase().indexOf('iphonex') > -1)
@@ -307,14 +339,14 @@ class Order extends Component {
                   className={classnames('wrap', orderType !== 1 ? 'un-active' : 'theme-c-' + theme,
                     s_take.indexOf(1) > -1 ? '' : 'disabled')}
                   onClick={this.changeOrderType.bind(this, 1)}>
-                  <Image src={require('../../images/icon-shop.png')}/>
+                  <Image src={orderType !== 1 ? require('../../images/icon-shop.png') : `${baseUrl}/static/addons/diancan/img/style/style_${theme}_1.png`}/>
                   <Text>到店取餐</Text>
                 </View>
                 <View
                   className={classnames('wrap wrap-2', orderType !== 3 ? 'un-active' : 'theme-c-' + theme,
                     s_take.indexOf(3) > -1 ? '' : 'disabled')}
                   onClick={this.changeOrderType.bind(this, 3)}>
-                  <Image src={require('../../images/icon-bike.png')}/>
+                  <Image src={orderType !== 3 ? require('../../images/icon-bike.png') : `${baseUrl}/static/addons/diancan/img/style/style_${theme}_4.png`}/>
                   <Text>外卖配送</Text>
                 </View>
 
@@ -333,7 +365,7 @@ class Order extends Component {
                           + reserveTime[dayTimeIndexs[0]].time[dayTimeIndexs[1]].time
                         ) : ''
                       }
-                      <Image src={require('../../images/icon-down.png')}/>
+                      <Image src={`${baseUrl}/static/addons/diancan/img/style/style_${theme}_3.png`}/>
                     </View>
                   </View>
                   <View className='mobile'>
@@ -405,7 +437,7 @@ class Order extends Component {
                             + reserveTime[dayTimeIndexs[0]].time[dayTimeIndexs[1]].time
                           ) : ''
                       }
-                      <Image src={require('../../images/icon-down.png')}/>
+                      <Image src={`${baseUrl}/static/addons/diancan/img/style/style_${theme}_3.png`}/>
                     </View>
                   </View>
                 </View>
@@ -483,14 +515,15 @@ class Order extends Component {
                   </View>
                 }
 
-                <View className='ticket'>
+                <View className='ticket' onClick={this.toChooseCouponPage}>
                   <View>
-                    <Image src={require('../../images/icon-ticket.png')}/>
+                    <Image src={`${baseUrl}/static/addons/diancan/img/style/style_${theme}_5.png`}/>
                     <Text>优惠券</Text>
                   </View>
                   <View className='handle'>
                     {
-                      couponList.length > 0 ? couponList[0].uc_name : '暂无可用'
+                      (couponList.length === 0 || curCouponIndex === 99) ?
+                        '暂无可用' : couponList[curCouponIndex].uc_name
                     }
                     <AtIcon value='chevron-right' size='16'/>
                   </View>

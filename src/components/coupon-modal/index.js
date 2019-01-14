@@ -1,6 +1,7 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Image, Text } from '@tarojs/components'
+import { View, Image, Text, Button } from '@tarojs/components'
 import {AtCurtain} from 'taro-ui'
+import { connect } from '@tarojs/redux'
 import PropTypes from 'prop-types'
 import classnames from 'classnames'
 import {baseUrl} from '../../config/index';
@@ -8,6 +9,7 @@ import {baseUrl} from '../../config/index';
 import './index.less'
 import '../../app.less'
 
+@connect(({common}) => ({...common}))
 class CouponModal extends Component {
 
   static defaultProps = {
@@ -16,8 +18,33 @@ class CouponModal extends Component {
     }
   }
 
+  getedUserInfo = (res) => {
+    if (this.props.userInfo.userInfo) return
+    this.props.dispatch({
+      type: 'common/setUserInfo',
+      payload: res.detail
+    })
+    const { encryptedData, iv } = res.detail
+
+    this.props.dispatch({
+      type: 'common/postUserInfo',
+      payload: {
+        encryptedData, iv
+      }
+    })
+
+    this.toChoosePage()
+  }
+
+  toChoosePage = () => {
+    if (!this.props.userInfo.userInfo) return
+    Taro.navigateTo({
+      url: '/pages/choose-shop/index'
+    })
+  }
+
   render () {
-    const {show, coupon, onClose} = this.props
+    const {show, coupon, onClose, userInfo} = this.props
 
     const {background_color, butto_color, font_color, image, list} = coupon
 
@@ -45,10 +72,14 @@ class CouponModal extends Component {
                       <Text>&yen;</Text>
                       {parseInt(item.uc_price)}
                     </View>
-                    <View
+                    <Button
+                      openType={userInfo.userInfo ? '' : 'getUserInfo'}
+                      onGetUserInfo={this.getedUserInfo}
+                      formType='submit'
+                      onClick={this.toChoosePage}
                       style={{color: font_color, backgroundColor: butto_color}}
                       className={classnames('handle')}
-                    >去使用</View>
+                    >去使用</Button>
                   </View>
                 </View>
               ))
