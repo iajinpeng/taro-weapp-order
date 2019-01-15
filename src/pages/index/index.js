@@ -166,7 +166,7 @@ class Index extends Component {
           isShowCoupon: true,
           curCoupon: coupon[this.curCouponIndex],
         })
-      }, 1500)
+      }, 500)
     }
   }
 

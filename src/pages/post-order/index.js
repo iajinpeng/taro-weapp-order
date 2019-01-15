@@ -449,12 +449,10 @@ class Order extends Component {
               <View className='title'>订单详情</View>
               <View className='block-content'>
                 {
+                  goods.length > 0 &&
                   goods.map((good, index) => (
                     <View className='good' key={index}>
-                      {
-                        good.g_image_100 &&
-                        <Image className='pic' src={baseUrl + good.g_image_100} />
-                      }
+                      <Image className='pic' src={baseUrl + good.g_image_100} />
                       <View className='info'>
                         <View className='name'>
                           {good.g_title}

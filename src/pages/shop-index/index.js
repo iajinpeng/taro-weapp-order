@@ -267,10 +267,11 @@ class ShopIndex extends Component {
     }
 
     this.props.dispatch({
-      type: 'cart/setOneCartItem',
+      type: 'cart/setCart',
       payload: {
         id: +this.$router.params.id,
-        good
+        good,
+        num
       }
     })
   }

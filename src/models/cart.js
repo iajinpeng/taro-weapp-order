@@ -19,16 +19,33 @@ export default {
 
       !curCart && (curCart = [])
 
-      let index = curCart.findIndex(item => item.g_id === good.g_id)
+      if (!good.propertyTagIndex) {
+        let index = curCart.findIndex(item => item.g_id === good.g_id)
 
-      if (index > -1) {
-        !curCart[index].num && (curCart[index].num = 0)
-        curCart[index].num += num
+        if (index > -1) {
+          !curCart[index].num && (curCart[index].num = 0)
+          curCart[index].num += num
 
-        curCart[index].num === 0 && curCart.splice(index, 1)
+          curCart[index].num === 0 && curCart.splice(index, 1)
+        } else {
+          curCart.push({...good, num})
+        }
       } else {
-        curCart.push({...good, num})
+        let idAlikes = curCart.filter(item => item.g_id === good.g_id)
+        if (idAlikes.length === 0) {
+          curCart.push({...good, num})
+        } else{
+          let index = idAlikes.findIndex(item => item.optionalstr === good.optionalstr)
+          if (index > -1) {
+            curCart[index].num += num
+            curCart[index].num === 0 && curCart.splice(index, 1)
+          } else {
+            curCart.push({...good, num})
+          }
+        }
+
       }
+
       state.carts[id] = curCart
 
       Taro.setStorageSync('carts', state.carts)
@@ -37,30 +54,6 @@ export default {
     clearOneCart(state, {payload}) {
       const {id} = payload
       state.carts[id] = []
-
-      Taro.setStorageSync('carts', state.carts)
-
-      return {...state}
-    },
-    setOneCartItem(state, {payload}) {
-      const {id, good} = payload
-      let curCart = state.carts[id] || []
-
-      let idAlikes = curCart.filter(item => item.g_id === good.g_id)
-
-      if (idAlikes.length === 0) {
-        curCart.push(good)
-      } else{
-        let index = idAlikes.findIndex(item => item.optionalstr === good.optionalstr)
-        if (index > -1) {
-          curCart[index] = good;
-          (!curCart[index].num || curCart[index].num === 0) && curCart.splice(index, 1)
-        } else {
-          curCart.push(good)
-        }
-      }
-
-      state.carts[id] = curCart
 
       Taro.setStorageSync('carts', state.carts)
 
