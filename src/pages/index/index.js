@@ -57,7 +57,7 @@ class Index extends Component {
         //   return
         // }
 
-        const {coupon, menu_banner, menu_cart, ...useState} = res
+        const {coupon, menu_banner, menu_cart, bottom_logo, ...useState} = res
 
         this.setState({
           ...useState
@@ -65,7 +65,7 @@ class Index extends Component {
 
         this.props.dispatch({
           type: 'common/setThemeInfo',
-          payload: {menu_banner, menu_cart, theme: res.style_color}
+          payload: {menu_banner, menu_cart, theme: res.style_color, bottom_logo}
         })
 
         this.coupon = coupon

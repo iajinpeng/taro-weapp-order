@@ -3,6 +3,7 @@ import {View, Text, Button, Image, ScrollView} from '@tarojs/components'
 import {connect} from '@tarojs/redux'
 import {AtIcon} from 'taro-ui'
 import classnames from 'classnames'
+import Copyright from '../../components/copyright'
 import './index.less'
 
 @connect(({common}) => ({...common}))
@@ -175,6 +176,8 @@ class Coupon extends Component {
 
             </View>
           }
+
+          <Copyright />
 
         </ScrollView>
       </View>

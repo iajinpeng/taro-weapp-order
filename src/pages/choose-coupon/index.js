@@ -4,6 +4,7 @@ import {connect} from '@tarojs/redux'
 import {AtIcon} from 'taro-ui'
 import classnames from 'classnames'
 import {baseUrl} from '../../config/index';
+import Copyright from '../../components/copyright'
 
 import '../coupon/index.less'
 import './index.less'
@@ -61,7 +62,7 @@ class ChooseCoupon extends Component {
           couponOptions.map((coupon, index) => (
             <View className='item' key={index} onClick={this.changeCoupon.bind(this, index)}>
               {
-                curCouponIndex === 0 ?
+                curCouponIndex === index ?
                   <Image src={`${baseUrl}/static/addons/diancan/img/style/style_${theme}_2.png`} />
                   :
                   <View className='un-select' />
@@ -99,6 +100,10 @@ class ChooseCoupon extends Component {
             </View>
           ))
         }
+
+        <View className='copy-box'>
+          <Copyright />
+        </View>
       </View>
     )
   }

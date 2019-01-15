@@ -3,6 +3,7 @@ import {View, Button, Text, Image, Input} from '@tarojs/components'
 import {connect} from '@tarojs/redux'
 import {AtToast} from 'taro-ui'
 import {baseUrl} from "../../config/index";
+import Copyright from '../../components/copyright'
 import './index.less'
 
 @connect(({common, address}) => ({...common, ...address}))
@@ -132,10 +133,15 @@ class AddAddress extends Component {
             />
           </View>
         </View>
+
         <Button
           className={isCanPost ? 'theme-grad-bg-' + theme : 'disabled'} disabled={!isCanPost}
           onClick={this.postAddress}
         >确认保存</Button>
+
+        <View className="copy-box">
+          <Copyright />
+        </View>
 
         <AtToast
           isOpened={alertPhone} text={alertPhoneText} iconSize={40} duration={2000}

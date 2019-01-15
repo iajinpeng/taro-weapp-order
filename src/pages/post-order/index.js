@@ -6,6 +6,7 @@ import classnames from 'classnames'
 
 import PickTime from '../../components/pick-time'
 import ChooseAddress from '../../components/choose-address'
+import Copyright from '../../components/copyright'
 import {baseUrl} from '../../config'
 
 import './index.less'
@@ -608,6 +609,7 @@ class Order extends Component {
                 <Text>{memo.length}/30个字</Text>
               </View>
             </View>
+            <Copyright />
           </View>
         </ScrollView>
 
