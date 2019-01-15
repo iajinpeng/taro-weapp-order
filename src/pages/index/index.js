@@ -70,10 +70,12 @@ class Index extends Component {
         this.curCouponIndex = 0
 
         if (coupon.length > 0) {
-          this.setState({
-            isShowCoupon: true,
-            curCoupon: coupon[0],
-          })
+          setTimeout(() => {
+            this.setState({
+              isShowCoupon: true,
+              curCoupon: coupon[0],
+            })
+          }, 1500)
         }
       })
     })

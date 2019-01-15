@@ -327,6 +327,7 @@ class Order extends Component {
     const useAddress = selectedAddress || (userAddress.length >0 ? userAddress.find(item => item.optional) : [])
 
     return (
+      theme &&
       <View className='post-order'>
         <ScrollView
           scrollY={!isShowPicker} className={classnames('scroll-view', isIphoneX ? 'iphonex' : '')}
@@ -360,10 +361,10 @@ class Order extends Component {
                     <View>
                       {
                         reserveTime.length > 0 ?
-                        (
-                          (dayTimeIndexs[0] === 0 ? '' : reserveTime[dayTimeIndexs[0]].title)
-                          + reserveTime[dayTimeIndexs[0]].time[dayTimeIndexs[1]].time
-                        ) : ''
+                          (
+                            (dayTimeIndexs[0] === 0 ? '' : reserveTime[dayTimeIndexs[0]].title)
+                            + reserveTime[dayTimeIndexs[0]].time[dayTimeIndexs[1]].time
+                          ) : ''
                       }
                       <Image src={`${baseUrl}/static/addons/diancan/img/style/style_${theme}_3.png`}/>
                     </View>
@@ -450,7 +451,10 @@ class Order extends Component {
                 {
                   goods.map((good, index) => (
                     <View className='good' key={index}>
-                      <Image className='pic' src={baseUrl + good.g_image_100} />
+                      {
+                        good.g_image_100 &&
+                        <Image className='pic' src={baseUrl + good.g_image_100} />
+                      }
                       <View className='info'>
                         <View className='name'>
                           {good.g_title}

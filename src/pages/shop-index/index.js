@@ -346,7 +346,7 @@ class ShopIndex extends Component {
               menu_banner.banner.map((img, index) => (
                 <SwiperItem className='swiper-item' key={index}>
                   <View>
-                    <Image className='swiper-img' src={baseUrl + img.image}/>
+                    <Image className='swiper-img' src={img.image ? baseUrl + img.image : ''}/>
                   </View>
                 </SwiperItem>
               ))
@@ -355,121 +355,126 @@ class ShopIndex extends Component {
           </Swiper>
         </View>
 
-        <View className='menu'>
-          <View className='aside'>
-            <ScrollView scrollWithAnimation
-                        scrollY={!isShowCart} className='item-wrap'
-                        onScroll={this.asideScroll} scrollIntoView={curGroupId}
-                        id='aside-scroll'>
-              <View className='bg-alias'>
+        {
+          group.length &&
+          <View className='menu'>
+            <View className='aside'>
+              <ScrollView
+                scrollWithAnimation
+                scrollY={!isShowCart} className='item-wrap'
+                onScroll={this.asideScroll} scrollIntoView={curGroupId}
+                id='aside-scroll'>
+                <View className='bg-alias'>
+                  {
+                    group.map((classify, index) => (
+                      <View key={index}/>
+                    ))
+                  }
+                </View>
                 {
                   group.map((classify, index) => (
-                    <View key={index}/>
+                    <View
+                      className={classnames('item', index === curClassifyIndex ? 'active' : '',
+                        index === curClassifyIndex - 1 ? 'pre-active' : '',
+                        index === curClassifyIndex + 1 ? 'af-active' : '')}
+                      onClick={this.changeClassify.bind(this, index)}
+                      key={index} id={'asid-' + classify.group_id}
+                    >
+                      <View>
+                        <Image src={classify.gg_image ? baseUrl + classify.gg_image : ''}/>
+                        <Text>{classify.gg_name}</Text>
+                      </View>
+                    </View>
                   ))
                 }
-              </View>
+                <View className='null-block'/>
+              </ScrollView>
+            </View>
+            <ScrollView
+              scrollWithAnimation
+              className='content'
+              scrollY={!isShowCart} scrollIntoView={curGroupGoodId}
+              onScroll={this.goodScroll}
+            >
               {
                 group.map((classify, index) => (
-                  <View
-                    className={classnames('item', index === curClassifyIndex ? 'active' : '',
-                      index === curClassifyIndex - 1 ? 'pre-active' : '',
-                      index === curClassifyIndex + 1 ? 'af-active' : '')}
-                    onClick={this.changeClassify.bind(this, index)}
-                    key={index} id={'asid-' + classify.group_id}
-                  >
-                    <View>
-                      <Image src={baseUrl + classify.gg_image}/>
-                      <Text>{classify.gg_name}</Text>
+                  <View className='good-block' key={index} id={'id' + classify.group_id}>
+                    <View className='title' id={'title-' + classify.group_id}>
+                      <View className={scrollCurGroupId === classify.group_id ? 'top-show' : ''}>
+                        <Image src={classify.gg_image ? baseUrl + classify.gg_image : ''}/>
+                        <Text>{classify.gg_name}</Text>
+                      </View>
+                    </View>
+                    <View className='good-list'>
+                      {
+                        classify.goods_list.map((good, i) => {
+                          const cartGood = carts.find(item => item.g_id === good.g_id)
+                          return (
+                            <View className='good' key={i} onClick={this.showDetail.bind(this, good)}>
+                              <View className='img-wrap'>
+                                {
+                                  good.tag_name &&
+                                  <Text className={classnames('tag', 'theme-grad-bg-' + theme)}>{good.tag_name}</Text>
+                                }
+                                <Image src={good.g_image_100 ? baseUrl + good.g_image_100 : ''}/>
+                              </View>
+                              <View className='info'>
+                                <View className='name'>{good.g_title}</View>
+                                <View className='pre-price'>&yen;{good.g_original_price}</View>
+                                <View className='price'><Text>&yen;</Text>{good.g_price}</View>
+                                <View className='handle' onClick={this.stopPropagation}>
+                                  {
+                                    good.g_combination === 1 &&
+                                    <Block>
+                                      {
+                                        good.g_has_norm === 2 &&
+                                        <View className='num-box'>
+                                          {
+                                            cartGood && cartGood.num !== 0 &&
+                                            <Block>
+                                              <AtIcon
+                                                value='subtract-circle' size={26}
+                                                onClick={this.this.setCart.bind(this, good, -1, cartGood)}
+                                              />
+                                              <Text className='num'>{cartGood.num}</Text>
+                                            </Block>
+                                          }
+                                          <View
+                                            onClick={this.setCart.bind(this, good, 1)}
+                                            className={classnames('add-circle', 'theme-bg-' + theme)}>
+                                            +
+                                          </View>
+                                        </View>
+                                      }
+                                      {
+                                        good.g_has_norm === 1 &&
+                                        <Button onClick={this.openOptions.bind(this, good)}
+                                                className={'theme-bg-' + theme}
+                                        >选规格</Button>
+                                      }
+                                    </Block>
+                                  }
+
+                                  {
+                                    good.g_combination === 2 &&
+                                    <Button onClick={this.toStandardDetail.bind(this, good.g_id)}
+                                            className={'theme-bg-' + theme}
+                                    >选规格</Button>
+                                  }
+                                </View>
+                              </View>
+                            </View>
+                          )
+                        })
+                      }
+
                     </View>
                   </View>
                 ))
               }
-              <View className='null-block'/>
             </ScrollView>
           </View>
-          <ScrollView scrollWithAnimation
-                      className='content'
-                      scrollY={!isShowCart} scrollIntoView={curGroupGoodId}
-                      onScroll={this.goodScroll}
-          >
-            {
-              group.map((classify, index) => (
-                <View className='good-block' key={index} id={'id' + classify.group_id}>
-                  <View className='title' id={'title-' + classify.group_id}>
-                    <View className={scrollCurGroupId === classify.group_id ? 'top-show' : ''}>
-                      <Image src={baseUrl + classify.gg_image}/>
-                      <Text>{classify.gg_name}</Text>
-                    </View>
-                  </View>
-                  <View className='good-list'>
-                    {
-                      classify.goods_list.map((good, i) => {
-                        const cartGood = carts.find(item => item.g_id === good.g_id)
-                        return (
-                          <View className='good' key={i} onClick={this.showDetail.bind(this, good)}>
-                            <View className='img-wrap'>
-                              {
-                                good.tag_name &&
-                                <Text className={classnames('tag', 'theme-grad-bg-' + theme)}>{good.tag_name}</Text>
-                              }
-                              <Image src={baseUrl + good.g_image_100}/>
-                            </View>
-                            <View className='info'>
-                              <View className='name'>{good.g_title}</View>
-                              <View className='pre-price'>&yen;{good.g_original_price}</View>
-                              <View className='price'><Text>&yen;</Text>{good.g_price}</View>
-                              <View className='handle' onClick={this.stopPropagation}>
-                                {
-                                  good.g_combination === 1 &&
-                                  <Block>
-                                    {
-                                      good.g_has_norm === 2 &&
-                                      <View className='num-box'>
-                                        {
-                                          cartGood && cartGood.num !== 0 &&
-                                          <Block>
-                                            <AtIcon
-                                              value='subtract-circle' size={26}
-                                              onClick={this.this.setCart.bind(this, good, -1, cartGood)}
-                                            />
-                                            <Text className='num'>{cartGood.num}</Text>
-                                          </Block>
-                                        }
-                                        <View
-                                          onClick={this.setCart.bind(this, good, 1)}
-                                          className={classnames('add-circle', 'theme-bg-' + theme)}>
-                                          +
-                                        </View>
-                                      </View>
-                                    }
-                                    {
-                                      good.g_has_norm === 1 &&
-                                      <Button onClick={this.openOptions.bind(this, good)}
-                                              className={'theme-bg-' + theme}
-                                      >选规格</Button>
-                                    }
-                                  </Block>
-                                }
-
-                                {
-                                  good.g_combination === 2 &&
-                                  <Button onClick={this.toStandardDetail.bind(this, good.g_id)}
-                                          className={'theme-bg-' + theme}
-                                  >选规格</Button>
-                                }
-                              </View>
-                            </View>
-                          </View>
-                        )
-                      })
-                    }
-
-                  </View>
-                </View>
-              ))
-            }
-          </ScrollView>
-        </View>
+        }
 
         {
           isShowCart && carts.length > 0 && <Text className='mask' onClick={this.closeCart}/>
@@ -549,7 +554,7 @@ class ShopIndex extends Component {
         <AtCurtain isOpened={isShowDetail} onCLose={this.closeDetail.bind(this, curGood)}>
           <View className='good-detail'>
             <View className='image-wrap'>
-              <Image src={baseUrl + curGood.g_image_300}/>
+              <Image src={curGood.g_image_300 ? baseUrl + curGood.g_image_300 : ''}/>
             </View>
             <View className='info'>
               <View className='title'>

@@ -51,7 +51,7 @@ class CouponModal extends Component {
     return (
       <AtCurtain isOpened={show} className='coupon-modal' onClose={onClose}>
         <View className='coupon-modal-content'>
-          <Image src={baseUrl + image} />
+          <Image src={image ? baseUrl + image : ''} />
           <View className='list' style={{backgroundColor: background_color}}>
             {
               list && list.map((item, index) => (
