@@ -46,8 +46,7 @@ class AddAddress extends Component {
   postAddress = () => {
     const {curAddress} = this.props
     const {da_id, address_detail, user_name, user_telephone} = this.state
-    const [address_lng, address_lat] = curAddress.location.split(',')
-    const {name, pname, cityname, adname, address } = curAddress
+    const {name, address, longitude, latitude } = curAddress
 
     if (!/^1(?:3\d|4[4-9]|5[0-35-9]|6[67]|7[013-8]|8\d|9\d)\d{8}$/.test(user_telephone)){
       this.setState({
@@ -60,11 +59,11 @@ class AddAddress extends Component {
     this.props.dispatch({
       type: 'address/postAddress',
       payload: {
-        address: [name, pname, cityname, adname, address].join('|'),
+        address: name + '|' +address,
         da_id,
         address_detail,
-        address_lng,
-        address_lat,
+        address_lng: longitude,
+        address_lat: latitude,
         user_name, user_telephone
       }
     }).then(() => {
@@ -103,7 +102,13 @@ class AddAddress extends Component {
             <View className='input' onClick={this.toSelectPage}>
               {curAddress.name || '点击选择'}
             </View>
-            <Image src={`${baseUrl}/static/addons/diancan/img/style/style_${theme}_3.png`} onClick={this.toSelectPage} />
+            {
+              theme &&
+              <Image
+                src={`${baseUrl}/static/addons/diancan/img/style/style_${theme}_3.png`}
+                onClick={this.toSelectPage}
+              />
+            }
           </View>
           <View className='item'>
             <View className='label'>门牌号</View>

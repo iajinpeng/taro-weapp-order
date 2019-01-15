@@ -128,14 +128,23 @@ class Order extends Component {
     })
   }
 
-  handleScroll = e => {
-    const top = e.detail.scrollTop
-    this.setState({isShowTextarea: top >= 35})
-  }
+  // handleScroll = e => {
+  //   let {scrollTop, scrollHeight} = e.detail
+  //   let {windowWidth, windowHeight} = Taro.getSystemInfoSync()
+  //   let fix = windowWidth / 750
+  //
+  //   let asize = scrollHeight - scrollTop - windowHeight
+  //
+  //   console.log(asize / fix)
+  //
+  //   this.setState({
+  //     isShowTextarea: asize > 400 * fix || asize < 250 * fix
+  //   })
+  //
+  // }
 
   handleMemoChange = e => {
     this.setState({memo: e.target.value})
-    console.log(e)
   }
 
   showAddress = () => {
@@ -196,8 +205,6 @@ class Order extends Component {
 
     const {orderType, takeType, userPhoneNum, reserveTime, dayTimeIndexs, memo} = this.state
 
-    console.log(carts[this.$router.params.store_id])
-
     const goods = carts[this.$router.params.store_id].map(cart => {
       let {g_id, num, send_goods} = cart
       let g_property = [], optional = []
@@ -250,6 +257,7 @@ class Order extends Component {
   stepPay = async () => {
 
     const {userPhoneNum, orderType} = this.state
+    const store_id = this.$router.params.store_id
 
     if (orderType !== 3) {
       if (!userPhoneNum) {
@@ -275,7 +283,7 @@ class Order extends Component {
       this.props.dispatch({
         type: 'cart/clearOneCart',
         payload: {
-          id: this.$router.params.store_id
+          id: store_id
         }
       })
     }
@@ -283,12 +291,39 @@ class Order extends Component {
     if (!pay) {
       const res = await this.requestPayOrder(order_id)
 
-      Taro.requestPayment({
+      await Taro.requestPayment({
         ...res,
         timeStamp: res.timestamp
-      }).then(response => {
-        console.log(response)
       })
+
+      Taro.showLoading({mask: true})
+
+      await this.props.dispatch({
+        type: 'order/getOrderPayStatus',
+        payload: {
+          store_id,
+          order_id
+        }
+      })
+
+      Taro.hideLoading()
+
+      Taro.showToast({
+        title: '支付成功'
+      })
+
+      setTimeout(() => {
+        Taro.redirectTo({
+          url: '/pages/order-detail/index?id=' + order_id
+        })
+      }, 1000)
+
+    } else {
+      setTimeout(() => {
+        Taro.redirectTo({
+          url: '/pages/order-detail/index?id=' + order_id
+        })
+      }, 1000)
     }
   }
 
@@ -326,12 +361,21 @@ class Order extends Component {
 
     const useAddress = selectedAddress || (userAddress.length >0 ? userAddress.find(item => item.optional) : [])
 
+    let totalAmout = +amount
+
+    if (takeType === 3) {
+      totalAmout += +store.s_take_money
+    }
+    if (couponList[curCouponIndex] && couponList[curCouponIndex].uc_price) {
+      totalAmout -= +couponList[curCouponIndex].uc_price
+    }
+
     return (
       theme &&
       <View className='post-order'>
         <ScrollView
           scrollY={!isShowPicker} className={classnames('scroll-view', isIphoneX ? 'iphonex' : '')}
-          onScroll={this.handleScroll}
+          // onScroll={this.handleScroll}
         >
           <View className='content'>
             <View className='order-type'>
@@ -572,14 +616,12 @@ class Order extends Component {
             <View className='discount'>
               已优惠￥
               {
-                couponList.reduce((total, item) => {
-                  return total += +item.uc_price
-                }, 0)
+                couponList[curCouponIndex].uc_price || 0
               }
             </View>
             <View className='total'>
               合计￥
-              <Text>{amount}</Text>
+              <Text>{totalAmout.toFixed(2)}</Text>
             </View>
           </View>
           <Button className={'theme-grad-bg-' + theme} onClick={this.stepPay}>去支付</Button>

@@ -154,9 +154,8 @@ class ShopIndex extends Component {
     })
   }
 
-  closeDetail = (good) => {
+  closeDetail = () => {
     this.setState({isShowDetail: false})
-    this.setCart(good)
   }
 
   openOptions = (good, e) => {
@@ -256,15 +255,23 @@ class ShopIndex extends Component {
     curCart.optionalstr = propertyTagIndex.join('') + optionalTagIndex.join('')
     this.setState({curCart})
 
+    let normInfo = {}
+    if (stanInfo.property) {
+      normInfo = {
+        property: JSON.parse(JSON.stringify(stanInfo.property)),
+        optional: JSON.parse(JSON.stringify(stanInfo.norm.optional)),
+        propertyTagIndex: JSON.parse(JSON.stringify(propertyTagIndex)),
+        optionalTagIndex: JSON.parse(JSON.stringify(optionalTagIndex)),
+        optionalstr: propertyTagIndex.join('') + optionalTagIndex.join(''),
+      }
+    }
+
     const good = {
       ...curGood,
       ...curCart,
-      property: JSON.parse(JSON.stringify(stanInfo.property)),
-      optional: JSON.parse(JSON.stringify(stanInfo.norm.optional)),
-      propertyTagIndex: JSON.parse(JSON.stringify(propertyTagIndex)),
-      optionalTagIndex: JSON.parse(JSON.stringify(optionalTagIndex)),
-      optionalstr: propertyTagIndex.join('') + optionalTagIndex.join(''),
+      ...normInfo
     }
+
 
     this.props.dispatch({
       type: 'cart/setCart',
@@ -552,7 +559,7 @@ class ShopIndex extends Component {
 
         </View>
 
-        <AtCurtain isOpened={isShowDetail} onCLose={this.closeDetail.bind(this, curGood)}>
+        <AtCurtain isOpened={isShowDetail} onCLose={this.closeDetail}>
           <View className='good-detail'>
             <View className='image-wrap'>
               <Image src={curGood.g_image_300 ? baseUrl + curGood.g_image_300 : ''}/>

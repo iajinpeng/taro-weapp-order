@@ -33,7 +33,8 @@ class Index extends Component {
     home_button: {},
     norm: [],
     isShowCoupon: false,
-    curCoupon: {}
+    curCoupon: {},
+    isFirstShow: ''
   }
 
   componentWillMount () {
@@ -49,11 +50,12 @@ class Index extends Component {
         type: 'common/requestHomeInfo'
       }).then(res => {
 
-        if (!res.under_review) {
-          Taro.redirectTo({
-            url: '/pages/alias/index'
-          })
-        }
+        // if (res.under_review) {
+        //   Taro.redirectTo({
+        //     url: '/pages/alias/index'
+        //   })
+        //   return
+        // }
 
         const {coupon, menu_banner, menu_cart, ...useState} = res
 
@@ -84,6 +86,11 @@ class Index extends Component {
   componentWillUnmount () { }
 
   componentDidShow () {
+    if (this.state.isFirstShow === '') {
+      this.setState({isFirstShow: true})
+    } else {
+      this.setState({isFirstShow: false})
+    }
 
   }
 
@@ -132,6 +139,21 @@ class Index extends Component {
 
   getedUserInfo = (res) => {
     if (this.props.userInfo.userInfo) return
+
+    this.handleFetchUserInfo(res)
+
+    this.toChoosePage()
+  }
+
+  presentInfo = res => {
+    if (this.props.userInfo.userInfo) return
+
+    this.handleFetchUserInfo(res)
+
+    this.toChoosePage('present')
+  }
+
+  handleFetchUserInfo = (res) => {
     this.props.dispatch({
       type: 'common/setUserInfo',
       payload: res.detail
@@ -144,8 +166,6 @@ class Index extends Component {
         encryptedData, iv
       }
     })
-
-    this.toChoosePage()
   }
 
   handleBannerChange = e => {
@@ -166,7 +186,7 @@ class Index extends Component {
           isShowCoupon: true,
           curCoupon: coupon[this.curCouponIndex],
         })
-      }, 500)
+      }, 350)
     }
   }
 
@@ -175,7 +195,7 @@ class Index extends Component {
 
     const { user_full_num, full_num, isShowModal, activeBannerIndex,
       home_banner, full_image, full_logo, full_logo_no, home_button,
-      full_status, full_undefind, norm, isShowCoupon,
+      full_status, full_undefind, norm, isShowCoupon, isFirstShow,
       curCoupon} = this.state
 
     const totStarsArr = new Array(full_num);
@@ -243,6 +263,9 @@ class Index extends Component {
                 <Button
                   class={classnames('do', 'theme-grad-bg-' + theme)}
                   style={{display: (user_full_num === full_num && full_num !== 0) ? 'block' : 'none'}}
+                  openType={userInfo.userInfo ? '' : 'getUserInfo'}
+                  onGetUserInfo={this.presentInfo}
+                  formType='submit'
                   onClick={this.toChoosePage.bind(this, 'present')}
                 >
                   去下单
@@ -281,7 +304,7 @@ class Index extends Component {
         </Modal>
 
         <CouponModal
-          show={isShowCoupon} coupon={curCoupon}
+          show={isShowCoupon && isFirstShow} coupon={curCoupon}
           onClose={this.couponClose}
         />
 

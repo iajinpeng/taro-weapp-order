@@ -57,6 +57,7 @@ class ChooseCoupon extends Component {
         </View>
 
         {
+          Array.isArray(couponOptions) &&
           couponOptions.map((coupon, index) => (
             <View className='item' key={index} onClick={this.changeCoupon.bind(this, index)}>
               {

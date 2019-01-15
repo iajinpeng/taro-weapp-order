@@ -4,6 +4,8 @@ import PropTypes from 'prop-types'
 import classnames from 'classnames'
 import {connect} from '@tarojs/redux'
 
+import {baseUrl} from "../../config/index";
+
 import './index.less'
 import '../../app.less'
 
@@ -30,9 +32,21 @@ class ChooseAddress extends Component {
   }
 
   toAddressPage = () => {
-    Taro.navigateTo({
-      url: '/pages/add-address/index'
+    Taro.chooseLocation().then(res => {
+      if (res.name) {
+        this.props.dispatch({
+          type: 'address/setCurAddress',
+          payload: res
+        })
+
+        Taro.navigateTo({
+          url: '/pages/add-address/index'
+        })
+      }
     })
+      .catch(err => {
+        console.log(err)
+      })
   }
 
   choose = index => {
@@ -86,7 +100,7 @@ class ChooseAddress extends Component {
                 <View className='address-item' key={index} onClick={this.choose.bind(this, index)}>
                   {
                     defaultIndex === index ?
-                    <Image src={require('../../images/icon-selected.png')} />
+                    <Image src={`${baseUrl}/static/addons/diancan/img/style/style_${theme}_2.png`} />
                       :
                     <View className='alias' />
                   }

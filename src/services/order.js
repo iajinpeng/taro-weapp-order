@@ -55,3 +55,12 @@ export const requestPayOrder = data => request({
   method: 'POST',
   data
 })
+
+/**
+ * 获取订单支付状态
+ * */
+export const getOrderPayStatus = data => request({
+  url: '/addons.diancan.api.Order_getOrderPayStatus',
+  method: 'POST',
+  data
+})
