@@ -246,6 +246,18 @@ class ShopIndex extends Component {
     })
   }
 
+  setComboCart = (good, num) => {
+    console.log(good)
+    this.props.dispatch({
+      type: 'cart/setComboCart',
+      payload: {
+        id: +this.$router.params.id,
+        good,
+        num
+      }
+    })
+  }
+
 
   setLocalCart = num => {
     const {curGood, stanInfo, propertyTagIndex, optionalTagIndex} = this.state
@@ -300,9 +312,9 @@ class ShopIndex extends Component {
     })
   }
 
-  toStandardDetail = (id) => {
+  toStandardDetail = (good) => {
     Taro.navigateTo({
-      url: `/pages/standard-detail/index?store_id=${this.$router.params.id}&id=${id}`
+      url: `/pages/standard-detail/index?store_id=${this.$router.params.id}&id=${good.group_id}&name=${good.g_title}&g_price=${good.g_price}`
     })
   }
 
@@ -465,7 +477,7 @@ class ShopIndex extends Component {
 
                                   {
                                     good.g_combination === 2 &&
-                                    <Button onClick={this.toStandardDetail.bind(this, good.g_id)}
+                                    <Button onClick={this.toStandardDetail.bind(this, good)}
                                             className={'theme-bg-' + theme}
                                     >选规格</Button>
                                   }
@@ -496,63 +508,116 @@ class ShopIndex extends Component {
             {
               carts.map((good, index) => (
                 good.num && good.num !== 0 &&
+                (
+                  !good.optionalnumstr ?
+                  <View className='item' key={index}>
+                    <View class='item-left'>
+                      <View className='name'>
+                        {good.g_title}
+                        {
+                          good.property && <Text>/</Text>
+                        }
+                        {
+                          good.property &&
+                          good.property.map((prop, i) => (
+                            <Text key={i}>
+                              {prop.list_name[good.propertyTagIndex[i]]}
+                              {i !== good.property.length - 1 ? '+' : ''}
+                            </Text>
+                          ))
+                        }
+                      </View>
+                      <View className='param'>
+                        {
+                          good.optional &&
+                          good.optional.map((opt, i) => (
+                            <Text key={i}>
+                              {opt.list[good.optionalTagIndex[i]].gn_name}
+                              {i !== good.optional.length - 1 ? '+' : ''}
+                            </Text>
+                          ))
+                        }
+                      </View>
+                    </View>
+                    <View class='item-center'>
+                      <Text className={'theme-c-' + theme}>&yen;
+                        {
+                          (+good.g_price
+                            + (
+                              good.optional ?
+                                good.optional.reduce((total, item, i) => {
+                                  return total += +item.list[good.optionalTagIndex[i]].gn_price
+                                }, 0)
+                                : 0
+                            )).toFixed(2)
+                        }
+                      </Text>
+                      <Text className='pre-price'>&yen;{good.g_original_price}</Text>
+                    </View>
+                    <View className='num-box'>
+                      <AtIcon
+                        value='subtract-circle' size={26}
+                        onClick={this.this.setCart.bind(this, good, -1, good)}
+                      />
+                      <Text className='num'>{good.num}</Text>
+                      <View
+                        onClick={this.setCart.bind(this, good, 1)}
+                        className={classnames('add-circle', 'theme-bg-' + theme)}
+                      >+</View>
+                    </View>
+                  </View>
+                    :
+                  <View className='item' key={index}>
+                    <View class='item-left'>
+                      <View className='name'>
+                        {good.g_title}
+                      </View>
+                      <View className='param'>
+                        {
+                          good.fixed ?
+                          good.fixed.reduce((total, fix) => {
+                            total.push(`${fix.gn_name}(${fix.gn_num}份)`)
 
-                <View className='item' key={index}>
-                  <View class='item-left'>
-                    <View className='name'>
-                      {good.g_title}
-                      {
-                        good.property && <Text>/</Text>
-                      }
-                      {
-                        good.property &&
-                        good.property.map((prop, i) => (
-                          <Text key={i}>
-                            {prop.list_name[good.propertyTagIndex[i]]}
-                            {i !== good.property.length - 1 ? '+' : ''}
-                          </Text>
-                        ))
-                      }
+                            return total
+                          }, []).join('+') : ''
+                        }
+                        {
+                          good.fixed.length > 0 && good.optional.length > 0 ? '+' : ''
+                        }
+                        {
+                          good.optional ?
+                          good.optional.reduce((total, opt) => {
+
+                            let str = opt.list.reduce((t, o) => {
+                              o.num && (t.push(`${o.gn_name}(${o.num}份)`))
+                              return t
+                            }, [])
+
+                            total.push(str.join('+'))
+
+                            return total
+                          }, []).join('+') : ''
+                        }
+                      </View>
                     </View>
-                    <View className='param'>
-                      {
-                        good.optional &&
-                        good.optional.map((opt, i) => (
-                          <Text key={i}>
-                            {opt.list[good.optionalTagIndex[i]].gn_name}
-                            {i !== good.optional.length - 1 ? '+' : ''}
-                          </Text>
-                        ))
-                      }
+                    <View class='item-center'>
+                      <Text className={'theme-c-' + theme}>&yen;
+                        {good.total_price ? good.total_price.toFixed(2) : ''}
+                      </Text>
+                    </View>
+                    <View className='num-box'>
+                      <AtIcon
+                        value='subtract-circle' size={26}
+                        onClick={this.setComboCart.bind(this, good, -1)}
+                      />
+                      <Text className='num'>{good.num}</Text>
+                      <View
+                        onClick={this.setComboCart.bind(this, good, 1)}
+                        className={classnames('add-circle', 'theme-bg-' + theme)}
+                      >+</View>
                     </View>
                   </View>
-                  <View class='item-center'>
-                    <Text className={'theme-c-' + theme}>&yen;
-                      {
-                        (+good.g_price
-                          + (
-                            good.optional ?
-                              good.optional.reduce((total, item, i) => {
-                                return total += +item.list[good.optionalTagIndex[i]].gn_price
-                              }, 0)
-                              : 0
-                          )).toFixed(2)
-                      }
-                    </Text>
-                    <Text className='pre-price'>&yen;{good.g_original_price}</Text>
-                  </View>
-                  <View className='num-box'>
-                    <AtIcon
-                      value='subtract-circle' size={26}
-                      onClick={this.this.setCart.bind(this, good, -1, good)}
-                    />
-                    <Text className='num'>{good.num}</Text>
-                    <View
-                      onClick={this.setCart.bind(this, good, 1)}
-                      className={classnames('add-circle', 'theme-bg-' + theme)}
-                    >+</View>
-                  </View>
-                </View>
+                )
               ))
             }
           </View>
@@ -615,7 +680,7 @@ class ShopIndex extends Component {
                 {
                   curGood.g_combination === 2 &&
                   <Button
-                    className={'theme-grad-bg-' + theme} onClick={this.toStandardDetail.bind(this, curGood.g_id)}
+                    className={'theme-grad-bg-' + theme} onClick={this.toStandardDetail.bind(this, curGood)}
                   >
                     选规格
                   </Button>

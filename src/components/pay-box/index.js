@@ -14,7 +14,8 @@ class PayBox extends Component {
     carts: [],
     themeInfo: {},
     totalPrice: null,
-    btnText: '去支付'
+    btnText: '去支付',
+    onClick: null
   }
 
   state = {
@@ -39,6 +40,14 @@ class PayBox extends Component {
     this.setState({isAlert: false})
   }
 
+  handleClick = () => {
+    if (this.props.onClick) {
+      this.props.onClick()
+    } else {
+      this.toPostOrder()
+    }
+  }
+
   render () {
     const {theme, carts, onOpenCart, themeInfo, simple, totalPrice, btnText} = this.props
     const {isAlert} = this.state
@@ -58,18 +67,22 @@ class PayBox extends Component {
             {
               totalPrice ||
               (carts.reduce((total, good) => {
-                let price = good.g_price * good.num
-                good.optional && (price +=
-                  good.optional.reduce((t, item, i) => {
-                    return t += +item.list[good.optionalTagIndex[i]].gn_price * good.num
-                  }, 0))
-                good.num && (total += +price)
+                if (!good.optionalnumstr) {
+                  let price = good.g_price * good.num
+                  good.optional && (price +=
+                    good.optional.reduce((t, item, i) => {
+                      return t += +item.list[good.optionalTagIndex[i]].gn_price * good.num
+                    }, 0))
+                  good.num && (total += +price)
+                } else {
+                  total += good.total_price
+                }
                 return total
               }, 0)).toFixed(2)
             }
           </View>
         </View>
-        <Button className={'theme-grad-bg-' + theme} onClick={this.toPostOrder}>{btnText}</Button>
+        <Button className={'theme-grad-bg-' + theme} onClick={this.handleClick}>{btnText}</Button>
 
         <AtToast
           isOpened={isAlert} text={'您还未添加商品哦～'} iconSize={40} duration={2000}

@@ -20,7 +20,8 @@ class StandardDetail extends Component {
     optional: []
   }
 
-  componentDidShow() {
+  componentWillMount() {
+    console.log(this.$router.params)
     this.getGoodNorm()
   }
 
@@ -54,16 +55,84 @@ class StandardDetail extends Component {
     !good.num && (good.num = 0)
     good.num += num
 
-    this.setState({optional: this.state.optional}, () => {
-      console.log(this.state.optional)
+    this.setState({optional: this.state.optional})
+  }
+
+  addCart = () => {
+    const {fixed, optional, g_image} = this.state
+
+    let noFull = false
+    optional.forEach((op) => {
+      let curnum = op.list.reduce((t, gn) => {
+        return t += (gn.num || 0)
+      }, 0)
+
+      if (curnum < op.gn_num) {
+        Taro.showToast({
+          title: `你还可以选择${op.gn_num - curnum}份${op.title}哦～`,
+          icon: 'none'
+        })
+        noFull = true
+        return
+      }
     })
+
+    if (noFull) return
+
+
+    const optionalnumstr = optional.reduce((total, op) => {
+      let curarr = []
+      op.list.forEach((gd) => {
+        curarr.push(gd.num || 0)
+      })
+      total.push(curarr.join('|'))
+      return total
+    }, []).join(',')
+
+    const good = {
+      g_id: +this.$router.params.id,
+      num: 1,
+      fixed,
+      optional,
+      optionalnumstr,
+      total_price: this.fixedPrice + this.optPrice + +this.$router.params.g_price,
+      g_image,
+      g_title: this.$router.params.name
+    }
+    this.props.dispatch({
+      type: 'cart/setComboCart',
+      payload: {
+        id: +this.$router.params.store_id,
+        good,
+        num: 1,
+      }
+    })
+
+    Taro.navigateBack()
   }
 
   render() {
     const {theme, menu_cart} = this.props
     const {g_description, g_image, fixed, optional} = this.state
 
+    const g_price = +this.$router.params.g_price || 0
 
+    this.fixedPrice = fixed.reduce((total, good) => {
+      let price = +good.gn_price
+      good.gn_norm.length > 0 && (
+        price += good.gn_norm.reduce((t, norm) => {
+          return t += +norm.gn_price
+        }, 0)
+      )
+      return total += price
+    }, 0)
+
+    this.optPrice = optional.reduce((total, opt) => {
+      let price = opt.list.reduce((t, good) => {
+        return t += +good.gn_price * (good.num || 0)
+      }, 0)
+      return total += price
+    }, 0)
 
     return (
       <ScrollView className='standard-detail' scrollY>
@@ -127,8 +196,9 @@ class StandardDetail extends Component {
 
         <View className="pay-wrap">
           <PayBox
-            simple
-            theme={theme} totalPrice={21.00} storeId={+this.$router.params.id}
+            simple onClick={this.addCart}
+            theme={theme}
+            totalPrice={(g_price + this.fixedPrice + this.optPrice).toFixed(2)} storeId={+this.$router.params.id}
             themeInfo={menu_cart} btnText='选好了'
           />
         </View>

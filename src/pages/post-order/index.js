@@ -90,11 +90,6 @@ class Order extends Component {
       let {g_id, num, send_goods} = cart
       let g_property = [], optional = []
 
-      // if (cart.propertyTagIndex) {
-      //   cart.property.forEach((item, i) => {
-      //     g_property.push(item.list_name[cart.propertyTagIndex[i]])
-      //   })
-      // }
       if (cart.optionalTagIndex) {
         cart.optional.forEach((item, i) => {
           optional.push({
@@ -107,6 +102,27 @@ class Order extends Component {
             }
           })
         })
+
+      }
+
+      if (cart.optionalnumstr) {
+        optional = cart.optional.reduce((total, op) => {
+          let cur = {
+            parent_id: op.parent_id,
+            list: {}
+          }
+          op.list.forEach((gd) => {
+            if (gd.num) {
+              cur.list[gd.gn_id] = {
+                gn_id: gd.gn_id,
+                gn_num: gd.num
+              }
+            }
+          })
+          total.push(cur)
+          return total
+        }, [])
+        console.log(optional)
       }
 
       return {g_id, num, send_goods, g_property, optional}
@@ -417,7 +433,7 @@ class Order extends Component {
                   <View className='mobile'>
                     <Image src={require('../../images/icon-mobile.png')}/>
                     <Input value={userPhoneNum} onInput={this.phoneNumInput} placeholder='请输入手机号'/>
-                    <Button open-type="getPhoneNumber" onGetphonenumber={this.autoInputMobile}>
+                    <Button open-type='getPhoneNumber' onGetphonenumber={this.autoInputMobile}>
                       <Text className={'theme-c-' + theme}>自动填写</Text>
                     </Button>
 
@@ -496,6 +512,7 @@ class Order extends Component {
                 {
                   goods.length > 0 &&
                   goods.map((good, index) => (
+                    !good.optionalnumstr ?
                     <View className='good' key={index}>
                       <Image className='pic' src={baseUrl + good.g_image_100} />
                       <View className='info'>
@@ -549,12 +566,64 @@ class Order extends Component {
                         </View>
                       </View>
                     </View>
+                      :
+                    <View className='good'>
+                      <Image className='pic' src={baseUrl + good.g_image} />
+                      <View className='info'>
+                        <View className='name'>
+                          {good.g_title}
+                        </View>
+                        <View className='standard'>
+                          {
+                            good.fixed ?
+                              good.fixed.reduce((total, fix) => {
+                                total.push(`${fix.gn_name}(${fix.gn_num}份)`)
+
+                                return total
+                              }, []).join('+') : ''
+                          }
+                          {
+                            good.fixed.length > 0 && good.optional.length > 0 ? '+' : ''
+                          }
+                          {
+                            good.optional ?
+                              good.optional.reduce((total, opt) => {
+
+                                let str = opt.list.reduce((t, o) => {
+                                  o.num && (t.push(`${o.gn_name}(${o.num}份)`))
+                                  return t
+                                }, [])
+
+                                total.push(str.join('+'))
+
+                                return total
+                              }, []).join('+') : ''
+                          }
+                        </View>
+                      </View>
+                      <Text className='num'>x{good.num}</Text>
+                      <View className='price'>
+                        {
+                          good.g_original_price &&
+                          <View className='pre'>
+                            <Text>&yen;</Text>
+                            {good.g_original_price}
+                          </View>
+                        }
+                        <View className='cur'>
+                          <Text>&yen;</Text>
+                          {
+                            good.total_price ? good.total_price.toFixed(2) : ''
+                          }
+                        </View>
+                      </View>
+                    </View>
                   ))
                 }
 
                 {
                   takeType === 3 &&
-                  <View className="pack-fee">
+                  <View className='pack-fee'>
                     <Text>打包费</Text>
                     <View className='price'>
                       <Text>&yen;</Text>{store.s_take_money}
@@ -575,19 +644,22 @@ class Order extends Component {
                     <AtIcon value='chevron-right' size='16'/>
                   </View>
                 </View>
-                <View className="subtotal">
+                <View className='subtotal'>
                   共<Text className={'theme-c-' + theme}>{goods.length}</Text> 个商品，小计
                   <Text className={classnames('price', 'theme-c-' + theme)}><Text>&yen;</Text>
                     {
-                      (goods.reduce((total, good) => {
-                        let price = good.g_price * good.num
-                        good.optional && (price +=
-                          good.optional.reduce((t, item, i) => {
-                            return t += +item.list[good.optionalTagIndex[i]].gn_price * good.num
-                          }, 0))
-                        good.num && (total += +price)
-                        return total
-                      }, 0)).toFixed(2)
+                      // (goods.reduce((total, good) => {
+                      //   let price = good.g_price * good.num
+                      //   good.optional && (price +=
+                      //     good.optional.reduce((t, item, i) => {
+                      //       return t += +item.list[good.optionalTagIndex[i]].gn_price * good.num
+                      //     }, 0))
+                      //   good.num && (total += +price)
+                      //   return total
+                      // }, 0)).toFixed(2)
+                    }
+                    {
+                      totalAmout.toFixed(2)
                     }
                   </Text>
                 </View>
