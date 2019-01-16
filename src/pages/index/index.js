@@ -68,6 +68,10 @@ class Index extends Component {
           payload: {menu_banner, menu_cart, theme: res.style_color, bottom_logo}
         })
 
+        this.props.dispatch({
+          type: 'common/getSetLocalInfo'
+        })
+
         this.coupon = coupon
         this.curCouponIndex = 0
 

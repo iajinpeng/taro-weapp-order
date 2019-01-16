@@ -41,7 +41,6 @@
         width: 128px;
         height: 128px;
         border-radius: 20px;
-        background: @default-color;
         margin-right: 32px;
       }
       .info{
@@ -106,40 +105,7 @@
     }
 
   }
-
-  .pay-box{
-    width: 700px;
-    height: 96px;
-    display: flex;
-    position: fixed;
-    bottom: 40px;
-    left: 50%;
-    transform: translate(-50%);
-    .info{
-      background: @default-color;
-      border-radius: 48px 0 0 48px;
-      flex: 1;
-      display: flex;
-      align-items: center;
-      image{
-        width: 68px;
-        height: 76px;
-        margin-left: 38px;
-      }
-      .price{
-        margin-left: 62px;
-        font-size: 48px;
-        &>text{
-          font-size: 42px;
-        }
-      }
-    }
-    button{
-      border-radius: 0 48px 48px 0;
-      width: 208px;
-      height: 98px;
-      line-height: 98px;
-      font-size: 36px;
-    }
+  .pay-wrap{
+    padding-bottom: 200px;
   }
 }

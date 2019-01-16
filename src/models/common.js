@@ -2,6 +2,9 @@ import Taro from '@tarojs/taro';
 
 import {requestLogin, postUserInfo, requestHomeInfo, requestCouponList, postFormId, getUserMobile} from '../services/common';
 
+import amapFile from '../utils/amap-wx'
+import {mapKey} from '../config'
+
 export default {
   namespace: 'common',
   state: {
@@ -43,6 +46,30 @@ export default {
     * getUserMobile({payload}, {put, call}) {
       return yield call(getUserMobile, payload)
     },
+    * getSetLocalInfo({}, {put, call}) {
+
+      const getRegeo  = () => {
+        return new Promise((resolve, reject) => {
+          const myAmapFun = new amapFile.AMapWX({key: mapKey})
+          myAmapFun.getRegeo({
+            success(data) {
+              let addressInfo = data[0].regeocodeData.addressComponent
+              let locationCity = addressInfo.city.replace('市', '')
+              let location = addressInfo.streetNumber.location
+              let [longitude, latitude] = location.split(',')
+
+              resolve({location, longitude, latitude, locationCity})
+            }
+          })
+        })
+      }
+
+      const localInfo = yield getRegeo()
+      yield put({
+        type: 'setLocalInfo',
+        payload: {localInfo}
+      })
+    },
 
   },
 
@@ -54,7 +81,7 @@ export default {
       return {...state, systemInfo: payload};
     },
     setLocalInfo(state, {payload}) {
-      return {...state, localInfo: payload};
+      return {...state, ...payload};
     },
     setThemeInfo(state, {payload}) {
       return {...state, ...payload};

@@ -1,6 +1,6 @@
 @default-color: #999;
 
-@default-bezier: cubic-bezier(.36,.66,.04,1);
+@default-bezier: cubic-bezier(.36, .66, .04, 1);
 
 @c-ccc: #ccc;
 @c-999: #999;
@@ -9,15 +9,23 @@
 @c-bf: #BFBFBF;
 @c-f5: #f5f5f5;
 
-.transition(@type: all, @time: 400ms){
+.transition(@type: all, @time: 400ms) {
   transition: @type @default-bezier @time;
 }
 
+.lines-clamp(@lines) {
+  display: -webkit-box;
+  word-break: break-all;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: @lines;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
-.bottom-tooth(){
+.bottom-tooth() {
   overflow: hidden;
   position: relative;
-  &:after{
+  &:after {
     content: '';
     display: block;
     width: 100%;
@@ -30,7 +38,7 @@
   }
 }
 
-.gap(@padding){
+.gap(@padding) {
   width: 100%;
   box-sizing: border-box;
   padding: @padding;
@@ -38,11 +46,11 @@
   left: 50%;
   transform: translate(-50%);
   height: 1px;
-  .line{
+  .line {
     height: 0;
     border-bottom: 1px dashed #E6E6E6;
   }
-  &:before, &:after{
+  &:before, &:after {
     content: '';
     display: block;
     width: 30px;
@@ -54,7 +62,7 @@
     transform: translateY(-50%);
     left: -15px;
   }
-  &:after{
+  &:after {
     left: unset;
     right: -15px;
   }

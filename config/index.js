@@ -1,34 +1,27 @@
-const config = {
+'use strict';
+
+var config = {
   projectName: 'taro-post-order',
   date: '2018-12-17',
   designWidth: 750,
   deviceRatio: {
-    '640': 2.34 / 2,
+    '640': 1.17,
     '750': 1,
-    '828': 1.81 / 2
+    '828': 0.905
   },
   sourceRoot: 'src',
   outputRoot: 'dist',
   plugins: {
     babel: {
       sourceMap: true,
-      presets: [
-        'env'
-      ],
-      plugins: [
-        'transform-class-properties',
-        'transform-decorators-legacy',
-        'transform-object-rest-spread'
-      ]
+      presets: ['env'],
+      plugins: ['transform-class-properties', 'transform-decorators-legacy', 'transform-object-rest-spread']
     }
   },
-  defineConstants: {
-  },
+  defineConstants: {},
   copy: {
-    patterns: [
-    ],
-    options: {
-    }
+    patterns: [],
+    options: {}
   },
   weapp: {
     module: {
@@ -36,18 +29,12 @@ const config = {
         autoprefixer: {
           enable: true,
           config: {
-            browsers: [
-              'last 3 versions',
-              'Android >= 4.1',
-              'ios >= 8'
-            ]
+            browsers: ['last 3 versions', 'Android >= 4.1', 'ios >= 8']
           }
         },
         pxtransform: {
           enable: true,
-          config: {
-
-          }
+          config: {}
         },
         url: {
           enable: true,
@@ -69,11 +56,11 @@ const config = {
       }
     }
   }
-}
+};
 
 module.exports = function (merge) {
-  if (process.env.NODE_ENV === 'development') {
-    return merge({}, config, require('./dev'))
+  {
+    return merge({}, config, require("./dev.js"));
   }
-  return merge({}, config, require('./prod'))
-}
+  return merge({}, config, require("./prod.js"));
+};

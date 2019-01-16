@@ -6,7 +6,6 @@
     padding-right: 54px;
   }
   .banner{
-    width: 670px;
     height: 300px;
     margin: 0 auto;
     font-size: 81px;
@@ -14,10 +13,14 @@
     border-radius: 20px;
     swiper{
       height: 100%;
+      padding: 0 20px;
       .swiper-item {
         view {
           height: 100%;
+          border-radius: 20px;
           overflow: hidden;
+          margin: 0 20px;
+          box-shadow: 0 0 20px #ddd;
           .swiper-img {
             width: 100%;
             height: 100%;
@@ -52,6 +55,7 @@
     border-radius: 48px;
     color: #fff;
     font-weight: bold;
+    box-shadow: 0 0 20px #ddd;
   }
   .icon-box{
     padding: 56px 140px 40px;
@@ -66,7 +70,7 @@
         image{
           width: 78px;
           height: 92px;
-          margin-bottom: 40px;
+          margin-bottom: 30px;
         }
       }
       &:last-child{
@@ -74,7 +78,7 @@
         image{
           width: 100px;
           height: 82px;
-          margin: 10px 0 40px;
+          margin: 10px 0 30px;
         }
       }
     }
@@ -92,14 +96,13 @@
       padding: 24px 0 24px 26px;
       .title{
         font-size: 30px;
-        font-weight: bold;
         color: @c-666;
       }
       .count-box{
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin: 26px 0;
+        margin: 12px 0 26px;
         font-weight: bold;
         .count{
           font-size: 26px;

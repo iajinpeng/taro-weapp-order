@@ -12,7 +12,9 @@ class PayBox extends Component {
 
   static defaultProps = {
     carts: [],
-    themeInfo: {}
+    themeInfo: {},
+    totalPrice: null,
+    btnText: '去支付'
   }
 
   state = {
@@ -38,7 +40,7 @@ class PayBox extends Component {
   }
 
   render () {
-    const {theme, carts, onOpenCart, themeInfo, simple} = this.props
+    const {theme, carts, onOpenCart, themeInfo, simple, totalPrice, btnText} = this.props
     const {isAlert} = this.state
 
     return (
@@ -46,7 +48,7 @@ class PayBox extends Component {
         <View className='info' onClick={onOpenCart}>
           <Image src={baseUrl + themeInfo.image} />
           {
-            carts.length &&
+            carts.length && !totalPrice &&
             <View
               className='badge' style={{color: themeInfo.text_color, backgroundColor: themeInfo.background_color}}
             >{carts.length}</View>
@@ -54,6 +56,7 @@ class PayBox extends Component {
           <View className='price'>
             <Text>&yen;</Text>
             {
+              totalPrice ||
               (carts.reduce((total, good) => {
                 let price = good.g_price * good.num
                 good.optional && (price +=
@@ -66,7 +69,7 @@ class PayBox extends Component {
             }
           </View>
         </View>
-        <Button className={'theme-grad-bg-' + theme} onClick={this.toPostOrder}>去支付</Button>
+        <Button className={'theme-grad-bg-' + theme} onClick={this.toPostOrder}>{btnText}</Button>
 
         <AtToast
           isOpened={isAlert} text={'您还未添加商品哦～'} iconSize={40} duration={2000}

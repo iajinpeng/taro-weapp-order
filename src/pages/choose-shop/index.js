@@ -7,8 +7,7 @@ import ConfirmModal from '../../components/confirm-modal'
 import IdButton from '../../components/id-button'
 import Copyright from '../../components/copyright'
 
-import {mapKey, warningDistance, baseUrl} from '../../config'
-import amapFile from '../../utils/amap-wx'
+import {warningDistance, baseUrl} from '../../config'
 import Citys from '../../utils/citys'
 
 import './index.less'
@@ -18,12 +17,12 @@ import './index.less'
 }))
 class Choose extends Component {
 
+  config = {
+    navigationBarTitleText: '选择餐厅'
+  }
+
   state = {
-    locationCity: '',
     city: '',
-    location: '',
-    longitude: '',
-    latitude: '',
     isShowCitys: false,
     isSearching: false,
     isShowDistanceWarn: false,
@@ -39,31 +38,11 @@ class Choose extends Component {
   }
 
   componentWillMount() {
-    this.myAmapFun = new amapFile.AMapWX({key: mapKey})
-
-    let _this = this
-    this.myAmapFun.getRegeo({
-      success(data) {
-        let addressInfo = data[0].regeocodeData.addressComponent
-        let locationCity = addressInfo.city.replace('市', '')
-        let location = addressInfo.streetNumber.location
-        let [longitude, latitude] = location.split(',')
-        _this.setState({location, longitude, latitude, locationCity}, () => {
-          _this.getStoreList()
-        })
-
-        _this.props.dispatch({
-          type: 'common/setLocalInfo',
-          payload: {location, longitude, latitude, locationCity}
-        })
-
-      }
-    })
-
+    this.getStoreList()
   }
 
   componentDidShow() {
-    // this.state.longitude && this.getStoreList()
+
   }
 
   toggleShowCitys = () => {
@@ -74,7 +53,8 @@ class Choose extends Component {
 
   getStoreList = () => {
 
-    const {longitude, latitude, city, locationCity, keyword} = this.state
+    const {longitude, latitude, locationCity} = this.props.localInfo
+    const {keyword, city} = this.state
 
     this.props.dispatch({
       type: 'shop/getStoreList',
@@ -129,57 +109,7 @@ class Choose extends Component {
     this.setState({
       keyword: '',
       isSearching: false,
-      keywordTips: []
     })
-  }
-
-  chooseTip = (tip) => {
-    if (typeof tip.location === 'string') {
-      let {id, name} = tip
-      let [longitude, latitude] = tip.location.split(',')
-
-      this.setState({
-        longitude,
-        latitude,
-        isSearching: false,
-        keyword: name,
-        markers: [{
-          longitude,
-          latitude,
-          id,
-          title: name,
-          callout: {
-            content: name,
-            fontSize: 50,
-            display: 'ALWAYS'
-          }
-        }]
-      })
-    } else {
-      let markers = []
-      this.state.keywordTips.map((item) => {
-        if (typeof item.location === 'string') {
-          let {id, name} = item
-          let [longitude, latitude] = item.location.split(',')
-          markers.push({
-            longitude,
-            latitude,
-            id,
-            title: name,
-            callout: {
-              content: name,
-              fontSize: 50,
-              display: 'ALWAYS'
-            }
-          })
-        }
-      })
-      this.setState({
-        isSearching: false,
-        keyword: tip.name,
-        markers
-      })
-    }
   }
 
   showShopMakers = ({brand, store}) => {
@@ -287,7 +217,7 @@ class Choose extends Component {
 
   calcDistance = (loca) => {
     if (typeof loca !== 'string') return ''
-    let [lng1, lat1] = this.state.location.split(',')
+    let [lng1, lat1] = this.props.localInfo.location.split(',')
     let [lng2, lat2] = loca.split(',')
     let rad1 = lat1 * Math.PI / 180.0;
     let rad2 = lat2 * Math.PI / 180.0;
@@ -299,10 +229,10 @@ class Choose extends Component {
   }
 
   render() {
-    const {theme} = this.props
+    const {theme, localInfo: {longitude, latitude, locationCity}} = this.props
 
     const {
-      keyword, longitude, latitude, city, locationCity,
+      keyword, city,
       isShowCitys, isSearching, markers,
       store, selectedStoreIndex, isShowDistanceWarn, warnDistance,
       isShowNullWarn, isShowMap, scrollStoreId, storeFilter
@@ -425,17 +355,21 @@ class Choose extends Component {
                           {(item.distance / 1000).toFixed(2)}KM</Text>
                       </View>
                       <View className='address'>{item.s_city}{item.s_area}{item.s_address}</View>
-                      <View className='info'>
-                        <View>营业时间：{item.s_open_start}-{item.s_open_end}</View>
-                        <View>门店电话：{item.s_telephone}</View>
-                      </View>
                       {
                         selectedStoreIndex === index &&
-                        <IdButton
-                          className={'theme-grad-bg-' + theme}
-                          disabled={item.s_business === 2}
-                          onClick={this.startOrder.bind(this, item)}
-                        >开始下单</IdButton>
+
+                        <Block>
+                          <View className='info'>
+                            <View>营业时间：{item.s_open_start}-{item.s_open_end}</View>
+                            <View>门店电话：{item.s_telephone}</View>
+                          </View>
+                          <IdButton
+                            className={'theme-grad-bg-' + theme}
+                            disabled={item.s_business === 2}
+                            onClick={this.startOrder.bind(this, item)}
+                          >开始下单</IdButton>
+                        </Block>
+
                       }
 
                     </View>

@@ -137,7 +137,7 @@ class Coupon extends Component {
                 lists.map((coupon, index) => (
                   <View className='item' key={index}>
                     <View className='entity'>
-                      <View className={classnames('deno', 'theme-bg-' + theme)}>
+                      <View className={classnames('deno', 'theme-grad-bg-' + theme)}>
                         <View className='price'>
                           <Text>&yen;</Text>
                           {coupon.uc_price}
@@ -148,7 +148,7 @@ class Coupon extends Component {
                         <View className='name'>{coupon.uc_name}</View>
                         <View className='time'>{coupon.uc_start_time} 至 {coupon.uc_end_time}</View>
                         <View className='btn' onClick={this.openCondition.bind(this, index)}>使用条件
-                          <AtIcon value={openIndex === index ? 'chevron-up': 'chevron-down'} size='19' />
+                          <AtIcon value={openIndex === index ? 'chevron-up': 'chevron-down'} size='13' />
                         </View>
                       </View>
                       <Button
@@ -156,7 +156,7 @@ class Coupon extends Component {
                         onGetUserInfo={this.getedUserInfo}
                         formType='submit'
                         onClick={this.toChoosePage}
-                        className={classnames('handle', 'theme-bg-' + theme)}
+                        className={classnames('handle', 'theme-grad-bg-' + theme)}
                       >去使用</Button>
                     </View>
                     {
