@@ -190,7 +190,7 @@ class PresentGood extends Component {
     this.props.dispatch({
       type: 'cart/setCart',
       payload: {
-        id: +this.$router.params.id,
+        id: +this.$router.params.id + '-present',
         good,
         num
       }
@@ -219,7 +219,7 @@ class PresentGood extends Component {
     const {theme, menu_cart} = this.props
     const {goods, image, curGood, isShowOptions, isShowDetail, stanInfo, curCart,
       propertyTagIndex, optionalTagIndex} = this.state
-    const carts = this.props.carts[(+this.$router.params.id)] || []
+    const carts = this.props.carts[(this.$router.params.id + '-present')] || []
 
     return (
       <View className='present-good'>

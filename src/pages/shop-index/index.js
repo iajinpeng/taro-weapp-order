@@ -134,8 +134,8 @@ class ShopIndex extends Component {
 
   }
 
-  showCart = () => {
-    this.setState({isShowCart: true})
+  ToggleShowCart = () => {
+    this.setState({isShowCart: !this.state.isShowCart})
   }
 
   closeCart = () => {
@@ -717,7 +717,7 @@ class ShopIndex extends Component {
         <PayBox
           theme={theme} carts={carts} storeId={+this.$router.params.id}
           themeInfo={menu_cart}
-          onOpenCart={this.showCart}
+          onOpenCart={this.ToggleShowCart}
         />
 
         <ConfirmModal
