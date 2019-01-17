@@ -755,8 +755,8 @@ class ShopIndex extends Component {
                 </View>
               </View>
               {
-                !curCart.num || curCart.num === 0 ||
-                  curCart.optionalstr !== (propertyTagIndex.join('') + optionalTagIndex.join('')) &&
+                (!curCart.num || curCart.num === 0 ||
+                  curCart.optionalstr !== (propertyTagIndex.join('') + optionalTagIndex.join(''))) &&
                 <Button
                   className={'theme-grad-bg-' + theme} onClick={this.setLocalCart.bind(this, 1)}
                 >

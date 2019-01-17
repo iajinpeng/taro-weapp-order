@@ -64,3 +64,12 @@ export const getOrderPayStatus = data => request({
   method: 'POST',
   data
 })
+
+/**
+ * 取消订单
+ * */
+export const requestCancelOrder = data => request({
+  url: '/addons.diancan.api.Order_cancelOrder',
+  method: 'POST',
+  data
+})

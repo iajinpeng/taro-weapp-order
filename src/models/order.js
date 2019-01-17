@@ -1,5 +1,5 @@
 import {getOrderList, getOrderDetail, getPreOrderInfo, getReserveTime,
-  requestSaveOrder, requestPayOrder, getOrderPayStatus} from '../services/order'
+  requestSaveOrder, requestPayOrder, getOrderPayStatus, requestCancelOrder} from '../services/order'
 
 export default {
   namespace: 'order',
@@ -36,6 +36,9 @@ export default {
         let res = yield put(getOrderPayStatus, payload)
       }
       return res
+    },
+    * requestCancelOrder({payload}, {put, call}) {
+      return yield call(requestCancelOrder, payload)
     },
   },
 

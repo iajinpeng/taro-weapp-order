@@ -97,8 +97,8 @@ class OrderDetail extends Component {
             {
               data.o_order_status === 1 &&
               <View className="btn">
-                <Button className="ok">立即支付</Button>
-                <Button className="no">取消订单</Button>
+                <Button className={classnames('ok', 'theme-grad-bg-' + theme)}>立即支付</Button>
+                <Button className={classnames('no', 'theme-c-' + theme)}>取消订单</Button>
               </View>
             }
 

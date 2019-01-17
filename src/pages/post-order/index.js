@@ -151,21 +151,6 @@ class Order extends Component {
     })
   }
 
-  // handleScroll = e => {
-  //   let {scrollTop, scrollHeight} = e.detail
-  //   let {windowWidth, windowHeight} = Taro.getSystemInfoSync()
-  //   let fix = windowWidth / 750
-  //
-  //   let asize = scrollHeight - scrollTop - windowHeight
-  //
-  //   console.log(asize / fix)
-  //
-  //   this.setState({
-  //     isShowTextarea: asize > 400 * fix || asize < 250 * fix
-  //   })
-  //
-  // }
-
   handleMemoChange = e => {
     this.setState({memo: e.target.value})
   }
@@ -353,21 +338,24 @@ class Order extends Component {
       Taro.hideLoading()
 
       Taro.showToast({
-        title: '支付成功'
+        title: '下单成功'
       })
 
       setTimeout(() => {
         Taro.redirectTo({
           url: '/pages/order-detail/index?id=' + order_id
         })
-      }, 1000)
+      }, 2000)
 
     } else {
+      Taro.showToast({
+        title: '下单成功'
+      })
       setTimeout(() => {
         Taro.redirectTo({
           url: '/pages/order-detail/index?id=' + order_id
         })
-      }, 1000)
+      }, 2000)
     }
   }
 
@@ -375,6 +363,10 @@ class Order extends Component {
     this.setState({
       alertPhone: false,
     })
+  }
+
+  hideOrShowTextarea = bool => {
+    this.setState({isShowTextarea: bool})
   }
 
   toChooseCouponPage = () => {
@@ -687,12 +679,22 @@ class Order extends Component {
               <View className='block-content memo'>
                 {
                   isShowTextarea &&
-                  <Textarea
+                  <Textarea autoFocus
                     className='textarea' maxlength={30} value={memo}
                     onInput={this.handleMemoChange}
+                    onBlur={this.hideOrShowTextarea.bind(this, false)}
                     placeholderClass='textarea-placeholder'
                     placeholder='饮品中规格可参阅订单详情中的显示，若有其它要求,请说明。'
                   />
+                }
+
+                {
+                  !isShowTextarea &&
+                  <View className='alias' onClick={this.hideOrShowTextarea.bind(this, true)}>
+                    {
+                      memo || '饮品中规格可参阅订单详情中的显示，若有其它要求,请说明。'
+                    }
+                  </View>
                 }
                 <Text>{memo.length}/30个字</Text>
               </View>

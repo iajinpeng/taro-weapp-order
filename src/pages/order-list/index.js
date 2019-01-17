@@ -79,6 +79,19 @@ class OrderList extends Component {
     })
   }
 
+  cancelOrder = (store_id, order_id, e) => {
+    e.stopPropagation()
+    this.props.dispatch({
+      type: 'order/requestCancelOrder',
+      payload: {
+        store_id,
+        order_id
+      }
+    }).then(res => {
+      console.log(res)
+    })
+  }
+
   render() {
     const {theme} = this.props
     const {type, lists} = this.state
@@ -160,7 +173,10 @@ class OrderList extends Component {
                   {
                     order.o_order_status === 2 &&
                     <View className='good-info'>
-                      <View>取消订单</View>
+                      <View
+                        className={classnames('cancel', 'theme-c-' + theme)}
+                        onClick={this.cancelOrder.bind(this, order.store_id, order.o_id)}
+                      >取消订单</View>
                     </View>
                   }
 
