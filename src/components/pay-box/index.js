@@ -27,8 +27,12 @@ class PayBox extends Component {
       this.openAlert()
       return
     }
+    let url = '/pages/post-order/index?store_id=' + this.props.storeId
+    if (this.props.present) {
+      url += ('&type=' + 'present')
+    }
     Taro.navigateTo({
-      url: '/pages/post-order/index?store_id=' + this.props.storeId
+      url
     })
   }
 

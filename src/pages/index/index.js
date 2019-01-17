@@ -266,7 +266,7 @@ class Index extends Component {
 
                 <Button
                   class={classnames('do', 'theme-grad-bg-' + theme)}
-                  style={{display: (user_full_num === full_num && full_num !== 0) ? 'block' : 'none'}}
+                  style={{display: (user_full_num >= full_num && full_num !== 0) ? 'block' : 'none'}}
                   openType={userInfo.userInfo ? '' : 'getUserInfo'}
                   onGetUserInfo={this.presentInfo}
                   formType='submit'

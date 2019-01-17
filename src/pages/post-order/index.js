@@ -43,8 +43,14 @@ class Order extends Component {
   }
 
   componentWillMount() {
+    let goods = this.props.carts[this.$router.params.store_id] || []
+
+    if (this.$router.params.type) {
+      goods = goods.filter(item => item.fs_id)
+    }
+
     this.setState({
-      goods: this.props.carts[this.$router.params.store_id] || []
+      goods
     })
     this.getPreOrderInfo()
     this.getReserveTime()
@@ -87,7 +93,7 @@ class Order extends Component {
     const {carts, localInfo} = this.props
 
     const goods = carts[this.$router.params.store_id].map(cart => {
-      let {g_id, num, send_goods} = cart
+      let {g_id, num, send_goods, fs_id} = cart
       let g_property = [], optional = []
 
       if (cart.optionalTagIndex) {
@@ -125,7 +131,7 @@ class Order extends Component {
 
       }
 
-      return {g_id, num, send_goods, g_property, optional}
+      return {g_id, num, send_goods, g_property, optional, full_send_id: fs_id}
     })
 
     this.props.dispatch({
@@ -223,7 +229,7 @@ class Order extends Component {
     const {orderType, takeType, userPhoneNum, reserveTime, dayTimeIndexs, memo} = this.state
 
     const goods = carts[this.$router.params.store_id].map(cart => {
-      let {g_id, num, send_goods} = cart
+      let {g_id, num, send_goods, fs_id} = cart
       let g_property = [], optional = []
 
       if (cart.propertyTagIndex) {
@@ -266,7 +272,7 @@ class Order extends Component {
 
       }
 
-      return {g_id, num, send_goods, g_property, optional}
+      return {g_id, num, send_goods, g_property, optional, full_send_id: fs_id}
     })
 
     return this.props.dispatch({
@@ -576,7 +582,7 @@ class Order extends Component {
                         <View className='cur'>
                           <Text>&yen;</Text>
                           {
-                            (+good.g_price + (
+                            ((+good.g_price || 0) + (
                               good.optional ?
                                 good.optional.reduce((total, item, i) => {
                                   return total += +item.list[good.optionalTagIndex[i]].gn_price
@@ -634,7 +640,7 @@ class Order extends Component {
                         <View className='cur'>
                           <Text>&yen;</Text>
                           {
-                            good.total_price ? good.total_price.toFixed(2) : ''
+                            good.total_price ? good.total_price.toFixed(2) : '0.00'
                           }
                         </View>
                       </View>
@@ -668,17 +674,6 @@ class Order extends Component {
                 <View className='subtotal'>
                   共<Text className={'theme-c-' + theme}>{goods.length}</Text> 个商品，小计
                   <Text className={classnames('price', 'theme-c-' + theme)}><Text>&yen;</Text>
-                    {
-                      // (goods.reduce((total, good) => {
-                      //   let price = good.g_price * good.num
-                      //   good.optional && (price +=
-                      //     good.optional.reduce((t, item, i) => {
-                      //       return t += +item.list[good.optionalTagIndex[i]].gn_price * good.num
-                      //     }, 0))
-                      //   good.num && (total += +price)
-                      //   return total
-                      // }, 0)).toFixed(2)
-                    }
                     {
                       totalAmout.toFixed(2)
                     }

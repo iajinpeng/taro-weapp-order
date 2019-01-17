@@ -180,6 +180,7 @@ class ShopIndex extends Component {
       const carts = this.props.carts[(+this.$router.params.id)] || []
       const optionalstr = propertyTagIndex.join('') + optionalTagIndex.join('')
       const cartsAlike = carts.find(item => (
+        !item.fs_id &&
         (item.g_id === good.g_id) && (item.optionalstr === optionalstr)
       ))
       const curCart = JSON.parse(JSON.stringify(cartsAlike || {}))
@@ -284,6 +285,7 @@ class ShopIndex extends Component {
       ...normInfo
     }
 
+    console.log(good)
 
     this.props.dispatch({
       type: 'cart/setCart',
@@ -341,7 +343,8 @@ class ShopIndex extends Component {
 
   render() {
     const {theme, menu_banner, menu_cart} = this.props
-    const carts = this.props.carts[(+this.$router.params.id)] || []
+    const {id, fs_id} = this.$router.params
+    const carts = (this.props.carts[+id] || []).filter(item => !item.fs_id || item.fs_id === +fs_id)
 
     const {
       group, curClassifyIndex, isShowCart, isGoodNull,
@@ -602,7 +605,7 @@ class ShopIndex extends Component {
                     </View>
                     <View class='item-center'>
                       <Text className={'theme-c-' + theme}>&yen;
-                        {good.total_price ? good.total_price.toFixed(2) : ''}
+                        {good.total_price ? good.total_price.toFixed(2) : '0.00'}
                       </Text>
                     </View>
                     <View className='num-box'>
@@ -752,8 +755,8 @@ class ShopIndex extends Component {
                 </View>
               </View>
               {
-                (!curCart.num || curCart.num === 0 ||
-                  curCart.optionalstr !== (propertyTagIndex.join('') + optionalTagIndex.join(''))) &&
+                !curCart.num || curCart.num === 0 ||
+                  curCart.optionalstr !== (propertyTagIndex.join('') + optionalTagIndex.join('')) &&
                 <Button
                   className={'theme-grad-bg-' + theme} onClick={this.setLocalCart.bind(this, 1)}
                 >

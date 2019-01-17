@@ -161,8 +161,8 @@
       }
     }
     .cart-list{
-      //max-height: 40vh;
-      //overflow-y: auto;
+      max-height: 40vh;
+      overflow-y: auto;
       .item{
         margin: 40px 24px;
         display: flex;
@@ -177,6 +177,10 @@
             margin-bottom: 10px;
             color: @c-40;
             font-weight: bold;
+            .lines-clamp(2);
+          }
+          .param{
+            .lines-clamp(2);
           }
         }
         &-center{

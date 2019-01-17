@@ -21,7 +21,6 @@ class StandardDetail extends Component {
   }
 
   componentWillMount() {
-    console.log(this.$router.params)
     this.getGoodNorm()
   }
 
@@ -59,6 +58,7 @@ class StandardDetail extends Component {
   }
 
   addCart = () => {
+    const {id, store_id, fs_id} = this.$router.params
     const {fixed, optional, g_image} = this.state
 
     let noFull = false
@@ -90,19 +90,20 @@ class StandardDetail extends Component {
     }, []).join(',')
 
     const good = {
-      g_id: +this.$router.params.id,
+      g_id: +id,
       num: 1,
       fixed,
       optional,
       optionalnumstr,
-      total_price: this.optPrice + +this.$router.params.g_price,
+      total_price: this.optPrice + (+this.$router.params.g_price || 0),
       g_image,
-      g_title: this.$router.params.name
+      g_title: this.$router.params.name,
+      fs_id: +fs_id
     }
     this.props.dispatch({
       type: 'cart/setComboCart',
       payload: {
-        id: +this.$router.params.store_id,
+        id: store_id,
         good,
         num: 1,
       }
@@ -122,7 +123,7 @@ class StandardDetail extends Component {
         return t += +good.gn_price * (good.num || 0)
       }, 0)
       return total += price
-    }, 0)
+    }, 0) || 0
 
     return (
       g_description &&
@@ -189,7 +190,7 @@ class StandardDetail extends Component {
           <PayBox
             simple onClick={this.addCart}
             theme={theme}
-            totalPrice={(g_price + this.optPrice).toFixed(2)} storeId={+this.$router.params.id}
+            totalPrice={((g_price || 0) + this.optPrice).toFixed(2)} storeId={+this.$router.params.id}
             themeInfo={menu_cart} btnText='选好了'
           />
         </View>

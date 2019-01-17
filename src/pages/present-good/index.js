@@ -26,12 +26,15 @@ class PresentGood extends Component {
     stanInfo: {},
     propertyTagIndex: [],
     optionalTagIndex: [],
-
+    fs_id: ''
   }
 
   componentWillMount() {
-    this.readStorageCarts()
     this.getPresentGood()
+  }
+
+  componentDidShow () {
+    this.readStorageCarts()
   }
 
   getPresentGood = () => {
@@ -40,14 +43,20 @@ class PresentGood extends Component {
       payload: {
         store_id: this.$router.params.id
       }
-    }).then(({goods, image}) => {
-      this.setState({goods, image})
+    }).then(({goods, image, fs_id}) => {
+      this.setState({goods, image, fs_id})
     })
   }
 
-  toStandardDetail = (id) => {
+  toStandardDetail = (good) => {
     Taro.navigateTo({
-      url: `/pages/standard-detail/index?store_id=${this.$router.params.id}&id=${id}`
+      url: `/pages/standard-detail/index?store_id=${this.$router.params.id}&id=${good.g_id}&name=${good.g_title}&fs_id=${this.state.fs_id}`
+    })
+  }
+
+  toShopIndex = () => {
+    Taro.navigateTo({
+      url: '/pages/shop-index/index?id=' + this.$router.params.id + '&fs_id=' + this.state.fs_id
     })
   }
 
@@ -58,7 +67,6 @@ class PresentGood extends Component {
   showDetail = (good) => {
     const carts = this.props.carts[(+this.$router.params.id)] || []
     const curCart = JSON.parse(JSON.stringify(carts.find(item => item.g_id === good.g_id) || {}))
-
 
     this.setState({
       isShowDetail: true,
@@ -149,18 +157,41 @@ class PresentGood extends Component {
 
   setCart = (good, num, cartGood) => {
     if (num === -1 && (!cartGood.num || cartGood.num <= 0)) return
+
+    if (num === 1 && (this.props.carts[(this.$router.params.id)] || []).some(item => item.fs_id)) {
+      Taro.showToast({
+        title: '只可以选择一份赠品哦～',
+        icon: 'none'
+      })
+      return
+    }
+
+    const {fs_id} = this.state
+    const gd = {
+      ...good,
+      g_price: 0,
+      fs_id
+    }
     this.props.dispatch({
       type: 'cart/setCart',
       payload: {
         id: +this.$router.params.id,
-        good,
+        good: gd,
         num
       }
     })
   }
 
   setLocalCart = num => {
-    const {curGood, stanInfo, propertyTagIndex, optionalTagIndex} = this.state
+    if (num === 1 && (this.props.carts[(this.$router.params.id)] || []).some(item => item.fs_id)) {
+      Taro.showToast({
+        title: '只可以选择一份赠品哦～',
+        icon: 'none'
+      })
+      return
+    }
+
+    const {curGood, stanInfo, propertyTagIndex, optionalTagIndex, fs_id} = this.state
     const curCart = JSON.parse(JSON.stringify(this.state.curCart))
     !curCart.num && (curCart.num = 0)
     curCart.num += num
@@ -182,15 +213,15 @@ class PresentGood extends Component {
     const good = {
       ...curGood,
       ...curCart,
-      ...normInfo
+      ...normInfo,
+      g_price: 0,
+      fs_id
     }
-
-    console.log(good)
 
     this.props.dispatch({
       type: 'cart/setCart',
       payload: {
-        id: +this.$router.params.id + '-present',
+        id: +this.$router.params.id,
         good,
         num
       }
@@ -219,7 +250,7 @@ class PresentGood extends Component {
     const {theme, menu_cart} = this.props
     const {goods, image, curGood, isShowOptions, isShowDetail, stanInfo, curCart,
       propertyTagIndex, optionalTagIndex} = this.state
-    const carts = this.props.carts[(this.$router.params.id + '-present')] || []
+    const carts = (this.props.carts[(this.$router.params.id)] || []).filter(item => item.fs_id)
 
     return (
       <View className='present-good'>
@@ -254,7 +285,7 @@ class PresentGood extends Component {
                                 <Block>
                                   <AtIcon
                                     value='subtract-circle' size={26}
-                                    onClick={this.this.setCart.bind(this, good, -1, cartGood)}
+                                    onClick={this.setCart.bind(this, good, -1)}
                                   />
                                   <Text className='num'>{cartGood.num}</Text>
                                 </Block>
@@ -279,7 +310,7 @@ class PresentGood extends Component {
                       {
                         good.g_combination === 2 &&
                         <Button
-                          onClick={this.toStandardDetail.bind(this, good.g_id)}
+                          onClick={this.toStandardDetail.bind(this, good)}
                           className={'theme-bg-' + theme}
                         >选规格</Button>
                       }
@@ -436,7 +467,7 @@ class PresentGood extends Component {
                 {
                   curGood.g_combination === 2 &&
                   <Button
-                    className={'theme-grad-bg-' + theme} onClick={this.toStandardDetail.bind(this, curGood.g_id)}
+                    className={'theme-grad-bg-' + theme} onClick={this.toStandardDetail.bind(this, curGood)}
                   >
                     选规格
                   </Button>
@@ -447,12 +478,12 @@ class PresentGood extends Component {
           </View>
         </AtCurtain>
 
-        <PayBox simple
+        <PayBox simple present
           theme={theme} carts={carts} storeId={+this.$router.params.id}
           themeInfo={menu_cart}
         />
 
-        <Button className={classnames('more', 'theme-c-' + theme)}>选购更多</Button>
+        <Button className={classnames('more', 'theme-c-' + theme)} onClick={this.toShopIndex}>选购更多</Button>
       </View>
     )
   }

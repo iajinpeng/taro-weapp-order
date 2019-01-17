@@ -144,10 +144,13 @@ class OrderDetail extends Component {
                   <Text>打包费</Text>
                   <Text className='price'><Text>&yen; </Text>{data.o_take_money}</Text>
                 </View>
-                <View className="other">
-                  <Text>{data.o_coupon_name}</Text>
-                  <Text className={classnames('price', 'theme-c-' + theme)}><Text>-&yen; </Text>{data.o_coupon_amount}</Text>
-                </View>
+                {
+                  data.o_coupon_name &&
+                  <View className="other">
+                    <Text>{data.o_coupon_name}</Text>
+                    <Text className={classnames('price', 'theme-c-' + theme)}><Text>-&yen; </Text>{data.o_coupon_amount}</Text>
+                  </View>
+                }
 
               </View>
 
