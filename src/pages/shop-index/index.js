@@ -314,7 +314,7 @@ class ShopIndex extends Component {
 
   toStandardDetail = (good) => {
     Taro.navigateTo({
-      url: `/pages/standard-detail/index?store_id=${this.$router.params.id}&id=${good.group_id}&name=${good.g_title}&g_price=${good.g_price}`
+      url: `/pages/standard-detail/index?store_id=${this.$router.params.id}&id=${good.g_id}&name=${good.g_title}&g_price=${good.g_price}`
     })
   }
 
@@ -413,7 +413,7 @@ class ShopIndex extends Component {
             <ScrollView
               scrollWithAnimation
               className='content'
-              scrollY={!isShowCart} scrollIntoView={curGroupGoodId}
+              scrollY={!isShowCart || carts.length === 0} scrollIntoView={curGroupGoodId}
               onScroll={this.goodScroll}
             >
               {

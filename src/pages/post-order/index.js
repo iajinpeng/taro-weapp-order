@@ -122,7 +122,7 @@ class Order extends Component {
           total.push(cur)
           return total
         }, [])
-        console.log(optional)
+
       }
 
       return {g_id, num, send_goods, g_property, optional}
@@ -243,6 +243,27 @@ class Order extends Component {
             }
           })
         })
+      }
+
+
+      if (cart.optionalnumstr) {
+        optional = cart.optional.reduce((total, op) => {
+          let cur = {
+            parent_id: op.parent_id,
+            list: {}
+          }
+          op.list.forEach((gd) => {
+            if (gd.num) {
+              cur.list[gd.gn_id] = {
+                gn_id: gd.gn_id,
+                gn_num: gd.num
+              }
+            }
+          })
+          total.push(cur)
+          return total
+        }, [])
+
       }
 
       return {g_id, num, send_goods, g_property, optional}

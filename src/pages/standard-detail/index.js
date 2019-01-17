@@ -95,7 +95,7 @@ class StandardDetail extends Component {
       fixed,
       optional,
       optionalnumstr,
-      total_price: this.fixedPrice + this.optPrice + +this.$router.params.g_price,
+      total_price: this.optPrice + +this.$router.params.g_price,
       g_image,
       g_title: this.$router.params.name
     }
@@ -117,16 +117,6 @@ class StandardDetail extends Component {
 
     const g_price = +this.$router.params.g_price || 0
 
-    this.fixedPrice = fixed.reduce((total, good) => {
-      let price = +good.gn_price
-      good.gn_norm.length > 0 && (
-        price += good.gn_norm.reduce((t, norm) => {
-          return t += +norm.gn_price
-        }, 0)
-      )
-      return total += price
-    }, 0)
-
     this.optPrice = optional.reduce((total, opt) => {
       let price = opt.list.reduce((t, good) => {
         return t += +good.gn_price * (good.num || 0)
@@ -135,6 +125,7 @@ class StandardDetail extends Component {
     }, 0)
 
     return (
+      g_description &&
       <ScrollView className='standard-detail' scrollY>
         <View className='content'>
           <View className='banner'>
@@ -198,7 +189,7 @@ class StandardDetail extends Component {
           <PayBox
             simple onClick={this.addCart}
             theme={theme}
-            totalPrice={(g_price + this.fixedPrice + this.optPrice).toFixed(2)} storeId={+this.$router.params.id}
+            totalPrice={(g_price + this.optPrice).toFixed(2)} storeId={+this.$router.params.id}
             themeInfo={menu_cart} btnText='选好了'
           />
         </View>

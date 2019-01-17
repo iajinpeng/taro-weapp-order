@@ -34,7 +34,9 @@ class Choose extends Component {
     storeFilter: [],
     selectedStoreIndex: 0,
     warnDistance: '',
-    scrollStoreId: ''
+    scrollStoreId: '',
+    longitude: '',
+    latitude: '',
   }
 
   componentWillMount() {
@@ -78,6 +80,8 @@ class Choose extends Component {
     this.setState({
       isShowCitys: false,
       city: city.name
+    }, () => {
+      this.getStoreList()
     })
   }
 
@@ -229,7 +233,9 @@ class Choose extends Component {
   }
 
   render() {
-    const {theme, localInfo: {longitude, latitude, locationCity}} = this.props
+    const {theme, localInfo: {locationCity}} = this.props
+
+    const {longitude, latitude} = this.state
 
     const {
       keyword, city,
@@ -278,7 +284,7 @@ class Choose extends Component {
         </View>
         <View className='select-city' style={{display: isShowCitys ? 'block' : 'none'}}>
           <AtIndexes list={Citys} topKey='' onClick={this.chooseCity}>
-            <View className='city-block' id='local'>
+            <View className='city-block' id='local' onClick={this.chooseCity.bind(this, {name: locationCity})}>
               <View className='title'>当前定位城市</View>
               <View className='item'>{locationCity}</View>
               <View className='re-position'>重新定位</View>
@@ -305,7 +311,7 @@ class Choose extends Component {
 
 
         {
-          !isSearching &&
+          !isSearching && store.length > 0 &&
 
           <Block>
             <Map
