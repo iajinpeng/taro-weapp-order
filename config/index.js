@@ -1,7 +1,7 @@
 'use strict';
 
 var config = {
-  projectName: 'taro-post-order',
+  projectName: 'taro-order',
   date: '2018-12-17',
   designWidth: 750,
   deviceRatio: {
