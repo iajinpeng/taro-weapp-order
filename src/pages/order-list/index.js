@@ -17,14 +17,15 @@ class OrderList extends Component {
     page: 1,
     page_size: 5,
     lists: [],
-    total: 0
+    total: 0,
+    firstId: ''
   }
 
   canRequestMore = true
 
   componentWillMount() {
     this.requestOrderList().then(({total, rows}) => {
-      this.setState({total, lists: rows})
+      this.setState({total, lists: rows, firstId: rows[0].o_id})
     })
   }
 
@@ -36,7 +37,7 @@ class OrderList extends Component {
       page: 1
     }, () => {
       this.requestOrderList().then(({total, rows}) => {
-        this.setState({total, lists: rows})
+        this.setState({total, lists: rows, firstId: rows[0].o_id})
       })
     })
 
@@ -66,7 +67,8 @@ class OrderList extends Component {
       this.requestOrderList().then(({total: tot, rows}) => {
         this.setState({
           lists: [...this.state.lists, ...rows],
-          total: tot
+          total: tot,
+          firstId: rows[0].o_id
         })
         this.canRequestMore = true
       })
@@ -94,7 +96,7 @@ class OrderList extends Component {
 
   render() {
     const {theme} = this.props
-    const {type, lists} = this.state
+    const {type, lists, firstId} = this.state
 
     return (
       <View className='order-list'>
@@ -109,7 +111,7 @@ class OrderList extends Component {
 
         <ScrollView
           scrollY className='content'
-          scrollIntoView={'id' + lists[0].o_id}
+          scrollIntoView={'id' + firstId}
           onScrollToLower={this.requestMore}
         >
           {

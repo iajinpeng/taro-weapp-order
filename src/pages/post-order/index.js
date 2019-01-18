@@ -268,7 +268,8 @@ class Order extends Component {
         contact_mobile: userPhoneNum,
         o_reserve_time: reserveTime[dayTimeIndexs[0]].date + ' ' + reserveTime[dayTimeIndexs[0]].time[dayTimeIndexs[1]].time,
         o_remark: memo,
-        goods
+        goods,
+        address_id: this.useAddress.da_id
       }
     })
   }
@@ -395,7 +396,9 @@ class Order extends Component {
     const isIphoneX = !!(this.props.systemInfo.model &&
       this.props.systemInfo.model.replace(' ', '').toLowerCase().indexOf('iphonex') > -1)
 
-    const useAddress = selectedAddress || (userAddress.length >0 ? userAddress.find(item => item.optional) : [])
+    this.useAddress = selectedAddress || (userAddress.length >0 ? userAddress.find(item => item.optional) : [])
+
+    const {useAddress} = this
 
     let totalAmout = +amount
 
@@ -411,7 +414,6 @@ class Order extends Component {
       <View className='post-order'>
         <ScrollView
           scrollY={!isShowPicker} className={classnames('scroll-view', isIphoneX ? 'iphonex' : '')}
-          // onScroll={this.handleScroll}
         >
           <View className='content'>
             <View className='order-type'>
