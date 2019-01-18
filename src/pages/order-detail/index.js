@@ -42,20 +42,18 @@ class OrderDetail extends Component {
     this.setState({isShowCancelWarn: bool})
   }
 
-  stepPay = async (order) => {
+  stepPay = async () => {
 
-    const order_id = order.oid
+    const order_id = +this.$router.params.id
     const store_id = +this.$router.params.store_id
 
-    await this.props.dispatch({
+    const res = await this.props.dispatch({
       type: 'order/requestPayOrder',
       payload: {
         store_id,
         order_id
       }
     })
-
-    const res = await this.requestPayOrder(order_id)
 
     await Taro.requestPayment({
       ...res,
@@ -76,6 +74,29 @@ class OrderDetail extends Component {
 
     Taro.showToast({
       title: '下单成功'
+    })
+
+    this.getOrderDetail()
+  }
+
+  cancelOrder = () => {
+    const order_id = +this.$router.params.id
+    const store_id = +this.$router.params.store_id
+
+    this.props.dispatch({
+      type: 'order/requestCancelOrder',
+      payload: {
+        store_id,
+        order_id
+      }
+    }).then(() => {
+      this.setState({
+        isShowCancelWarn: false
+      })
+      Taro.showToast({
+        title: '取消成功'
+      })
+      this.getOrderDetail()
     })
   }
 
@@ -134,8 +155,14 @@ class OrderDetail extends Component {
             {
               data.o_order_status === 1 &&
               <View className="btn">
-                <Button onClick={this.stepPay.bind(this, data)} className={classnames('ok', 'theme-grad-bg-' + theme)}>立即支付</Button>
-                <Button className={classnames('no', 'theme-c-' + theme)}>取消订单</Button>
+                <Button
+                  onClick={this.stepPay.bind(this, data)}
+                  className={classnames('ok', 'theme-grad-bg-' + theme)}
+                >立即支付</Button>
+                <Button
+                  onClick={this.showOrHideWarn.bind(this, true)}
+                  className={classnames('no', 'theme-c-' + theme)}
+                >取消订单</Button>
               </View>
             }
 
@@ -241,7 +268,7 @@ class OrderDetail extends Component {
           theme={theme}
           title='取消订单'
           onCancel={this.showOrHideWarn.bind(this, false)}
-          onOk={this.showOrHideWarn.bind(this, false)}
+          onOk={this.cancelOrder}
         >
           确定要取消吗
         </ConfirmModal>

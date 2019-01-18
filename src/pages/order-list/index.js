@@ -2,6 +2,8 @@ import Taro, {Component} from '@tarojs/taro'
 import {View, Text, Button, Image, ScrollView} from '@tarojs/components'
 import {connect} from '@tarojs/redux'
 import classnames from 'classnames'
+
+import ConfirmModal from '../../components/confirm-modal'
 import './index.less'
 
 import {orderTypes} from '../../config'
@@ -18,7 +20,9 @@ class OrderList extends Component {
     page_size: 5,
     lists: [],
     total: 0,
-    firstId: ''
+    firstId: '',
+    isShowCancelWarn: false,
+    curOrder: {}
   }
 
   canRequestMore = true
@@ -43,16 +47,24 @@ class OrderList extends Component {
 
   }
 
-  requestOrderList = () => {
+  requestOrderList = (targetPage) => {
     const {type, page, page_size} = this.state
 
     return this.props.dispatch({
       type: 'order/getOrderList',
       payload: {
         type,
-        page,
+        page: targetPage || page,
         page_size
       }
+    })
+  }
+
+  showOrHideWarn = (bool, order, e) => {
+    e && e.stopPropagation()
+    this.setState({
+      isShowCancelWarn: bool,
+      curOrder: order
     })
   }
 
@@ -75,28 +87,43 @@ class OrderList extends Component {
     })
   }
 
-  toOrderDetail = id => {
+  toOrderDetail = (id, store_id) => {
     Taro.navigateTo({
-      url: '/pages/order-detail/index?id=' + id
+      url: '/pages/order-detail/index?id=' + id + '&store_id=' + store_id
     })
   }
 
-  cancelOrder = (store_id, order_id, e) => {
-    e.stopPropagation()
+  cancelOrder = () => {
+    const {lists, page_size, curOrder: {store_id, o_id}} = this.state
+
     this.props.dispatch({
       type: 'order/requestCancelOrder',
       payload: {
         store_id,
-        order_id
+        order_id: o_id
       }
-    }).then(res => {
-      console.log(res)
+    }).then(() => {
+      this.setState({
+        isShowCancelWarn: false
+      })
+      Taro.showToast({
+        title: '取消成功'
+      })
+      const index = lists.findIndex(item => item.o_id === o_id)
+      const targetPage = Math.floor(index / page_size)
+
+      this.requestOrderList(targetPage).then(({rows}) => {
+        let i = rows.findIndex(item => item.o_id === o_id)
+        lists[index] = rows[i]
+        this.setState({lists})
+      })
+
     })
   }
 
   render() {
     const {theme} = this.props
-    const {type, lists, firstId} = this.state
+    const {type, lists, firstId, isShowCancelWarn} = this.state
 
     return (
       <View className='order-list'>
@@ -132,7 +159,7 @@ class OrderList extends Component {
             lists.map((order, index) => (
               <View
                 className='order-item' key={index} id={'id' + order.o_id}
-                onClick={this.toOrderDetail.bind(this, order.o_id)}
+                onClick={this.toOrderDetail.bind(this, order.o_id, order.store_id)}
               >
                 <View className='order-title'>
                   <View className={classnames('status', 'theme-c-' + theme)}>
@@ -177,7 +204,7 @@ class OrderList extends Component {
                     <View className='good-info'>
                       <View
                         className={classnames('cancel', 'theme-c-' + theme)}
-                        onClick={this.cancelOrder.bind(this, order.store_id, order.o_id)}
+                        onClick={this.showOrHideWarn.bind(this, true, order)}
                       >取消订单</View>
                     </View>
                   }
@@ -221,6 +248,17 @@ class OrderList extends Component {
             ))
           }
         </ScrollView>
+
+        <ConfirmModal
+          show={isShowCancelWarn}
+          className='clear-cart-modal'
+          theme={theme}
+          title='取消订单'
+          onCancel={this.showOrHideWarn.bind(this, false)}
+          onOk={this.cancelOrder}
+        >
+          确定要取消吗
+        </ConfirmModal>
       </View>
     )
   }

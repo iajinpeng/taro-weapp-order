@@ -52,8 +52,8 @@ class Order extends Component {
     this.setState({
       goods
     })
-    this.getPreOrderInfo()
-    this.getReserveTime()
+
+    this.initPage()
   }
 
   componentDidShow() {
@@ -69,12 +69,18 @@ class Order extends Component {
     }
   }
 
-  changeOrderType = orderType => {
+  changeOrderType = async orderType => {
     if (this.state.s_take.indexOf(orderType) === -1) return
 
     this.setState({orderType})
 
-    this.getPreOrderInfo(orderType)
+    this.initPage(orderType)
+  }
+
+  initPage = async (orderType) => {
+    const amount = await this.getPreOrderInfo(orderType)
+
+    await this.getReserveTime(amount, orderType)
   }
 
   changeTakeType = takeType => {
@@ -134,7 +140,7 @@ class Order extends Component {
       return {g_id, num, send_goods, g_property, optional, full_send_id: fs_id}
     })
 
-    this.props.dispatch({
+    return this.props.dispatch({
       type: 'order/getPreOrderInfo',
       payload: {
         store_id: this.$router.params.store_id,
@@ -148,6 +154,7 @@ class Order extends Component {
         store, couponList, userAddress, amount,
         s_take: store.s_take.map(v => +v)
       })
+      return amount
     })
   }
 
@@ -189,7 +196,7 @@ class Order extends Component {
     })
   }
 
-  getReserveTime = () => {
+  getReserveTime = (amount, orderType) => {
     const {localInfo} = this.props
     return this.props.dispatch({
       type: 'order/getReserveTime',
@@ -197,7 +204,8 @@ class Order extends Component {
         store_id: this.$router.params.store_id,
         lat: localInfo.latitude,
         lng: localInfo.longitude,
-        amount: 24
+        take_type: orderType,
+        amount
       }
     }).then(res => {
       this.setState({
