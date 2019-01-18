@@ -327,67 +327,69 @@ class Choose extends Component {
             <ScrollView scrollWithAnimation
               scrollY scrollIntoView={scrollStoreId}
               className={classnames('shop-list', isIphoneX ? 'iphonex' : '', !isShowMap ? 'long' : '')}>
-              {
-                store.map((item, index) => {
-                  const isShowTheme = item.s_business === 1 && selectedStoreIndex === index
-                  const theme_c = isShowTheme ? 'theme-c-' + theme : ''
-                  const theme_bd = isShowTheme ? 'theme-bd-' + theme : ''
+              <View className='wrap'>
+                {
+                  store.map((item, index) => {
+                    const isShowTheme = item.s_business === 1 && selectedStoreIndex === index
+                    const theme_c = isShowTheme ? 'theme-c-' + theme : ''
+                    const theme_bd = isShowTheme ? 'theme-bd-' + theme : ''
 
-                  return (
-                    <View id={'id' + item.s_id}
-                      className='shop-item' key={index} onClick={this.selectShop.bind(this, item, index)}>
-                      <View className='title'>
-                        <View>
-                          <Text className={classnames('name', theme_c)}>{item.s_title}</Text>
-                          {
-                            item.s_business === 1 &&
-                            <Block>
-                              {
-                                item.s_take.indexOf('1') > -1 &&
-                                <Text className={classnames('tag', theme_c, theme_bd)}>可自取</Text>
-                              }
-                              {
-                                item.s_take.indexOf('3') > -1 &&
-                                <Text className={classnames('tag', theme_c, theme_bd)}>可外送</Text>
-                              }
-                            </Block>
-                          }
-                          {
-                            item.s_business === 2 &&
-                            <Text className='tag'>休息中</Text>
-                          }
-                        </View>
-                        <Text className={classnames('distance', theme_c)}>
-                          {(item.distance / 1000).toFixed(2)}KM</Text>
-                      </View>
-                      <View className='address'>{item.s_city}{item.s_area}{item.s_address}</View>
-                      {
-                        selectedStoreIndex === index &&
-
-                        <Block>
-                          <View className='info'>
-                            <View>营业时间：{item.s_open_start}-{item.s_open_end}</View>
-                            <View>门店电话：{item.s_telephone}</View>
+                    return (
+                      <View id={'id' + item.s_id}
+                            className='shop-item' key={index} onClick={this.selectShop.bind(this, item, index)}>
+                        <View className='title'>
+                          <View>
+                            <Text className={classnames('name', theme_c)}>{item.s_title}</Text>
+                            {
+                              item.s_business === 1 &&
+                              <Block>
+                                {
+                                  item.s_take.indexOf('1') > -1 &&
+                                  <Text className={classnames('tag', theme_c, theme_bd)}>可自取</Text>
+                                }
+                                {
+                                  item.s_take.indexOf('3') > -1 &&
+                                  <Text className={classnames('tag', theme_c, theme_bd)}>可外送</Text>
+                                }
+                              </Block>
+                            }
+                            {
+                              item.s_business === 2 &&
+                              <Text className='tag'>休息中</Text>
+                            }
                           </View>
-                          <IdButton
-                            className={'theme-grad-bg-' + theme}
-                            disabled={item.s_business === 2}
-                            onClick={this.startOrder.bind(this, item)}
-                          >开始下单</IdButton>
-                        </Block>
+                          <Text className={classnames('distance', theme_c)}>
+                            {(item.distance / 1000).toFixed(2)}KM</Text>
+                        </View>
+                        <View className='address'>{item.s_city}{item.s_area}{item.s_address}</View>
+                        {
+                          selectedStoreIndex === index &&
 
-                      }
+                          <Block>
+                            <View className='info'>
+                              <View>营业时间：{item.s_open_start}-{item.s_open_end}</View>
+                              <View>门店电话：{item.s_telephone}</View>
+                            </View>
+                            <IdButton
+                              className={'theme-grad-bg-' + theme}
+                              disabled={item.s_business === 2}
+                              onClick={this.startOrder.bind(this, item)}
+                            >开始下单</IdButton>
+                          </Block>
 
-                    </View>
-                  )
+                        }
 
-                })
-              }
-              <View className='alias-space' />
-              {
-                store.length > 0 &&
-                <Copyright />
-              }
+                      </View>
+                    )
+
+                  })
+                }
+                <View className='alias-space' />
+                {
+                  store.length > 0 &&
+                  <Copyright />
+                }
+              </View>
 
             </ScrollView>
           </Block>

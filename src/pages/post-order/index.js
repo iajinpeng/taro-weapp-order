@@ -191,7 +191,8 @@ class Order extends Component {
 
 
   chooseReserveTime = () => {
-    this.getReserveTime().then(() => {
+    const {amount, takeType} = this.state
+    this.getReserveTime(amount, takeType).then(() => {
       this.setState({isShowPicker: true})
     })
   }
@@ -651,11 +652,27 @@ class Order extends Component {
                 }
 
                 {
-                  takeType === 3 &&
+                  (orderType === 3 || takeType === 3) &&
                   <View className='pack-fee'>
                     <Text>打包费</Text>
                     <View className='price'>
                       <Text>&yen;</Text>{store.s_take_money}
+                    </View>
+                  </View>
+                }
+
+                {
+                  orderType === 3 &&
+                  <View className='pack-fee'>
+                    <Text>配送费</Text>
+                    <View className='price'>
+                      <Text>&yen;</Text>
+                      {
+                        reserveTime.length > 0 ?
+                          (
+                            reserveTime[dayTimeIndexs[0]].time[dayTimeIndexs[1]].price
+                          ) : ''
+                      }
                     </View>
                   </View>
                 }
@@ -677,7 +694,13 @@ class Order extends Component {
                   共<Text className={'theme-c-' + theme}>{goods.length}</Text> 个商品，小计
                   <Text className={classnames('price', 'theme-c-' + theme)}><Text>&yen;</Text>
                     {
-                      totalAmout.toFixed(2)
+                      (
+                        totalAmout + +store.s_take_money
+                        + (orderType === 3 && reserveTime.length > 0 ?
+                          (
+                            +reserveTime[dayTimeIndexs[0]].time[dayTimeIndexs[1]].price
+                          ) : 0)
+                      ).toFixed(2)
                     }
                   </Text>
                 </View>
@@ -723,7 +746,17 @@ class Order extends Component {
             </View>
             <View className='total'>
               合计￥
-              <Text>{totalAmout.toFixed(2)}</Text>
+              <Text>
+                {
+                  (
+                    totalAmout + +store.s_take_money
+                  + (orderType === 3 && reserveTime.length > 0 ?
+                    (
+                      +reserveTime[dayTimeIndexs[0]].time[dayTimeIndexs[1]].price
+                    ) : 0)
+                  ).toFixed(2)
+                }
+              </Text>
             </View>
           </View>
           <Button className={'theme-grad-bg-' + theme} onClick={this.stepPay}>去支付</Button>

@@ -39,6 +39,10 @@ class PickTime extends Component {
   handleClose = () => {
     const {dayIndex, timeIndex} = this.state
     this.props.onClose([dayIndex, timeIndex])
+    this.setState({
+      dayIndex: 0,
+      timeIndex: 0
+    })
   }
 
   render() {
@@ -74,7 +78,7 @@ class PickTime extends Component {
                     onClick={this.chooseTime.bind(this, index)}
                   >
                     {
-                      index === 0 &&
+                      dayIndex === 0 && index === 0 &&
                         <Text>现在下单，</Text>
                     }
                     {

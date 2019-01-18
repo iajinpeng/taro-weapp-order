@@ -40,11 +40,15 @@ class App extends Component {
   }
 
 
-  componentDidMount () {}
-
-  componentDidShow () {
-
+  componentDidMount () {
+    // store.dispatch({
+    //   type: 'common/getNotice'
+    // }).then(res => {
+    //   console.log(res)
+    // })
   }
+
+  componentDidShow () {}
 
   componentDidHide () {}
 

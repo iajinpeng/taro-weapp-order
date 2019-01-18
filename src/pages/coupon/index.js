@@ -174,10 +174,11 @@ class Coupon extends Component {
                 ))
               }
 
+              <Copyright />
+
             </View>
           }
 
-          <Copyright />
 
         </ScrollView>
       </View>

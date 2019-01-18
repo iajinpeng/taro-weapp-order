@@ -278,7 +278,7 @@ class Index extends Component {
               <View className='star-box'>
                 {
                   totStarsArr.map((item, index) => (
-                    <Image
+                    <Image mode='widthFix'
                       className={full_num === 3 ? 'big' : ''}
                       src={(user_full_num >= index + 1) ? baseUrl + full_logo : baseUrl + full_logo_no} key={index}
                     />

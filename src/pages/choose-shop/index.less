@@ -2,7 +2,7 @@
 @import "../../app";
 
 .choose-page{
-  padding-top: 30px;
+  padding-top: 24px;
   .header{
     display: flex;
     height: 68px;
@@ -77,75 +77,79 @@
   }
   .shop-list{
     &.iphonex{
-      height: ~"calc(100vh - 648px)";
+      height: ~"calc(100vh - 642px)";
       &.long{
-        height: ~"calc(100vh - 138px)";
+        height: ~"calc(100vh - 242px)";
       }
     }
     &.long{
-      height: ~"calc(100vh - 68px)";
+      height: ~"calc(100vh - 142px)";
     }
-    height: ~"calc(100vh - 578px)";
+    height: ~"calc(100vh - 542px)";
     box-sizing: border-box;
-    .shop-item{
-      background: #fff;
-      border-radius: 10px;
-      padding: 24px 32px 32px;
-      margin: 0 20px 30px;
-      color: @c-666;
-      .title{
-        display: flex;
-        &>View{
-          flex: 1;
-          .name{
-            font-size: 30px;
-            margin-right: 26px;
-            font-weight: bold;
-            color: @c-40;
+    .wrap{
+      position: relative;
+      min-height: 100%;
+      .shop-item{
+        background: #fff;
+        border-radius: 10px;
+        padding: 24px 32px 32px;
+        margin: 0 20px 30px;
+        color: @c-666;
+        .title{
+          display: flex;
+          &>View{
+            flex: 1;
+            .name{
+              font-size: 30px;
+              margin-right: 26px;
+              font-weight: bold;
+              color: @c-40;
+            }
+            .tag{
+              font-size: 24px;
+              display: inline-block;
+              color: @c-40;
+              padding: 4px 10px;
+              border: 1px solid @c-bf;
+              border-radius: 8px;
+              margin-right: 26px;
+            }
           }
-          .tag{
-            font-size: 24px;
-            display: inline-block;
-            color: @c-40;
-            padding: 4px 10px;
-            border: 1px solid @c-bf;
-            border-radius: 8px;
-            margin-right: 26px;
+          .distance{
+            font-size: 22px;
+            margin-top: 12px;
           }
         }
-        .distance{
-          font-size: 22px;
-          margin-top: 12px;
+        .address{
+          margin-top: 24px;
+          font-size: 31px;
+        }
+        .info{
+          margin-top: 24px;
+          font-size: 24px;
+          &>view{
+            margin-bottom: 8px;
+          }
+        }
+        button{
+          margin-top: 24px;
+          height: 80px;
+          line-height: 80px;
+          border-radius: 40px;
+          font-size: 30px;
+          color: #fff;
+          font-weight: bold;
+          &[disabled]{
+            font-size: @c-999!important;
+            background: #E6E6E6!important;
+          }
         }
       }
-      .address{
-        margin-top: 24px;
-        font-size: 31px;
-      }
-      .info{
-        margin-top: 24px;
-        font-size: 24px;
-        &>view{
-          margin-bottom: 8px;
-        }
-      }
-      button{
-        margin-top: 24px;
-        height: 80px;
-        line-height: 80px;
-        border-radius: 40px;
-        font-size: 30px;
-        color: #fff;
-        font-weight: bold;
-        &[disabled]{
-          font-size: @c-999!important;
-          background: #E6E6E6!important;
-        }
-      }
-    }
 
-    .alias-space{
-      height: 400px;
+      .alias-space{
+        height: 400px;
+      }
     }
   }
 

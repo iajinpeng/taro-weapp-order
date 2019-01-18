@@ -1,10 +1,10 @@
 import Taro, {Component} from '@tarojs/taro'
-import {View, Text, Button, Block, ScrollView} from '@tarojs/components'
+import {View, Text, Button, Block, Map, Image} from '@tarojs/components'
 import {connect} from '@tarojs/redux'
-
+import {AtIcon} from 'taro-ui'
 import classnames from 'classnames'
 import './index.less'
-import {orderTypes} from '../../config'
+import {orderTypes, outOrderTypes} from '../../config'
 import ConfirmModal from '../../components/confirm-modal'
 
 @connect(({common}) => ({
@@ -107,53 +107,115 @@ class OrderDetail extends Component {
     const {data, isShowCancelWarn} = this.state
 
     return (
-      <ScrollView scrollY>
+      <Block>
         {
           !!data.o_order_status &&
           <View className={classnames('order-detail', isIphoneX ? 'iphonex' : '')}>
-            <View className="status">
-              <View className={classnames('status-text', 'theme-c-' + theme)}>{orderTypes[data.o_order_status.toString()[0]]}</View>
-              <View className="status-memo">
-                {
-                  data.o_order_status === 1 ? '当前尚未下单，请尽快支付' : ''
-                }
-
-                {
-                  data.o_order_status === 2 ? '商家确认中，请您耐心等待' : ''
-                }
-
-                {
-                  (data.o_order_status.toString()[0] === '3' || data.o_order_status.toString()[0] === '4') &&
-                  <Block>
-                    <View className='take-meal'>取餐号: <Text className={classnames('theme-c-' + theme)}>{data.o_take_no}</Text></View>
-                    <View>{data.status_remark}</View>
-                  </Block>
-                }
-
-                {
-                  (data.o_order_status === 6 || data.o_order_status === 7) &&
-                  <Text>
-                    {data.o_refund_remark}
-                    {
-                      data.o_order_status === 6 ? '\n ' + '退款成功：预计1-7工作日到账' : ''
-                    }
-                  </Text>
-                }
-              </View>
-              {
-                (data.o_order_status === 5 || data.o_order_status === 6 || data.o_order_status === 7) &&
-                <Button className={'theme-grad-bg-' + theme}>再来一单</Button>
-              }
-
-              {
-                data.o_order_status === 2 &&
-                <Button onClick={this.showOrHideWarn.bind(this, true)} className={'theme-grad-bg-' + theme}>取消订单</Button>
-              }
-
-            </View>
 
             {
-              data.o_order_status === 1 &&
+              data.o_take_type === 3 && data.o_order_status !== 5
+              && data.o_order_status !== 6 && data.o_order_status !== 7
+              &&
+              <Block>
+                <Map
+                  className='map'
+                />
+                <View className="out-status">
+                  <View className="info">
+                    <View className={classnames('status-text', 'theme-c-' + theme)}>
+                      {outOrderTypes[data.o_order_status]}
+                    </View>
+                    <View className='tip'>
+                      {
+                        {
+                          1: '当前尚未下单，请尽快支付',
+                          2: '商家确认中，请您耐心等待',
+                          31: '正在尽快制作，请您耐心等待',
+                          32: '正在尽快制作，请您耐心等待',
+                          41: '等待骑手前来取餐，请耐心等待',
+                          42: '骑手预计在12:20送达',
+                        }[data.o_order_status]
+
+                      }
+                    </View>
+                  </View>
+
+                  {
+                    (data.o_order_status === 1 || data.o_order_status === 2) &&
+                    <View className="cancel">
+                      <AtIcon size='24' value='add-circle' />
+                      <View>取消订单</View>
+                    </View>
+                  }
+
+                  <View className={classnames('contact',
+                    (data.o_order_status === 1 || data.o_order_status === 2) ? '' : 'long')}>
+                    <Image src={require('../../images/icon-contact.png')} mode='widthFix' />
+                    <View>联系商家</View>
+                  </View>
+
+                </View>
+
+                {
+                  data.o_order_status === 1 &&
+                  <Button
+                    onClick={this.stepPay.bind(this, data)}
+                    className={classnames('out-ok', 'theme-grad-bg-' + theme)}
+                  >立即支付</Button>
+                }
+              </Block>
+            }
+
+
+            {
+              data.o_take_type !== 3
+              || (data.o_order_status === 5 || data.o_order_status ===6 || data.o_order_status === 7) &&
+              <View className="status">
+                <View className={classnames('status-text', 'theme-c-' + theme)}>{orderTypes[data.o_order_status.toString()[0]]}</View>
+                <View className="status-memo">
+                  {
+                    data.o_order_status === 1 ? '当前尚未下单，请尽快支付' : ''
+                  }
+
+                  {
+                    data.o_order_status === 2 ? '商家确认中，请您耐心等待' : ''
+                  }
+
+                  {
+                    (data.o_order_status.toString()[0] === '3' || data.o_order_status.toString()[0] === '4') &&
+                    <Block>
+                      <View className='take-meal'>取餐号:
+                        <Text className={classnames('theme-c-' + theme)}>{data.o_take_no}</Text>
+                      </View>
+                      <View>{data.status_remark}</View>
+                    </Block>
+                  }
+
+                  {
+                    (data.o_order_status === 6 || data.o_order_status === 7) &&
+                    <Text>
+                      {data.o_refund_remark}
+                      {
+                        data.o_order_status === 6 ? '\n ' + '退款成功：预计1-7工作日到账' : ''
+                      }
+                    </Text>
+                  }
+                </View>
+                {
+                  (data.o_order_status === 5 || data.o_order_status === 6 || data.o_order_status === 7) &&
+                  <Button className={'theme-grad-bg-' + theme}>再来一单</Button>
+                }
+
+                {
+                  data.o_order_status === 2 &&
+                  <Button onClick={this.showOrHideWarn.bind(this, true)} className={'theme-grad-bg-' + theme}>取消订单</Button>
+                }
+
+              </View>
+            }
+
+            {
+              data.o_order_status === 1 && data.o_take_type !== 3 &&
               <View className="btn">
                 <Button
                   onClick={this.stepPay.bind(this, data)}
@@ -170,10 +232,12 @@ class OrderDetail extends Component {
               <View className="header">
                 <View>
                   <View className="name">{data.o_store_name}</View>
-                  <View>{data.o_address}</View>
+                  <View className='address'>{data.o_address}</View>
                 </View>
                 <View>
-                  <View>取餐时间</View>
+                  <View>
+                    {data.o_take_type === 3 ? '取餐' : '送达'}
+                    时间</View>
                   <View>{data.o_reserve_time}</View>
                 </View>
               </View>
@@ -273,7 +337,7 @@ class OrderDetail extends Component {
           确定要取消吗
         </ConfirmModal>
 
-      </ScrollView>
+      </Block>
     )
   }
 }

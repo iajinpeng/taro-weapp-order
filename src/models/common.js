@@ -1,6 +1,7 @@
 import Taro from '@tarojs/taro';
 
-import {requestLogin, postUserInfo, requestHomeInfo, requestCouponList, postFormId, getUserMobile} from '../services/common';
+import {requestLogin, postUserInfo, requestHomeInfo,
+  requestCouponList, postFormId, getUserMobile, getNotice} from '../services/common';
 
 import amapFile from '../utils/amap-wx'
 import {mapKey} from '../config'
@@ -45,6 +46,9 @@ export default {
     },
     * getUserMobile({payload}, {put, call}) {
       return yield call(getUserMobile, payload)
+    },
+    * getNotice({payload}, {put, call}) {
+      return yield call(getNotice, payload)
     },
     * getSetLocalInfo({}, {put, call}) {
 

@@ -37,6 +37,7 @@ class ShopIndex extends Component {
 
   componentWillMount() {
     this.readStorageCarts()
+    console.log(JSON.stringify(this.props.carts))
   }
 
   componentDidShow() {
@@ -285,8 +286,6 @@ class ShopIndex extends Component {
       ...normInfo
     }
 
-    console.log(good)
-
     this.props.dispatch({
       type: 'cart/setCart',
       payload: {
@@ -295,6 +294,7 @@ class ShopIndex extends Component {
         num
       }
     })
+
   }
 
   showOrHideCartWarn = (bool) => {

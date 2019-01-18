@@ -55,3 +55,12 @@ export const postFormId = data => request({
   data
 })
 
+/**
+ * 获取顾客须知
+ * */
+export const getNotice = data => request({
+  url: '/addons.diancan.api.Home_customerNotice',
+  method: 'POST',
+  data
+})
+

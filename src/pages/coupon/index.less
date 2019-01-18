@@ -33,7 +33,7 @@
   }
 
   .content{
-    height: ~"calc(100vh - 138px)";
+    height: ~"calc(100vh - 122px)";
     .null{
       padding-top: 290px;
       color: @c-ccc;
@@ -51,13 +51,19 @@
     }
     .coupon-list{
       width: 678px;
-      margin: 30px auto 50px;
-
+      margin: 30px auto 0;
+      position: relative;
+      padding-bottom: 120px;
+      min-height: ~"calc(100% - 30px)";
+      box-sizing: border-box;
     }
   }
 
   .item{
     margin-bottom: 48px;
+    &:last-of-type{
+      margin-bottom: 100px;
+    }
     .entity{
       display: flex;
       height: 200px;
