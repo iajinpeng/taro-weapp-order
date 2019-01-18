@@ -5,10 +5,31 @@
 //}
 .order-detail{
   padding: 24px 0 50px;
+  position: relative;
 
   .map{
     width: 100%;
     height: 400px;
+  }
+
+  .map-tip{
+    position: absolute;
+    left: 36px;
+    top: 325px;
+    padding: 20px 28px;
+    border-radius: 20px;
+    display: flex;
+    background: #fff;
+    font-size: 24px;
+    font-weight: bold;
+    color: @c-40;
+    cover-image{
+      width: 32px;
+      height: 26px;
+    }
+    .text{
+      margin-left: 20px;
+    }
   }
 
   &.iphonex{
@@ -29,6 +50,9 @@
       .tip{
         font-size: 28px;
         color: @c-666;
+        &.red{
+          color: #FF6666;
+        }
       }
     }
     .cancel{

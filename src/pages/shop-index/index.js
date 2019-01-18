@@ -37,7 +37,6 @@ class ShopIndex extends Component {
 
   componentWillMount() {
     this.readStorageCarts()
-    console.log(JSON.stringify(this.props.carts))
   }
 
   componentDidShow() {

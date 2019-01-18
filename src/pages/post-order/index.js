@@ -191,8 +191,8 @@ class Order extends Component {
 
 
   chooseReserveTime = () => {
-    const {amount, takeType} = this.state
-    this.getReserveTime(amount, takeType).then(() => {
+    const {amount, orderType} = this.state
+    this.getReserveTime(amount, orderType).then(() => {
       this.setState({isShowPicker: true})
     })
   }

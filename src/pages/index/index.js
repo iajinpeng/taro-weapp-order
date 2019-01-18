@@ -47,7 +47,7 @@ class Index extends Component {
     })
     this.setSessionId().then(() => {
       this.props.dispatch({
-        type: 'common/requestHomeInfo'
+        type: 'common/initRequest'
       }).then(res => {
 
         // if (res.under_review) {
@@ -57,29 +57,19 @@ class Index extends Component {
         //   return
         // }
 
-        const {coupon, menu_banner, menu_cart, bottom_logo, ...useState} = res
 
         this.setState({
-          ...useState
+          ...res
         })
 
-        this.props.dispatch({
-          type: 'common/setThemeInfo',
-          payload: {menu_banner, menu_cart, theme: res.style_color, bottom_logo}
-        })
-
-        this.props.dispatch({
-          type: 'common/getSetLocalInfo'
-        })
-
-        this.coupon = coupon
+        this.coupon = res.coupon
         this.curCouponIndex = 0
 
-        if (coupon.length > 0) {
+        if (res.coupon.length > 0) {
           setTimeout(() => {
             this.setState({
               isShowCoupon: true,
-              curCoupon: coupon[0],
+              curCoupon: res.coupon[0],
             })
           }, 1500)
         }
@@ -94,8 +84,8 @@ class Index extends Component {
       this.setState({isFirstShow: true})
     } else {
       this.setState({isFirstShow: false})
+      Taro.hideNavigationBarLoading()
     }
-
   }
 
   componentDidHide () { }

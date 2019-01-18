@@ -75,6 +75,23 @@ export default {
       })
     },
 
+    * initRequest ({}, {put, call}) {
+
+      const data = yield call(requestHomeInfo)
+
+      const {menu_banner, menu_cart, bottom_logo, b_logo, ...indexState} = data
+
+      yield put({
+        type: 'setThemeInfo',
+        payload: {menu_banner, menu_cart, theme: data.style_color, bottom_logo, b_logo}
+      })
+      yield put({
+        type: 'getSetLocalInfo'
+      })
+
+      return indexState
+    }
+
   },
 
   reducers: {
