@@ -42,6 +42,43 @@ class OrderDetail extends Component {
     this.setState({isShowCancelWarn: bool})
   }
 
+  stepPay = async (order) => {
+
+    const order_id = order.oid
+    const store_id = +this.$router.params.store_id
+
+    await this.props.dispatch({
+      type: 'order/requestPayOrder',
+      payload: {
+        store_id,
+        order_id
+      }
+    })
+
+    const res = await this.requestPayOrder(order_id)
+
+    await Taro.requestPayment({
+      ...res,
+      timeStamp: res.timestamp
+    })
+
+    Taro.showLoading({mask: true})
+
+    await this.props.dispatch({
+      type: 'order/getOrderPayStatus',
+      payload: {
+        store_id,
+        order_id
+      }
+    })
+
+    Taro.hideLoading()
+
+    Taro.showToast({
+      title: '下单成功'
+    })
+  }
+
   render() {
     const {theme, systemInfo} = this.props
     const isIphoneX = !!(systemInfo.model && systemInfo.model.replace(' ', '').toLowerCase().indexOf('iphonex') > -1)
@@ -77,7 +114,7 @@ class OrderDetail extends Component {
                   <Text>
                     {data.o_refund_remark}
                     {
-                      data.o_order_status === 7 ? '\n ' + '退款成功：预计1-7工作日到账' : ''
+                      data.o_order_status === 6 ? '\n ' + '退款成功：预计1-7工作日到账' : ''
                     }
                   </Text>
                 }
@@ -97,7 +134,7 @@ class OrderDetail extends Component {
             {
               data.o_order_status === 1 &&
               <View className="btn">
-                <Button className={classnames('ok', 'theme-grad-bg-' + theme)}>立即支付</Button>
+                <Button onClick={this.stepPay.bind(this, data)} className={classnames('ok', 'theme-grad-bg-' + theme)}>立即支付</Button>
                 <Button className={classnames('no', 'theme-c-' + theme)}>取消订单</Button>
               </View>
             }
