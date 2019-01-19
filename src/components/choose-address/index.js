@@ -69,6 +69,10 @@ class ChooseAddress extends Component {
     this.toAddressPage()
   }
 
+  stopPro = e => {
+    e.stopPropagation()
+  }
+
   render() {
     const {show, theme, address} = this.props
 
@@ -78,7 +82,7 @@ class ChooseAddress extends Component {
 
     return (
       <Block>
-        <View catchTouchMove
+        <View onTouchMove={this.stopPro}
           className='mask' style={{display: show ? 'block' : 'none'}}
           onClick={this.handleClose.bind(this, true, useAddress[defaultIndex])}
         />

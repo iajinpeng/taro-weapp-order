@@ -223,8 +223,8 @@ class OrderDetail extends Component {
 
 
             {
-              data.o_take_type !== 3
-              || (data.o_order_status === 5 || data.o_order_status ===6 || data.o_order_status === 7) &&
+              (data.o_take_type !== 3
+              || (data.o_order_status === 5 || data.o_order_status ===6 || data.o_order_status === 7)) &&
               <View className='status'>
                 <View className={classnames('status-text', 'theme-c-' + theme)}>{orderTypes[data.o_order_status.toString()[0]]}</View>
                 <View className='status-memo'>
@@ -291,7 +291,7 @@ class OrderDetail extends Component {
               <View className='header'>
                 <View>
                   <View className='name'>{data.o_store_name}</View>
-                  <View className='address'>{data.o_address}</View>
+                  <View className='address'>{data.s_address}</View>
                 </View>
                 <View>
                   <View>

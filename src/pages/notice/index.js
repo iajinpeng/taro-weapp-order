@@ -65,6 +65,7 @@ class Notice extends Component {
     const {diancan, quxiao, question} = this.state
 
     return (
+      diancan &&
       <View className='notice'>
         <View className='block'>
           <View>您在使用此平台前应仔细阅读如下须知：</View>

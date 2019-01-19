@@ -14,7 +14,8 @@ import {baseUrl} from '../../config'
 class ShopIndex extends Component {
 
   config = {
-    navigationBarTitleText: '商品列表'
+    navigationBarTitleText: '商品列表',
+    disableScroll: true
   }
 
   state = {
@@ -353,8 +354,7 @@ class ShopIndex extends Component {
     } = this.state
 
     return (
-      <View className='shop-index' style={{position: (isShowCart || isShowDetail ||
-        isShowCartWarn || isShowOptions) ? 'fixed' : 'static'}}>
+      <View className='shop-index'>
         <View className='banner'>
           <Swiper
             indicatorColor='#999'

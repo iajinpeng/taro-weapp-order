@@ -18,7 +18,8 @@ import './index.less'
 class Choose extends Component {
 
   config = {
-    navigationBarTitleText: '选择餐厅'
+    navigationBarTitleText: '选择餐厅',
+    disableScroll: true
   }
 
   state = {
@@ -82,6 +83,13 @@ class Choose extends Component {
       city: city.name
     }, () => {
       this.getStoreList()
+    })
+  }
+
+  reLocation = e => {
+    e.stopPropagation()
+    this.props.dispatch({
+      type: 'common/getSetLocalInfo'
     })
   }
 
@@ -283,11 +291,11 @@ class Choose extends Component {
           }
         </View>
         <View className='select-city' style={{display: isShowCitys ? 'block' : 'none'}}>
-          <AtIndexes list={Citys} topKey='' onClick={this.chooseCity}>
+          <AtIndexes list={Citys} topKey='' onClick={this.chooseCity} animation>
             <View className='city-block' id='local' onClick={this.chooseCity.bind(this, {name: locationCity})}>
               <View className='title'>当前定位城市</View>
               <View className='item'>{locationCity}</View>
-              <View className='re-position'>重新定位</View>
+              <View className='re-position' onClick={this.reLocation}>重新定位</View>
             </View>
           </AtIndexes>
         </View>
@@ -314,15 +322,17 @@ class Choose extends Component {
           !isSearching && store.length > 0 &&
 
           <Block>
-            <Map
-              style={{display: isShowCitys || !isShowMap ? 'none' : 'block'}}
-              className='map'
-              latitude={latitude}
-              longitude={longitude}
-              markers={markers}
-              onMarkerTap={this.handleMarkerClick}
-              showLocation
-            />
+            {
+              !isShowCitys && isShowMap &&
+              <Map
+                className='map'
+                latitude={latitude}
+                longitude={longitude}
+                markers={markers}
+                onMarkerTap={this.handleMarkerClick}
+                showLocation
+              />
+            }
             <View className='hide-map' onClick={this.toggleShowMap}><Text/></View>
             <ScrollView scrollWithAnimation
               scrollY scrollIntoView={scrollStoreId}

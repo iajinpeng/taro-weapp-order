@@ -34,7 +34,11 @@ class Modal extends Component {
   render () {
     const { title, className, show, titleAlign, theme, blackTitle } = this.props
     return (
-      <View className={classnames('modal-wrap', show ? 'modal-fade' : '')} onClick={this.props.onHide} catchTouchMove>
+      <View
+        className={classnames('modal-wrap', show ? 'modal-fade' : '')}
+        onClick={this.props.onHide}
+        onTouchMove={this.stopPro}
+      >
         <View className={classnames('modal', className)} onClick={this.stopPro}>
           <View className='title' style={{textAlign: titleAlign}}>
             <Text className={!blackTitle ? 'theme-c-' + theme : ''}>{title}</Text>
