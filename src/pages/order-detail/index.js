@@ -350,14 +350,17 @@ class OrderDetail extends Component {
                   <Text>联系方式</Text>
                   <Text>{data.o_contact_mobile}</Text>
                 </View>
-                <View className='item'>
-                  <Text>支付方式</Text>
-                  <Text>
-                    {
-                      data.o_pay_type === 1 ? '微信支付' : '余额支付'
-                    }
-                  </Text>
-                </View>
+                {
+                  data.o_pay_type !== 0 &&
+                  <View className='item'>
+                    <Text>支付方式</Text>
+                    <Text>
+                      {
+                        data.o_pay_type === 1 ? '微信支付' : '余额支付'
+                      }
+                    </Text>
+                  </View>
+                }
                 <View className='item'>
                   <Text>订单号</Text>
                   <Text>{data.o_order_no}</Text>

@@ -29,7 +29,7 @@ class OrderList extends Component {
 
   componentWillMount() {
     this.requestOrderList().then(({total, rows}) => {
-      this.setState({total, lists: rows, firstId: rows[0].o_id})
+      this.setState({total, lists: rows, firstId: rows && rows.length > 0 && rows[0].o_id})
     })
   }
 
@@ -41,7 +41,7 @@ class OrderList extends Component {
       page: 1
     }, () => {
       this.requestOrderList().then(({total, rows}) => {
-        this.setState({total, lists: rows, firstId: rows[0].o_id})
+        this.setState({total, lists: rows, firstId: rows && rows.length > 0 && rows[0].o_id})
       })
     })
 

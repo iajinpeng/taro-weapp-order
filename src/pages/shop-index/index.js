@@ -353,7 +353,8 @@ class ShopIndex extends Component {
     } = this.state
 
     return (
-      <View className='shop-index'>
+      <View className='shop-index' style={{position: (isShowCart || isShowDetail ||
+        isShowCartWarn || isShowOptions) ? 'fixed' : 'static'}}>
         <View className='banner'>
           <Swiper
             indicatorColor='#999'
@@ -422,7 +423,9 @@ class ShopIndex extends Component {
                 group.map((classify, index) => (
                   <View className='good-block' key={index} id={'id' + classify.group_id}>
                     <View className='title' id={'title-' + classify.group_id}>
-                      <View className={scrollCurGroupId === classify.group_id ? 'top-show' : ''}>
+                      <View className={scrollCurGroupId === classify.group_id ? 'top-show' : ''}
+                        style={{zIndex: 20 + index}}
+                      >
                         <Image src={classify.gg_image ? baseUrl + classify.gg_image : ''}/>
                         <Text>{classify.gg_name}</Text>
                       </View>
