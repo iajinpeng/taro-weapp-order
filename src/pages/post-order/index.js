@@ -267,8 +267,8 @@ class Order extends Component {
 
       }
       const g_property_array = {
-        property_titles: cart.property.map(item => item.title),
-        optional_titles: !fs_id && cart.optional.map(item => item.title),
+        property_titles: cart.property && cart.property.map(item => item.title),
+        optional_titles: !fs_id && cart.property && cart.optional.map(item => item.title),
         propertyTagIndex: cart.propertyTagIndex,
         optionalTagIndex: cart.optionalTagIndex,
         optionalstr: cart.optionalstr,

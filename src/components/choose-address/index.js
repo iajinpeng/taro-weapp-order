@@ -34,13 +34,13 @@ class ChooseAddress extends Component {
   handleAdd = () => {
     Taro.chooseLocation().then(res => {
       if (res.name) {
+        const {address, address_detail, latitude, longitude} = res
         this.props.dispatch({
           type: 'address/setCurAddress',
-          payload: res
-        })
-
-        Taro.navigateTo({
-          url: '/pages/add-address/index'
+          payload: {
+            name: address,
+            address_detail, latitude, longitude
+          }
         })
       }
     })
@@ -56,14 +56,14 @@ class ChooseAddress extends Component {
   edit = (addressInfo, e) => {
     e.stopPropagation()
 
-    const [name, pname, cityname, adname, address] = addressInfo.address.split('|')
-    const {address_lng, address_lat} = addressInfo
-    const location = address_lng + ',' + address_lat
+    const {da_id, address, address_detail, address_lat, address_lng, user_name, user_telephone} = addressInfo
     this.props.dispatch({
       type: 'address/setCurAddress',
       payload: {
-        ...addressInfo,
-        address, pname, cityname, name, adname, location
+        da_id, address_detail, user_name, user_telephone,
+        name: address,
+        latitude: address_lat,
+        longitude: address_lng
       }
     })
     this.handleAdd()

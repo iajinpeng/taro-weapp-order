@@ -5,6 +5,7 @@ import {AtToast} from 'taro-ui'
 import {baseUrl} from "../../config/index";
 import Copyright from '../../components/copyright'
 import './index.less'
+import address from "../../models/address";
 
 @connect(({common, address}) => ({...common, ...address}))
 class AddAddress extends Component {
@@ -24,26 +25,25 @@ class AddAddress extends Component {
 
   componentWillMount () {
 
-    if (this.props.curAddress.da_id) {
-      const {da_id, address_detail, user_name, user_telephone} = this.props.curAddress
+    const {da_id, user_name, address_detail, user_telephone } = this.props.curAddress
 
-      this.setState({
-        da_id, address_detail, user_name, user_telephone
-      })
-    }
+    this.setState({
+      da_id, address_detail, user_name, user_telephone
+    })
   }
 
   handleAdd = () => {
     Taro.chooseLocation().then(res => {
       if (res.name) {
+        const {address, address_detail, latitude, longitude} = res
         this.props.dispatch({
           type: 'address/setCurAddress',
-          payload: res
+          payload: {
+            name: address,
+            address_detail, latitude, longitude
+          }
         })
 
-        Taro.navigateTo({
-          url: '/pages/add-address/index'
-        })
       }
     })
       .catch(err => {
@@ -78,7 +78,8 @@ class AddAddress extends Component {
         address_detail,
         address_lng: longitude,
         address_lat: latitude,
-        user_name, user_telephone
+        user_name,
+        user_telephone
       }
     }).then(() => {
       Taro.showToast({
@@ -120,7 +121,7 @@ class AddAddress extends Component {
               theme &&
               <Image
                 src={`${baseUrl}/static/addons/diancan/img/style/style_${theme}_3.png`}
-                onClick={this.toSelectPage}
+                onClick={this.handleAdd}
               />
             }
           </View>
