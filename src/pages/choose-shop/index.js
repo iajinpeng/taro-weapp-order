@@ -1,6 +1,6 @@
 import Taro, {Component} from '@tarojs/taro'
 import {connect} from '@tarojs/redux'
-import {View, Text, Button, Map, ScrollView, Input, Block} from '@tarojs/components'
+import {View, Text, Map, ScrollView, Input, Block} from '@tarojs/components'
 import {AtIcon, AtIndexes} from 'taro-ui'
 import classnames from 'classnames'
 import ConfirmModal from '../../components/confirm-modal'
@@ -346,7 +346,7 @@ class Choose extends Component {
 
                     return (
                       <View id={'id' + item.s_id}
-                            className='shop-item' key={index} onClick={this.selectShop.bind(this, item, index)}>
+                        className='shop-item' key={index} onClick={this.selectShop.bind(this, item, index)}>
                         <View className='title'>
                           <View>
                             <Text className={classnames('name', theme_c)}>{item.s_title}</Text>

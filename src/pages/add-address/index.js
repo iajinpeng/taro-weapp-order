@@ -25,22 +25,22 @@ class AddAddress extends Component {
 
   componentWillMount () {
 
-    const {da_id, user_name, address_detail, user_telephone } = this.props.curAddress
+    const {da_id, user_name, door, user_telephone } = this.props.curAddress
 
     this.setState({
-      da_id, address_detail, user_name, user_telephone
+      da_id, user_name, user_telephone,
+      address_detail: door || ''
     })
   }
 
   handleAdd = () => {
     Taro.chooseLocation().then(res => {
       if (res.name) {
-        const {address, address_detail, latitude, longitude} = res
+        const {address, name, latitude, longitude} = res
         this.props.dispatch({
           type: 'address/setCurAddress',
           payload: {
-            name: address,
-            address_detail, latitude, longitude
+            name, latitude, longitude, address
           }
         })
 
@@ -60,7 +60,7 @@ class AddAddress extends Component {
   postAddress = () => {
     const {curAddress} = this.props
     const {da_id, address_detail, user_name, user_telephone} = this.state
-    const {name, address, longitude, latitude } = curAddress
+    const {name, longitude, latitude, address } = curAddress
 
     if (!/^1(?:3\d|4[4-9]|5[0-35-9]|6[67]|7[013-8]|8\d|9\d)\d{8}$/.test(user_telephone)){
       this.setState({
@@ -73,9 +73,9 @@ class AddAddress extends Component {
     this.props.dispatch({
       type: 'address/postAddress',
       payload: {
-        address: name + '|' +address,
+        address: name,
         da_id,
-        address_detail,
+        address_detail: address + '|' + address_detail,
         address_lng: longitude,
         address_lat: latitude,
         user_name,

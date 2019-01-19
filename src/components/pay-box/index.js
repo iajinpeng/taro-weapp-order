@@ -3,6 +3,7 @@ import {View, Text, Button, Image} from '@tarojs/components'
 import classnames from 'classnames'
 import {AtToast} from 'taro-ui'
 import PropTypes from 'prop-types'
+import IdButton from '../../components/id-button'
 import {baseUrl} from '../../config'
 import '../../app.less'
 
@@ -86,7 +87,7 @@ class PayBox extends Component {
             }
           </View>
         </View>
-        <Button className={'theme-grad-bg-' + theme} onClick={this.handleClick}>{btnText}</Button>
+        <IdButton className={'theme-grad-bg-' + theme} onClick={this.handleClick}>{btnText}</IdButton>
 
         <AtToast
           isOpened={isAlert} text={'您还未添加商品哦～'} iconSize={40} duration={2000}

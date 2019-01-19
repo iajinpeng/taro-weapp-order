@@ -4,6 +4,7 @@ import {connect} from '@tarojs/redux'
 import {AtIcon, AtToast} from 'taro-ui'
 import classnames from 'classnames'
 
+import IdButton from '../../components/id-button'
 import PickTime from '../../components/pick-time'
 import ChooseAddress from '../../components/choose-address'
 import Copyright from '../../components/copyright'
@@ -770,7 +771,7 @@ class Order extends Component {
               </Text>
             </View>
           </View>
-          <Button className={'theme-grad-bg-' + theme} onClick={this.stepPay}>去支付</Button>
+          <IdButton className={'theme-grad-bg-' + theme} onClick={this.stepPay}>去支付</IdButton>
         </View>
 
         <PickTime show={isShowPicker} reserveTime={reserveTime} theme={theme} onClose={this.closeTimePicker}/>
