@@ -33,10 +33,22 @@ class AddAddress extends Component {
     }
   }
 
-  toSelectPage = () => {
-    Taro.navigateTo({
-      url: '/pages/add-address/select'
+  handleAdd = () => {
+    Taro.chooseLocation().then(res => {
+      if (res.name) {
+        this.props.dispatch({
+          type: 'address/setCurAddress',
+          payload: res
+        })
+
+        Taro.navigateTo({
+          url: '/pages/add-address/index'
+        })
+      }
     })
+      .catch(err => {
+        console.log(err)
+      })
   }
 
   handleInput = (key, e) => {
@@ -101,7 +113,7 @@ class AddAddress extends Component {
         <View className='content'>
           <View className='item'>
             <View className='label'>收货地址</View>
-            <View className='input' onClick={this.toSelectPage}>
+            <View className='input' onClick={this.handleAdd}>
               {curAddress.name || '点击选择'}
             </View>
             {

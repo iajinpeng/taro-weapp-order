@@ -31,7 +31,7 @@ class ChooseAddress extends Component {
     this.props.onClose(isChange ? address : null)
   }
 
-  toAddressPage = () => {
+  handleAdd = () => {
     Taro.chooseLocation().then(res => {
       if (res.name) {
         this.props.dispatch({
@@ -66,7 +66,7 @@ class ChooseAddress extends Component {
         address, pname, cityname, name, adname, location
       }
     })
-    this.toAddressPage()
+    this.handleAdd()
   }
 
   stopPro = e => {
@@ -93,7 +93,7 @@ class ChooseAddress extends Component {
           <View className='content'>
             {
               useAddress.length === 0 &&
-              <View className='null' onClick={this.toAddressPage}>
+              <View className='null' onClick={this.handleAdd}>
                 <View className={classnames('icon', 'theme-grad-bg-' + theme)}>+</View>
                 <View className={classnames('text', 'theme-c-' + theme)}>新增收货地址</View>
               </View>
@@ -123,7 +123,7 @@ class ChooseAddress extends Component {
 
             {
               show && useAddress.length > 0 &&
-              <View className='add' onClick={this.toAddressPage}>
+              <View className='add' onClick={this.handleAdd}>
                 <Text className={classnames('icon', 'theme-bg-' + theme)}>+</Text>
                 <Text>新增收货地址</Text>
               </View>
