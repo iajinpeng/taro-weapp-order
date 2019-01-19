@@ -9,7 +9,8 @@ import './index.less'
 @connect(({common}) => ({...common}))
 class Coupon extends Component {
   config = {
-    navigationBarTitleText: '我的优惠'
+    navigationBarTitleText: '我的优惠',
+    disableScroll: true
   }
 
   state = {

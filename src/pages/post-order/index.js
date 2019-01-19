@@ -16,7 +16,8 @@ import './index.less'
 class Order extends Component {
 
   config = {
-    navigationBarTitleText: '提交订单'
+    navigationBarTitleText: '提交订单',
+    disableScroll: true
   }
 
   state = {
@@ -265,8 +266,17 @@ class Order extends Component {
         }, [])
 
       }
+      const g_property_array = {
+        property: cart.property,
+        optional: cart.optional,
+        propertyTagIndex: cart.propertyTagIndex,
+        optionalTagIndex: cart.optionalTagIndex,
+        optionalstr: cart.optionalstr,
+        fixed: cart.fixed,
+        optionalnumstr: cart.optionalnumstr
+      }
 
-      return {g_id, num, send_goods, g_property, optional, full_send_id: fs_id}
+      return {g_id, num, send_goods, g_property, optional, full_send_id: fs_id, g_property_array}
     })
 
     return this.props.dispatch({

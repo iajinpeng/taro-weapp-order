@@ -11,7 +11,8 @@ import {orderTypes} from '../../config'
 @connect(({common}) => ({...common}))
 class OrderList extends Component {
   config = {
-    navigationBarTitleText: '订单'
+    navigationBarTitleText: '订单',
+    disableScroll: true
   }
 
   state = {

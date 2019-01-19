@@ -12,7 +12,8 @@ import ConfirmModal from '../../components/confirm-modal'
 }))
 class OrderDetail extends Component {
   config = {
-    navigationBarTitleText: '订单详情'
+    navigationBarTitleText: '订单详情',
+    disableScroll: true
   }
 
   state = {

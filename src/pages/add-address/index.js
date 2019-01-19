@@ -11,6 +11,7 @@ class AddAddress extends Component {
 
   config = {
     navigationBarTitleText: '收货信息',
+    disableScroll: true
   }
 
   state = {

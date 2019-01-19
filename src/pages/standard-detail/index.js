@@ -13,6 +13,11 @@ import {baseUrl} from '../../config'
 @connect(({common}) => ({...common}))
 class StandardDetail extends Component {
 
+  config = {
+    navigationBarTitleText: '满单即送',
+    disableScroll: true
+  }
+
   state = {
     g_description: '',
     g_image: null,

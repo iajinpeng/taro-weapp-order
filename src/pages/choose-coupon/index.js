@@ -14,7 +14,8 @@ import './index.less'
 class ChooseCoupon extends Component {
 
   config = {
-    navigationBarTitleText: '选择优惠券'
+    navigationBarTitleText: '选择优惠券',
+    disableScroll: true
   }
 
   state = {

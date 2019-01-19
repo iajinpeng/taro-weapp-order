@@ -8,7 +8,8 @@ import './index.less'
 @connect(({common}) => ({...common}))
 class Notice extends Component {
   config = {
-    navigationBarTitleText: '顾客须知'
+    navigationBarTitleText: '顾客须知',
+    disableScroll: true
   }
 
   state = {

@@ -13,7 +13,8 @@ import './index.less'
 @connect(({common, cart}) => ({...common, ...cart}))
 class PresentGood extends Component {
   config = {
-    navigationBarTitleText: '满单即送'
+    navigationBarTitleText: '满单即送',
+    disableScroll: true
   }
 
   state = {
