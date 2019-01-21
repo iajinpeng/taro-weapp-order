@@ -235,6 +235,7 @@ class Order extends Component {
           })
         })
       }
+
       if (cart.optionalTagIndex) {
         cart.optional.forEach((item, i) => {
           optional.push({

@@ -21,6 +21,7 @@ class OrderDetail extends Component {
       o_order_status: ''
     },
     isShowCancelWarn: false,
+    isShowOrderAgainWarn: false,
     markers: []
   }
 
@@ -62,6 +63,17 @@ class OrderDetail extends Component {
 
   showOrHideWarn = bool => {
     this.setState({isShowCancelWarn: bool})
+  }
+
+  showOrHideAgainWarn = bool => {
+    this.setState({isShowOrderAgainWarn: bool})
+  }
+
+  againOk = () => {
+    Taro.navigateTo({
+      url: '/pages/shop-index/index?id=' + this.state.data.store_id
+    })
+    this.showOrHideAgainWarn(false)
   }
 
   stepPay = async () => {
@@ -127,23 +139,77 @@ class OrderDetail extends Component {
     Taro.makePhoneCall({phoneNumber})
   }
 
-  requestOrderRepeat = () => {
+  requestOrderRepeat = async () => {
     const {data: {store_id, o_id}} = this.state
 
-    this.props.dispatch({
+    const {change, goods} = await this.props.dispatch({
       type: 'order/requestOrderRepeat',
       payload: {
         store_id,
         order_id: o_id
       }
     })
+
+    if (change) {
+      this.showOrHideAgainWarn(true)
+    } else {
+
+      goods.forEach(good => {
+        delete good.optionalTagIndex
+        let {propertyTagIndex, optionalTagIndex, optionalnumstr} = good
+
+        if (optionalnumstr.length === 0) {
+          delete  good.optionalnumstr
+
+          if (optionalTagIndex.length > 0) {
+            good.optionalTagIndex = optionalTagIndex.map(item => +item)
+          }
+
+          if (optionalTagIndex.length > 0 || propertyTagIndex.length > 0) {
+            good.optionalstr = propertyTagIndex.join('') + optionalTagIndex.join('')
+          }
+        } else {
+          good.optionalnumstr = optionalnumstr[0]
+
+          good.optional.map((opt, index) => {
+            opt.list.map((g, i) => {
+              return g.num = good.optionalnumstr.split(',')[index].split('|')[i]
+            })
+          })
+
+          let optPrice = good.optional.reduce((total, opt) => {
+            let price = opt.list.reduce((t, g) => {
+              return t += +g.gn_price * (g.num || 0)
+            }, 0)
+            return total += price
+          }, 0) || 0
+
+          good.total_price = +good.g_price + optPrice
+        }
+
+        const {od_optional_array, od_property_array, ...useGood} = good
+
+        this.props.dispatch({
+          type: 'cart/setCart',
+          payload: {
+            id: +store_id,
+            good: useGood,
+            num: good.od_num || 1
+          }
+        })
+      })
+
+      Taro.navigateTo({
+        url: '/pages/shop-index/index?id=' + store_id
+      })
+    }
   }
 
   render() {
     const {theme, systemInfo} = this.props
     const isIphoneX = !!(systemInfo.model && systemInfo.model.replace(' ', '').toLowerCase().indexOf('iphonex') > -1)
 
-    const {data, isShowCancelWarn, markers} = this.state
+    const {data, isShowCancelWarn, markers, isShowOrderAgainWarn} = this.state
 
     return (
       <Block>
@@ -413,6 +479,16 @@ class OrderDetail extends Component {
           onOk={this.cancelOrder}
         >
           确定要取消吗
+        </ConfirmModal>
+
+        <ConfirmModal
+          show={isShowOrderAgainWarn}
+          className='order-again-modal'
+          theme={theme}
+          onCancel={this.showOrHideAgainWarn.bind(this, false)}
+          onOk={this.againOk}
+        >
+          商品规格属性已变更，是否重新选择？
         </ConfirmModal>
 
       </Block>

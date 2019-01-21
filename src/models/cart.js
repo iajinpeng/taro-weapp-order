@@ -24,7 +24,6 @@ export default {
         let index = curCart.findIndex(item => item.fs_id === good.fs_id)
         if (index > -1) {
           if (num === 1) {
-            console.log(curCart[index])
             Taro.showToast({
               title: '只可以选择一份赠品哦～',
               icon: 'none'
@@ -72,7 +71,7 @@ export default {
 
       state.carts[id] = curCart
 
-      Taro.setStorageSync('carts', state.carts)
+      // Taro.setStorageSync('carts', state.carts)
       return {...state, whatEver: state.whatEver + num};
     },
     setComboCart(state, {payload}) {
@@ -113,7 +112,7 @@ export default {
 
       state.carts[id] = curCart
 
-      Taro.setStorageSync('carts', state.carts)
+      // Taro.setStorageSync('carts', state.carts)
       return {...state, whatEver: state.whatEver + num};
 
     },
@@ -121,7 +120,7 @@ export default {
       const {id} = payload
       state.carts[id] = []
 
-      Taro.setStorageSync('carts', state.carts)
+      // Taro.setStorageSync('carts', state.carts)
 
       return {...state}
     },

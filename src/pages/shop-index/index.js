@@ -37,7 +37,7 @@ class ShopIndex extends Component {
   }
 
   componentWillMount() {
-    this.readStorageCarts()
+    // this.readStorageCarts()
   }
 
   componentDidShow() {
@@ -225,16 +225,16 @@ class ShopIndex extends Component {
     this.openOptions(this.state.curGood)
   }
 
-  readStorageCarts = () => {
-    let carts = Taro.getStorageSync('carts') || {}
-    Taro.getStorageSync('carts') &&
-    this.props.dispatch({
-      type: 'cart/setStorageCart',
-      payload: {
-        carts
-      }
-    })
-  }
+  // readStorageCarts = () => {
+  //   let carts = Taro.getStorageSync('carts') || {}
+  //   Taro.getStorageSync('carts') &&
+  //   this.props.dispatch({
+  //     type: 'cart/setStorageCart',
+  //     payload: {
+  //       carts
+  //     }
+  //   })
+  // }
 
   setCart = (good, num, cartGood) => {
     if (num === -1 && (!cartGood.num || cartGood.num <= 0)) return
@@ -279,7 +279,6 @@ class ShopIndex extends Component {
         optionalstr: propertyTagIndex.join('') + optionalTagIndex.join(''),
       }
     }
-    console.log(curCart.optionalstr)
 
     const good = {
       ...curGood,
