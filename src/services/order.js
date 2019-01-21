@@ -73,3 +73,13 @@ export const requestCancelOrder = data => request({
   method: 'POST',
   data
 })
+
+/**
+ * 再来一单
+ * */
+export const requestOrderRepeat = data => request({
+  url: '/addons.diancan.api.Home_repeatOrder',
+  method: 'POST',
+  data
+})
+

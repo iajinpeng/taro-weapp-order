@@ -127,6 +127,18 @@ class OrderDetail extends Component {
     Taro.makePhoneCall({phoneNumber})
   }
 
+  requestOrderRepeat = () => {
+    const {data: {store_id, o_id}} = this.state
+
+    this.props.dispatch({
+      type: 'order/requestOrderRepeat',
+      payload: {
+        store_id,
+        order_id: o_id
+      }
+    })
+  }
+
   render() {
     const {theme, systemInfo} = this.props
     const isIphoneX = !!(systemInfo.model && systemInfo.model.replace(' ', '').toLowerCase().indexOf('iphonex') > -1)
@@ -263,7 +275,10 @@ class OrderDetail extends Component {
                 </View>
                 {
                   (data.o_order_status === 5 || data.o_order_status === 6 || data.o_order_status === 7) &&
-                  <Button className={'theme-grad-bg-' + theme}>再来一单</Button>
+                  <Button
+                    className={'theme-grad-bg-' + theme}
+                    onClick={this.requestOrderRepeat}
+                  >再来一单</Button>
                 }
 
                 {

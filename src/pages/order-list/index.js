@@ -28,7 +28,7 @@ class OrderList extends Component {
 
   canRequestMore = true
 
-  componentWillMount() {
+  componentDidShow() {
     this.requestOrderList().then(({total, rows}) => {
       this.setState({total, lists: rows, firstId: rows && rows.length > 0 && rows[0].o_id})
     })

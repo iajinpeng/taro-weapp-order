@@ -40,6 +40,10 @@ class Index extends Component {
 
   componentWillMount () {
 
+    Taro.showShareMenu({
+      withShareTicket: true
+    })
+
     Taro.getSystemInfo().then(res => {
       this.props.dispatch({
         type: 'common/setSistemInfo',

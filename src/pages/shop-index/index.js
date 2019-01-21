@@ -279,6 +279,7 @@ class ShopIndex extends Component {
         optionalstr: propertyTagIndex.join('') + optionalTagIndex.join(''),
       }
     }
+    console.log(curCart.optionalstr)
 
     const good = {
       ...curGood,
@@ -294,7 +295,6 @@ class ShopIndex extends Component {
         num
       }
     })
-
   }
 
   showOrHideCartWarn = (bool) => {

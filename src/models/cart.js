@@ -54,7 +54,7 @@ export default {
           if (idAlikes.length === 0) {
             curCart.push({...good, num})
           } else{
-            let index = idAlikes.findIndex(item => !item.fs_id && (item.g_id === good.g_id))
+            let index = idAlikes.findIndex(item => !item.fs_id && (item.optionalstr === good.optionalstr))
             if (index > -1) {
 
               let i = idAlikes[index].index
@@ -100,7 +100,7 @@ export default {
         if (idAlikes.length === 0) {
           curCart.push({...good, num})
         } else {
-          let index = idAlikes.findIndex(item => item.optionalnumstr === good.optionalnumstr)
+          let index = idAlikes.findIndex(item => !item.fs_id && (item.optionalnumstr === good.optionalnumstr))
           if (index > -1) {
             let i = idAlikes[index].index
             curCart[i].num += num

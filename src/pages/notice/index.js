@@ -1,5 +1,5 @@
 import Taro, {Component} from '@tarojs/taro'
-import {View, Text, Button, Image} from '@tarojs/components'
+import {View, Text, Button, ScrollView} from '@tarojs/components'
 import {connect} from '@tarojs/redux'
 import classnames from 'classnames'
 import './index.less'
@@ -9,7 +9,7 @@ import './index.less'
 class Notice extends Component {
   config = {
     navigationBarTitleText: '顾客须知',
-    // disableScroll: true
+    disableScroll: true
   }
 
   state = {
@@ -67,49 +67,51 @@ class Notice extends Component {
 
     return (
       diancan &&
-      <View className='notice'>
-        <View className='block'>
-          <View>您在使用此平台前应仔细阅读如下须知：</View>
+      <ScrollView scrollY className='notice'>
+        <View className='wrap'>
+          <View className='block'>
+            <View>您在使用此平台前应仔细阅读如下须知：</View>
 
-          <View className={classnames('title-2', 'theme-c-' + theme)}>1. {diancan.title}</View>
+            <View className={classnames('title-2', 'theme-c-' + theme)}>1. {diancan.title}</View>
 
-          <View>
-            <Text className='dot' />
-            {diancan.answer}
+            <View>
+              <Text className='dot' />
+              {diancan.answer}
+            </View>
+
+            <View className={classnames('title-2', 'theme-c-' + theme)}>1. {quxiao.title}</View>
+
+            <View>
+              <Text className='dot' />
+              {quxiao.answer}
+            </View>
+
           </View>
 
-          <View className={classnames('title-2', 'theme-c-' + theme)}>1. {quxiao.title}</View>
+          <View className='block'>
+            <View className={classnames('title-1', 'theme-c-' + theme)}>常见问题</View>
 
-          <View>
-            <Text className='dot' />
-            {quxiao.answer}
+            {
+              question.map((item, index) => (
+                <View key={index}>
+                  <View className={classnames('title-2', 'theme-c-' + theme)}>{item.title}</View>
+                  <View>{item.answer}</View>
+                </View>
+              ))
+            }
           </View>
 
+          <Button
+            className={classnames('do-btn', 'theme-grad-bg-' + theme)}
+            openType={userInfo.userInfo ? '' : 'getUserInfo'}
+            onGetUserInfo={this.getedUserInfo}
+            formType='submit'
+            onClick={this.toChoosePage.bind(this, null)}
+          >
+            开始点餐</Button>
         </View>
 
-        <View className='block'>
-          <View className={classnames('title-1', 'theme-c-' + theme)}>常见问题</View>
-
-          {
-            question.map((item, index) => (
-              <View key={index}>
-                <View className={classnames('title-2', 'theme-c-' + theme)}>{item.title}</View>
-                <View>{item.answer}</View>
-              </View>
-            ))
-          }
-        </View>
-
-        <Button
-          className={classnames('do-btn', 'theme-grad-bg-' + theme)}
-          openType={userInfo.userInfo ? '' : 'getUserInfo'}
-          onGetUserInfo={this.getedUserInfo}
-          formType='submit'
-          onClick={this.toChoosePage.bind(this, null)}
-        >
-          开始点餐</Button>
-
-      </View>
+      </ScrollView>
     )
   }
 }
