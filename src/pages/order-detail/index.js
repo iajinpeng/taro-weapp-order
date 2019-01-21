@@ -1,5 +1,5 @@
 import Taro, {Component} from '@tarojs/taro'
-import {View, Text, Button, Block, Map, Image, CoverView, CoverImage} from '@tarojs/components'
+import {View, Text, Button, Block, Map, Image, CoverView, CoverImage, ScrollView} from '@tarojs/components'
 import {connect} from '@tarojs/redux'
 import {AtIcon} from 'taro-ui'
 import classnames from 'classnames'
@@ -137,7 +137,7 @@ class OrderDetail extends Component {
       <Block>
         {
           !!data.o_order_status &&
-          <View className={classnames('order-detail', isIphoneX ? 'iphonex' : '')}>
+          <ScrollView scrollY className={classnames('order-detail', isIphoneX ? 'iphonex' : '')}>
 
             {
               data.o_take_type === 3 && data.o_order_status !== 5
@@ -386,7 +386,7 @@ class OrderDetail extends Component {
 
               <View className='tooth-border'/>
             </View>
-          </View>
+          </ScrollView>
         }
 
         <ConfirmModal

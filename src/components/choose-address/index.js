@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import classnames from 'classnames'
 import {connect} from '@tarojs/redux'
 
-import {baseUrl} from "../../config/index";
+import {baseUrl} from '../../config/index';
 
 import './index.less'
 import '../../app.less'

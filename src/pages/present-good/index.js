@@ -3,7 +3,7 @@ import {View, Text, Button, Image, ScrollView, Block} from '@tarojs/components'
 import {AtIcon, AtCurtain} from 'taro-ui'
 import {connect} from '@tarojs/redux'
 import classnames from 'classnames'
-import {baseUrl} from "../../config/index"
+import {baseUrl} from '../../config/index'
 import Modal from '../../components/modal'
 import PayBox from '../../components/pay-box'
 
@@ -14,7 +14,7 @@ import './index.less'
 class PresentGood extends Component {
   config = {
     navigationBarTitleText: '满单即送',
-    disableScroll: true
+    // disableScroll: true
   }
 
   state = {
@@ -255,7 +255,7 @@ class PresentGood extends Component {
 
     return (
       <View className='present-good'>
-        <Image className="banner" src={image ? baseUrl + image : ''}/>
+        <Image className='banner' src={image ? baseUrl + image : ''}/>
 
         <View className='good-list'>
           {

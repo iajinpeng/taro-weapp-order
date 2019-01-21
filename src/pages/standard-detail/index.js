@@ -160,7 +160,7 @@ class StandardDetail extends Component {
                 {
                   opt.list && opt.list.map((good, i) => (
                     <View className='others-item' key={i}>
-                      <Image className="pic" src={baseUrl + good.gn_image}/>
+                      <Image className='pic' src={baseUrl + good.gn_image}/>
                       <View className='info'>
                         <View className='name'>{good.gn_name}</View>
                         <View className='standard'>{good.gn_append}</View>
@@ -191,7 +191,7 @@ class StandardDetail extends Component {
           }
         </View>
 
-        <View className="pay-wrap">
+        <View className='pay-wrap'>
           <PayBox
             simple onClick={this.addCart}
             theme={theme}

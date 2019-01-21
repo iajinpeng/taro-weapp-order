@@ -193,10 +193,7 @@ class Order extends Component {
 
 
   chooseReserveTime = () => {
-    const {amount, orderType} = this.state
-    this.getReserveTime(amount, orderType).then(() => {
-      this.setState({isShowPicker: true})
-    })
+    this.setState({isShowPicker: true})
   }
 
   getReserveTime = (amount, orderType) => {
@@ -226,7 +223,7 @@ class Order extends Component {
 
     const goods = carts[this.$router.params.store_id].map(cart => {
       let {g_id, num, send_goods, fs_id} = cart
-      let g_property = [], optional = []
+      let g_property = [], optional = [], g_property_array = []
 
       if (cart.propertyTagIndex) {
         cart.property.forEach((item, i) => {
@@ -243,6 +240,11 @@ class Order extends Component {
                 gn_num: item.list[cart.optionalTagIndex[i]].gn_num,
               }
             }
+          })
+
+          g_property_array.push({
+            name: item.title,
+            list_name: item.list[cart.optionalTagIndex[i]].gn_name
           })
         })
       }
@@ -266,14 +268,6 @@ class Order extends Component {
           return total
         }, [])
 
-      }
-      const g_property_array = {
-        property_titles: cart.property && cart.property.map(item => item.title),
-        optional_titles: !fs_id && cart.property && cart.optional.map(item => item.title),
-        propertyTagIndex: cart.propertyTagIndex,
-        optionalTagIndex: cart.optionalTagIndex,
-        optionalstr: cart.optionalstr,
-        optionalnumstr: cart.optionalnumstr
       }
 
       return {g_id, num, send_goods, g_property, optional, full_send_id: fs_id, g_property_array}

@@ -2,10 +2,10 @@ import Taro, {Component} from '@tarojs/taro'
 import {View, Button, Text, Image, Input} from '@tarojs/components'
 import {connect} from '@tarojs/redux'
 import {AtToast} from 'taro-ui'
-import {baseUrl} from "../../config/index";
+import {baseUrl} from '../../config/index';
 import Copyright from '../../components/copyright'
 import './index.less'
-import address from "../../models/address";
+import address from '../../models/address';
 
 @connect(({common, address}) => ({...common, ...address}))
 class AddAddress extends Component {
@@ -153,7 +153,7 @@ class AddAddress extends Component {
           onClick={this.postAddress}
         >确认保存</Button>
 
-        <View className="copy-box">
+        <View className='copy-box'>
           <Copyright />
         </View>
 
