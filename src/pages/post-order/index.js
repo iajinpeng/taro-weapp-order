@@ -228,6 +228,11 @@ class Order extends Component {
       if (cart.propertyTagIndex) {
         cart.property.forEach((item, i) => {
           g_property.push(item.list_name[cart.propertyTagIndex[i]])
+
+          g_property_array.push({
+            name: item.name,
+            list_name: item.list_name[cart.optionalTagIndex[i]]
+          })
         })
       }
       if (cart.optionalTagIndex) {
@@ -240,11 +245,6 @@ class Order extends Component {
                 gn_num: item.list[cart.optionalTagIndex[i]].gn_num,
               }
             }
-          })
-
-          g_property_array.push({
-            name: item.title,
-            list_name: item.list[cart.optionalTagIndex[i]].gn_name
           })
         })
       }
