@@ -12,23 +12,18 @@ export default async (options = { method: 'GET', data: {} }) => {
   let sessionId = Taro.getStorageSync('sessionId')
   let constance_data = options.no_const ? {} : request_data
 
-  let request = async (sid) => {
-    Taro.showNavigationBarLoading()
-    const response = await Taro.request({
-      url: baseUrl + options.url,
-      data: {
-        sessionId: sid || sessionId,
-        ...constance_data,
-        ...options.data,
-      },
-      header: {
-        'Content-Type': 'application/json',
-      },
-      method: options.method.toUpperCase(),
-    })
-    Taro.hideNavigationBarLoading()
-    return response
-  }
+  let request = (sid) => Taro.request({
+    url: baseUrl + options.url,
+    data: {
+      sessionId: sid || sessionId,
+      ...constance_data,
+      ...options.data,
+    },
+    header: {
+      'Content-Type': 'application/json',
+    },
+    method: options.method.toUpperCase(),
+  })
 
   let resp = await request();
 

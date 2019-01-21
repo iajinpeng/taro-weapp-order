@@ -7,7 +7,6 @@ import '../../app.less'
 class IdButton extends Component {
 
   handleSubmit = e => {
-    console.log(e)
     this.props.dispatch({
       type: 'common/postFormId',
       payload: {

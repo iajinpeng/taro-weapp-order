@@ -85,7 +85,6 @@ class Index extends Component {
       this.setState({isFirstShow: true})
     } else {
       this.setState({isFirstShow: false})
-      Taro.hideNavigationBarLoading()
     }
   }
 
