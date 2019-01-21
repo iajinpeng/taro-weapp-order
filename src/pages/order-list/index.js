@@ -122,6 +122,22 @@ class OrderList extends Component {
     })
   }
 
+  requestOrderRepeat = (order_id, store_id) => {
+
+    this.props.dispatch({
+      type: 'order/requestOrderRepeat',
+      payload: {
+        store_id,
+        order_id
+      }
+    }).then(change => {
+      if (change) {
+        this.showOrHideAgainWarn(true)
+      }
+    })
+
+  }
+
   render() {
     const {theme} = this.props
     const {type, lists, firstId, isShowCancelWarn} = this.state
@@ -221,7 +237,10 @@ class OrderList extends Component {
                   {
                     order.o_order_status === 5 &&
                     <View className='good-info'>
-                      <Button className={'theme-grad-bg-' + theme}>再来一单</Button>
+                      <Button
+                        className={'theme-grad-bg-' + theme}
+                        onClick={this.requestOrderRepeat.bind(this, order.o_id, order.store_id)}
+                      >再来一单</Button>
                     </View>
                   }
 

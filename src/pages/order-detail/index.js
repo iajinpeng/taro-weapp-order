@@ -139,70 +139,22 @@ class OrderDetail extends Component {
     Taro.makePhoneCall({phoneNumber})
   }
 
-  requestOrderRepeat = async () => {
+  requestOrderRepeat = () => {
     const {data: {store_id, o_id}} = this.state
 
-    const {change, goods} = await this.props.dispatch({
+    this.props.dispatch({
       type: 'order/requestOrderRepeat',
       payload: {
         store_id,
         order_id: o_id
       }
+    }).then(change => {
+      if (change) {
+        this.showOrHideAgainWarn(true)
+      }
     })
 
-    if (change) {
-      this.showOrHideAgainWarn(true)
-    } else {
 
-      goods.forEach(good => {
-        delete good.optionalTagIndex
-        let {propertyTagIndex, optionalTagIndex, optionalnumstr} = good
-
-        if (optionalnumstr.length === 0) {
-          delete  good.optionalnumstr
-
-          if (optionalTagIndex.length > 0) {
-            good.optionalTagIndex = optionalTagIndex.map(item => +item)
-          }
-
-          if (optionalTagIndex.length > 0 || propertyTagIndex.length > 0) {
-            good.optionalstr = propertyTagIndex.join('') + optionalTagIndex.join('')
-          }
-        } else {
-          good.optionalnumstr = optionalnumstr[0]
-
-          good.optional.map((opt, index) => {
-            opt.list.map((g, i) => {
-              return g.num = good.optionalnumstr.split(',')[index].split('|')[i]
-            })
-          })
-
-          let optPrice = good.optional.reduce((total, opt) => {
-            let price = opt.list.reduce((t, g) => {
-              return t += +g.gn_price * (g.num || 0)
-            }, 0)
-            return total += price
-          }, 0) || 0
-
-          good.total_price = +good.g_price + optPrice
-        }
-
-        const {od_optional_array, od_property_array, ...useGood} = good
-
-        this.props.dispatch({
-          type: 'cart/setCart',
-          payload: {
-            id: +store_id,
-            good: useGood,
-            num: good.od_num || 1
-          }
-        })
-      })
-
-      Taro.navigateTo({
-        url: '/pages/shop-index/index?id=' + store_id
-      })
-    }
   }
 
   render() {
