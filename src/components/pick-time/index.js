@@ -1,5 +1,5 @@
 import Taro, {Component} from '@tarojs/taro'
-import {View, Block, Text} from '@tarojs/components'
+import {View, Block, Text, ScrollView} from '@tarojs/components'
 import PropTypes from 'prop-types'
 import classnames from 'classnames'
 
@@ -51,7 +51,7 @@ class PickTime extends Component {
 
   render() {
     const {dayIndex, timeIndex} = this.state
-    const {show, reserveTime, theme} = this.props
+    const {show, reserveTime, theme, showPrice} = this.props
 
     return (
       <Block>
@@ -64,7 +64,7 @@ class PickTime extends Component {
             <Text className='cacel' onClick={this.props.onClose.bind(this, null)}>取消</Text>
           </View>
           <View className='picker'>
-            <View className='day-list' onTouchMove={this.stopPro}>
+            <ScrollView scrollY className='day-list' onTouchMove={this.stopPro}>
               {
                 reserveTime.map((day, index) => (
                   <View
@@ -74,8 +74,8 @@ class PickTime extends Component {
                   >{day.title}</View>
                 ))
               }
-            </View>
-            <View className='time-list'>
+            </ScrollView>
+            <ScrollView scrollY className='time-list'>
               {
                 reserveTime.length > 0 && reserveTime[dayIndex].time.length > 0 &&
                 reserveTime[dayIndex].time.map((time, index) => (
@@ -84,18 +84,26 @@ class PickTime extends Component {
                     key={index}
                     onClick={this.chooseTime.bind(this, index)}
                   >
-                    {
-                      dayIndex === 0 && index === 0 &&
+                    <Text className='time'>
+                      {
+                        dayIndex === 0 && index === 0 &&
                         <Text>现在下单，</Text>
-                    }
+                      }
+                      {
+                        index === 0 ? '预计' : ''
+                      }
+                      {time.time}
+                    </Text>
                     {
-                      index === 0 ? '预计' : ''
+                      showPrice &&
+                      <Text className='price'>
+                        {time.price}元配送费
+                      </Text>
                     }
-                    {time.time}
                   </View>
                 ))
               }
-            </View>
+            </ScrollView>
           </View>
         </View>
       </Block>

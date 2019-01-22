@@ -6,6 +6,7 @@ import classnames from 'classnames'
 import ConfirmModal from '../../components/confirm-modal'
 import IdButton from '../../components/id-button'
 import Copyright from '../../components/copyright'
+import Loading from '../../components/Loading'
 
 import {warningDistance, baseUrl} from '../../config'
 import Citys from '../../utils/citys'
@@ -29,6 +30,8 @@ class Choose extends Component {
     isShowDistanceWarn: false,
     isShowNullWarn: false,
     isShowMap: true,
+    isRenderCity: false,
+    isShowLoading: false,
     keyword: '',
     markers: [],
     store: [],
@@ -42,6 +45,10 @@ class Choose extends Component {
 
   componentWillMount() {
     this.getStoreList()
+
+    setTimeout(() => {
+      this.setState({isRenderCity: true})
+    }, 3000)
   }
 
   componentDidShow() {
@@ -59,6 +66,7 @@ class Choose extends Component {
     const {longitude, latitude, locationCity} = this.props.localInfo
     const {keyword, city} = this.state
 
+    this.setState({isShowLoading: true})
     this.props.dispatch({
       type: 'shop/getStoreList',
       payload: {
@@ -71,9 +79,12 @@ class Choose extends Component {
       this.setState({
         store: res.store,
         isShowNullWarn: res.store.length === 0
+      }, () => {
+        this.setState({isShowLoading: false})
       })
 
       this.showShopMakers(res)
+
     })
   }
 
@@ -227,18 +238,6 @@ class Choose extends Component {
     })
   }
 
-  calcDistance = (loca) => {
-    if (typeof loca !== 'string') return ''
-    let [lng1, lat1] = this.props.localInfo.location.split(',')
-    let [lng2, lat2] = loca.split(',')
-    let rad1 = lat1 * Math.PI / 180.0;
-    let rad2 = lat2 * Math.PI / 180.0;
-    let a = rad1 - rad2;
-    let b = lng1 * Math.PI / 180.0 - lng2 * Math.PI / 180.0;
-    let r = 6378137;
-    return ((r * 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a / 2), 2) + Math.cos(rad1) * Math.cos(rad2) * Math.pow(Math.sin(b / 2), 2)))) / 1000).toFixed(1)
-
-  }
 
   render() {
     const {theme, localInfo: {locationCity}} = this.props
@@ -246,8 +245,8 @@ class Choose extends Component {
     const {longitude, latitude} = this.state
 
     const {
-      keyword, city,
-      isShowCitys, isSearching, markers,
+      keyword, city, isShowLoading,
+      isShowCitys, isSearching, markers, isRenderCity,
       store, selectedStoreIndex, isShowDistanceWarn, warnDistance,
       isShowNullWarn, isShowMap, scrollStoreId, storeFilter
     } = this.state
@@ -290,15 +289,18 @@ class Choose extends Component {
             </View>
           }
         </View>
-        <View className='select-city' style={{display: isShowCitys ? 'block' : 'none'}}>
-          <AtIndexes list={Citys} topKey='' onClick={this.chooseCity} animation>
-            <View className='city-block' id='local' onClick={this.chooseCity.bind(this, {name: locationCity})}>
-              <View className='title'>当前定位城市</View>
-              <View className='item'>{locationCity}</View>
-              <View className='re-position' onClick={this.reLocation}>重新定位</View>
-            </View>
-          </AtIndexes>
-        </View>
+        {
+          isRenderCity &&
+          <View className='select-city' style={{display: isShowCitys ? 'block' : 'none'}}>
+            <AtIndexes list={Citys} topKey='' onClick={this.chooseCity} animation>
+              <View className='city-block' id='local' onClick={this.chooseCity.bind(this, {name: locationCity})}>
+                <View className='title'>当前定位城市</View>
+                <View className='item'>{locationCity}</View>
+                <View className='re-position' onClick={this.reLocation}>重新定位</View>
+              </View>
+            </AtIndexes>
+          </View>
+        }
         {
           isSearching &&
           <ScrollView
@@ -423,6 +425,8 @@ class Choose extends Component {
         >
           当前城市还没有门店！敬请期待。
         </ConfirmModal>
+
+        <Loading show={isShowLoading} />
 
       </View>
     )

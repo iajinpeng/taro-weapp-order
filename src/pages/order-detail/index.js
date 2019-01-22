@@ -1,5 +1,5 @@
 import Taro, {Component} from '@tarojs/taro'
-import {View, Text, Button, Block, Map, Image, CoverView, CoverImage, ScrollView} from '@tarojs/components'
+import {View, Text, Button, Block, Map, Image, CoverView, CoverImage} from '@tarojs/components'
 import {connect} from '@tarojs/redux'
 import {AtIcon} from 'taro-ui'
 import classnames from 'classnames'
@@ -13,7 +13,7 @@ import ConfirmModal from '../../components/confirm-modal'
 class OrderDetail extends Component {
   config = {
     navigationBarTitleText: '订单详情',
-    disableScroll: true
+    // disableScroll: true
   }
 
   state = {
@@ -22,12 +22,16 @@ class OrderDetail extends Component {
     },
     isShowCancelWarn: false,
     isShowOrderAgainWarn: false,
-    markers: []
+    markers: [],
+    includePoints: [],
+    polyline: []
   }
 
   componentWillMount() {
 
     this.getOrderDetail()
+
+
   }
 
   getOrderDetail = () => {
@@ -38,8 +42,7 @@ class OrderDetail extends Component {
         id: this.$router.params.id
       }
     }).then((data) => {
-      this.setState({
-        data,
+      let mapAttrs = {
         markers: [{
           iconPath: baseUrl + b_logo,
           width: 40,
@@ -57,6 +60,59 @@ class OrderDetail extends Component {
             borderRadius: 4
           }
         }]
+      }
+
+      if (+data.o_order_status === 42) {
+        mapAttrs.markers.push({
+          iconPath: baseUrl + data.u_avatar,
+          width: 40,
+          height: 40,
+          id: '_' + data.o_id,
+          longitude: data.o_address_lng,
+          latitude: data.o_address_lat,
+        })
+        mapAttrs.includePoints = mapAttrs.markers
+        mapAttrs.polyline = [{
+          points: [
+            {
+              longitude: data.s_address_lng,
+              latitude: data.s_address_lat,
+            },
+            {
+              longitude: data.o_address_lng,
+              latitude: data.o_address_lat,
+            }
+          ],
+          color: '#FF0000DD',
+          width: 2,
+          dottedLine: true,
+        }]
+
+        if (+data.take_id === 2) {
+          mapAttrs.markers.push({
+            iconPath: require('../../images/icon-bike.png'),
+            width: 36,
+            height: 28,
+            id: '_' + data.o_id,
+            longitude: data.transporter_lng,
+            latitude: data.transporter_lat,
+            callout: {
+              content: `距离您${data.take_distance > 1000 ? ((data.take_distance /1000).toFixed(2) + 'k') : data.take_distance}m`,
+              fontSize: 12,
+              padding: 8,
+              display: 'ALWAYS',
+              borderRadius: 4
+            }
+          })
+        }
+        setTimeout(() => {
+          this.getOrderDetail()
+        }, 10000)
+      }
+
+      this.setState({
+        data,
+        ...mapAttrs
       })
     })
   }
@@ -161,13 +217,14 @@ class OrderDetail extends Component {
     const {theme, systemInfo} = this.props
     const isIphoneX = !!(systemInfo.model && systemInfo.model.replace(' ', '').toLowerCase().indexOf('iphonex') > -1)
 
-    const {data, isShowCancelWarn, markers, isShowOrderAgainWarn} = this.state
+    const {data, isShowCancelWarn, markers, isShowOrderAgainWarn, includePoints,
+      polyline} = this.state
 
     return (
       <Block>
         {
           !!data.o_order_status &&
-          <ScrollView scrollY className={classnames('order-detail', isIphoneX ? 'iphonex' : '')}>
+          <View className={classnames('order-detail', isIphoneX ? 'iphonex' : '')}>
 
             {
               data.o_take_type === 3 && data.o_order_status !== 5
@@ -179,10 +236,12 @@ class OrderDetail extends Component {
                   latitude={data.s_address_lat}
                   longitude={data.s_address_lng}
                   markers={markers}
+                  includePoints={includePoints}
+                  polyline={polyline}
                 />
 
                 {
-                  data.o_order_status === 42 &&
+                  data.o_order_status === 42 && data.take_id === 1 &&
                   <CoverView className='map-tip'>
                     <CoverImage src={require('../../images/icon-bike.png')} />
                    <CoverView className='text'>
@@ -190,6 +249,13 @@ class OrderDetail extends Component {
                        `当前由${data.take_id === 1 ? '商家' : '骑手'}配送，请留意骑手来电`
                      }
                    </CoverView>
+                  </CoverView>
+                }
+
+                {
+                  data.o_order_status === 42 && data.take_id === 2 &&
+                  <CoverView className='map-refresh' onClick={this.getOrderDetail}>
+                    <CoverImage src={require('../../images/icon-refresh.png')} />
                   </CoverView>
                 }
                 <View className='out-status'>
@@ -419,7 +485,7 @@ class OrderDetail extends Component {
 
               <View className='tooth-border'/>
             </View>
-          </ScrollView>
+          </View>
         }
 
         <ConfirmModal

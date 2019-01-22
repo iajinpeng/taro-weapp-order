@@ -769,7 +769,11 @@ class Order extends Component {
           <IdButton className={'theme-grad-bg-' + theme} onClick={this.stepPay}>去支付</IdButton>
         </View>
 
-        <PickTime show={isShowPicker} reserveTime={reserveTime} theme={theme} onClose={this.closeTimePicker}/>
+        <PickTime
+          show={isShowPicker} reserveTime={reserveTime}
+          theme={theme} onClose={this.closeTimePicker}
+          showPrice={orderType === 3}
+        />
 
         <ChooseAddress show={isShowAddress} address={userAddress} theme={theme} onClose={this.hideAddress} />
 

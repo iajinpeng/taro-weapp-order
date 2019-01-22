@@ -42,7 +42,7 @@
     .day-list{
       width: 270px;
       background: #F5F5F5;
-      overflow-y: auto;
+      height: 100%;
       &:last-child{
         padding-bottom: 200px;
       }
@@ -61,15 +61,26 @@
     .time-list{
       flex: 1;
       background: #fff;
-      overflow-y: auto;
+      height: 100%;
       .time-item{
         height: 90px;
         line-height: 90px;
         text-align: center;
         font-size: 30px;
         color: @c-666;
+        display: flex;
         &>text{
           font-size: 32px;
+        }
+        .time{
+          flex: 1;
+        }
+        .price{
+          font-size: 22px;
+          display: inline-block;
+          width: 140px;
+          text-align: right;
+          padding-right: 26px;
         }
         &.active{
           font-weight: bold;

@@ -509,7 +509,7 @@ class ShopIndex extends Component {
             <Image src={require('../../images/icon-trash.png')}/>
             <Text onClick={this.showOrHideCartWarn.bind(this, true)}>清空购物车</Text>
           </View>
-          <View className='cart-list'>
+          <ScrollView scrollY className='cart-list'>
             {
               carts.map((good, index) => (
                 good.num && good.num !== 0 &&
@@ -625,7 +625,7 @@ class ShopIndex extends Component {
                 )
               ))
             }
-          </View>
+          </ScrollView>
 
         </View>
 
