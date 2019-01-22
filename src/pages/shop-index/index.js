@@ -38,6 +38,7 @@ class ShopIndex extends Component {
 
   componentWillMount() {
     // this.readStorageCarts()
+    this.setState({isShowCart: !!this.$router.params.showcart})
   }
 
   componentDidShow() {

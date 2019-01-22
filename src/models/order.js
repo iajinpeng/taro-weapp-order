@@ -98,7 +98,7 @@ export default {
         }
 
         Taro.navigateTo({
-          url: '/pages/shop-index/index?id=' + store_id
+          url: '/pages/shop-index/index?id=' + store_id + '&showcart=1'
         })
 
         return change
