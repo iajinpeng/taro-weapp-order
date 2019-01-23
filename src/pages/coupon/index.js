@@ -108,12 +108,16 @@ class Coupon extends Component {
     })
   }
 
+  handleTouchStart = e => {
+    console.log(e)
+  }
+
   render() {
     const {theme, userInfo} = this.props
     const {type, lists, openIndex} = this.state
 
     return (
-      <View className='coupon'>
+      <View className='coupon' onTouchStart={this.handleTouchStart}>
         <View className='title'>
           <View
             className={classnames('normal', type === 1 ? 'active theme-c-' + theme : '')}

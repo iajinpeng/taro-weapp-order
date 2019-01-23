@@ -200,8 +200,9 @@ class Index extends Component {
 
     return (
       <View className='index-page' style={{display: home_banner.banner ? 'block' : 'none'}}>
-        <View className='icon-help-wrap' onClick={this.toNoticePage}>
-          <AtIcon value='help' size='14' />
+        <View className={classnames('icon-help-wrap', 'theme-c-' + theme)}>
+          <Text className='greed'>晚上好!</Text>
+          <AtIcon value='help' size='14' onClick={this.toNoticePage} />
         </View>
 
         <View className='banner'>
@@ -279,7 +280,9 @@ class Index extends Component {
                   ))
                 }
               </View>
-              <View className='rule' onClick={this.showOrHideModal.bind(this, true)}>活动规则</View>
+              <View className='rule' onClick={this.showOrHideModal.bind(this, true)}>活动规则
+                <AtIcon value='chevron-right' size='17' />
+              </View>
             </View>
             <Image src={baseUrl + full_image} />
           </View>

@@ -719,10 +719,10 @@ class ShopIndex extends Component {
                     <View className='options'>
                       {
                         item.list_name.map((option, i) => (
-                          <Button
+                          <View
                             onClick={this.selectTag.bind(this, 'propertyTagIndex', index, i)} key={i}
                             className={propertyTagIndex[index] === i ? 'active theme-grad-bg-' + theme : ''}
-                          >{option}</Button>
+                          >{option}</View>
                         ))
                       }
                     </View>
@@ -736,10 +736,10 @@ class ShopIndex extends Component {
                     <View className='options'>
                       {
                         item.list.map((option, i) => (
-                          <Button
+                          <View
                             onClick={this.selectTag.bind(this, 'optionalTagIndex', index, i)} key={i}
                             className={optionalTagIndex[index] === i ? 'active theme-grad-bg-' + theme : ''}
-                          >{option.gn_name}</Button>
+                          >{option.gn_name}</View>
                         ))
                       }
                     </View>
