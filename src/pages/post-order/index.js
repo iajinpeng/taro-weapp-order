@@ -335,26 +335,39 @@ class Order extends Component {
     if (!pay) {
       const res = await this.requestPayOrder(order_id)
 
-      await Taro.requestPayment({
+      const isPayed =  await Taro.requestPayment({
         ...res,
         timeStamp: res.timestamp
+      }).then(r => {
+        console.log(r)
+        return true
+      }).catch(err => {
+        console.log(err)
+        return false
       })
 
       Taro.showLoading({mask: true})
 
-      await this.props.dispatch({
-        type: 'order/getOrderPayStatus',
-        payload: {
-          store_id,
-          order_id
-        }
-      })
+      if (isPayed) {
+        await this.props.dispatch({
+          type: 'order/getOrderPayStatus',
+          payload: {
+            store_id,
+            order_id
+          }
+        })
 
-      Taro.hideLoading()
+        Taro.hideLoading()
 
-      Taro.showToast({
-        title: '下单成功'
-      })
+        Taro.showToast({
+          title: '下单成功'
+        })
+      } else {
+        Taro.showToast({
+          title: '您已取消支付',
+          icon: 'none'
+        })
+      }
 
       setTimeout(() => {
         Taro.redirectTo({
@@ -468,7 +481,7 @@ class Order extends Component {
                     </View>
                     <View className='mobile'>
                       <Image src={require('../../images/icon-mobile.png')}/>
-                      <Input value={userPhoneNum} onInput={this.phoneNumInput} placeholder='请输入手机号'/>
+                      <Input value={userPhoneNum} onInput={this.phoneNumInput} placeholder='请输入手机号' maxlength='15'/>
                       <Button open-type='getPhoneNumber' onGetphonenumber={this.autoInputMobile}>
                         <Text className={'theme-c-' + theme}>自动填写</Text>
                       </Button>
@@ -526,7 +539,7 @@ class Order extends Component {
                       }
                     </View>
                     <View className='time' onClick={this.chooseReserveTime}>
-                      <Text>自取时间</Text>
+                      <Text>外卖下单</Text>
                       <View>
                         {
                           reserveTime.length > 0 ?

@@ -47,7 +47,7 @@ class Choose extends Component {
 
     setTimeout(() => {
       this.setState({isRenderCity: true})
-    }, 3000)
+    }, 300)
   }
 
   componentDidShow() {

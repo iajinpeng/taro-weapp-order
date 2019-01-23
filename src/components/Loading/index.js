@@ -1,5 +1,5 @@
 import Taro, {Component} from '@tarojs/taro'
-import {CoverView, CoverImage} from '@tarojs/components'
+import {View, Image} from '@tarojs/components'
 
 import './index.less'
 
@@ -12,9 +12,9 @@ class Loading extends Component {
   render () {
 
     return (
-      <CoverView className='loading'>
-        <CoverImage src={require('../../images/icon-loading.gif')} />
-      </CoverView>
+      <View className='loading'>
+        <Image src={require('../../images/icon-loading.gif')} />
+      </View>
     )
   }
 }

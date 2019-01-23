@@ -706,7 +706,7 @@ class ShopIndex extends Component {
         </AtCurtain>
 
         <Modal
-          show={isShowOptions} title={stanInfo.g_description}
+          show={isShowOptions} title={curGood.g_title}
           blackTitle
           titleAlign='center' onHide={this.closeOptions.bind(this, curGood)}
         >

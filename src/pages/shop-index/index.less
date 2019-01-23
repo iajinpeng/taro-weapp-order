@@ -110,6 +110,8 @@
               width: 32px;
               height: 32px;
               margin-right: 22px;
+              position: relative;
+              top: 5px;
             }
             &.top-show{
               position: fixed;
@@ -283,8 +285,8 @@
 .option-modal-content{
   padding-top: 20px;
   scroll-view{
-    height: 632px;
     margin: 20px 0;
+    //min-height: 480px;
   }
   .block{
     margin: 0 32px 20px;
@@ -303,6 +305,7 @@
         margin: 0 28px 12px 0;
         color: @c-40;
         border: 1px solid @c-ccc;
+        background: #fff;
         &.active{
           border-color: transparent;
           color: #fff;
@@ -329,19 +332,19 @@
         }
       }
       .pre-price{
-        font-size: 28px;
+        font-size: 24px;
         text-decoration: line-through;
         margin-left: 26px;
-        &>text{
-          font-size: 24px;
-        }
+        color: @c-999;
+        position: relative;
+        top: 4px;
       }
     }
     button{
       width: 232px;
       height: 88px;
       line-height: 88px;
-      border-radius: 39px;
+      border-radius: 44px;
       color: #fff;
       font-weight: bold;
       font-size: 32px;
