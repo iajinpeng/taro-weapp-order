@@ -31,10 +31,9 @@ class Choose extends Component {
     isShowNullWarn: false,
     isShowMap: true,
     isRenderCity: false,
-    isShowLoading: false,
     keyword: '',
     markers: [],
-    store: [],
+    store: null,
     storeFilter: [],
     selectedStoreIndex: 0,
     warnDistance: '',
@@ -66,7 +65,6 @@ class Choose extends Component {
     const {longitude, latitude, locationCity} = this.props.localInfo
     const {keyword, city} = this.state
 
-    this.setState({isShowLoading: true})
     this.props.dispatch({
       type: 'shop/getStoreList',
       payload: {
@@ -79,8 +77,6 @@ class Choose extends Component {
       this.setState({
         store: res.store,
         isShowNullWarn: res.store.length === 0
-      }, () => {
-        this.setState({isShowLoading: false})
       })
 
       this.showShopMakers(res)
@@ -245,7 +241,7 @@ class Choose extends Component {
     const {longitude, latitude} = this.state
 
     const {
-      keyword, city, isShowLoading,
+      keyword, city,
       isShowCitys, isSearching, markers, isRenderCity,
       store, selectedStoreIndex, isShowDistanceWarn, warnDistance,
       isShowNullWarn, isShowMap, scrollStoreId, storeFilter
@@ -255,6 +251,7 @@ class Choose extends Component {
       this.props.systemInfo.model.replace(' ', '').toLowerCase().indexOf('iphonex') > -1)
 
     return (
+      store ?
       <View className='choose-page'>
         <View className='header'>
           {
@@ -321,7 +318,7 @@ class Choose extends Component {
 
 
         {
-          !isSearching && store.length > 0 &&
+          !isSearching && store && store.length > 0 &&
 
           <Block>
             {
@@ -426,9 +423,9 @@ class Choose extends Component {
           当前城市还没有门店！敬请期待。
         </ConfirmModal>
 
-        <Loading show={isShowLoading} />
-
       </View>
+        :
+      <Loading />
     )
   }
 }

@@ -7,6 +7,7 @@ import ConfirmModal from '../../components/confirm-modal'
 import './index.less'
 
 import {orderTypes} from '../../config'
+import {baseUrl} from "../../config/index";
 
 @connect(({common}) => ({...common}))
 class OrderList extends Component {
@@ -180,11 +181,12 @@ class OrderList extends Component {
               >
                 <View className='order-title'>
                   <View className={classnames('status', 'theme-c-' + theme)}>
-                    <Text className={classnames('icon', 'theme-grad-bg-' + theme, (order.o_order_status === 6 || order.o_order_status === 7) ? 'rotate' : '')}>
+                    {/*<Text className={classnames('icon', 'theme-grad-bg-' + theme, (order.o_order_status === 6 || order.o_order_status === 7) ? 'rotate' : '')}>
                       {
                         (order.o_order_status === 6 || order.o_order_status === 7) ? '+' : '-'
                       }
-                    </Text>
+                    </Text>*/}
+                    <Image src={`${baseUrl}/static/addons/diancan/img/style/style_${theme}_${(order.o_order_status === 6 || order.o_order_status === 7) ? 7 : 6}.png`} />
                     <Text>{orderTypes[order.o_order_status.toString()[0]]}</Text>
                   </View>
                   <Text className='c-time'>{order.o_reserve_time}</Text>

@@ -10,10 +10,8 @@ class Loading extends Component {
   }
 
   render () {
-    const {show} = this.props
 
     return (
-      show &&
       <CoverView className='loading'>
         <CoverImage src={require('../../images/icon-loading.gif')} />
       </CoverView>

@@ -6,6 +6,7 @@ import classnames from 'classnames'
 import Modal from '../../components/modal'
 import PayBox from '../../components/pay-box'
 import ConfirmModal from '../../components/confirm-modal'
+import Loading from '../../components/Loading'
 import './index.less'
 import {baseUrl} from '../../config'
 
@@ -19,7 +20,7 @@ class ShopIndex extends Component {
   }
 
   state = {
-    group: [],
+    group: null,
     curGroupId: '',
     curGroupGoodId: '',
     curClassifyIndex: 0,
@@ -130,8 +131,10 @@ class ShopIndex extends Component {
 
     if (scrollGood) {
       this.setState({
-        curGroupGoodId: 'id' + this.state.group[index].group_id
+        curGroupGoodId: 'id' + this.state.group[index].group_id,
+        scrollCurGroupId: null
       })
+      this.curGroupGoodId = this.state.group[index].group_id
     }
 
   }
@@ -332,9 +335,13 @@ class ShopIndex extends Component {
     const fix = e.detail.scrollHeight / (this.goodPosition[this.goodPosition.length - 1].bottom + 105)
     this.goodPosition.map(item => {
       if (e.detail.scrollTop >= Math.floor(item.top * fix) && e.detail.scrollTop < (item.bottom) * fix) {
-        this.setState({
-          scrollCurGroupId: item.group_id,
-        })
+        if (this.curGroupGoodId !== this.state.group[item.index].group_id) {
+          this.setState({
+            scrollCurGroupId: item.group_id,
+          })
+        } else{
+          this.curGroupGoodId = null
+        }
         this.changeClassify(item.index, false)
       }
     })
@@ -354,6 +361,7 @@ class ShopIndex extends Component {
     } = this.state
 
     return (
+      group ?
       <View className='shop-index'>
         <View className='banner'>
           <Swiper
@@ -379,7 +387,7 @@ class ShopIndex extends Component {
         </View>
 
         {
-          group.length &&
+          group && group.length &&
           <View className='menu'>
             <View className='aside'>
               <ScrollView
@@ -519,9 +527,8 @@ class ShopIndex extends Component {
                     <View class='item-left'>
                       <View className='name'>
                         {good.g_title}
-                        {
-                          good.property && <Text>/</Text>
-                        }
+                      </View>
+                      <View className='param'>
                         {
                           good.property &&
                           good.property.map((prop, i) => (
@@ -531,8 +538,10 @@ class ShopIndex extends Component {
                             </Text>
                           ))
                         }
-                      </View>
-                      <View className='param'>
+                        {
+                          good.property && good.property.length > 0 &&
+                          good.optional && good.optional.length > 0 ? '+' : ''
+                        }
                         {
                           good.optional &&
                           good.optional.map((opt, i) => (
@@ -807,6 +816,9 @@ class ShopIndex extends Component {
           text='部分原商品已下架，请重新挑选'/>
 
       </View>
+
+      :
+      <Loading />
     )
   }
 }
