@@ -447,7 +447,7 @@ class ShopIndex extends Component {
                               <View className='img-wrap'>
                                 {
                                   good.tag_name &&
-                                  <Text className={classnames('tag', 'theme-grad-bg-' + theme)}>{good.tag_name}</Text>
+                                  <Text className={classnames('tag')} style={{background: good.tag_color}}>{good.tag_name}</Text>
                                 }
                                 <Image src={good.g_image_100 ? baseUrl + good.g_image_100 : ''}/>
                               </View>

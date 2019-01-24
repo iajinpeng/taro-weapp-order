@@ -331,7 +331,10 @@ class Order extends Component {
       }
     }
 
-    const {pay, order_id} = await this.requestSaveOrder()
+    const res = await this.requestSaveOrder()
+    console.log(res)
+    return
+    const {pay, order_id} = res
 
     if (order_id) {
       this.props.dispatch({
