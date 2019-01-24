@@ -4,10 +4,10 @@ import {connect} from '@tarojs/redux'
 import classnames from 'classnames'
 
 import ConfirmModal from '../../components/confirm-modal'
+import {getTouchData} from '../../utils/utils'
 import './index.less'
 
-import {orderTypes} from '../../config'
-import {baseUrl} from "../../config/index";
+import {orderTypes, baseUrl} from '../../config'
 
 @connect(({common}) => ({...common}))
 class OrderList extends Component {
@@ -139,12 +139,35 @@ class OrderList extends Component {
 
   }
 
+  handleTouchStart = e => {
+    this.touch_s_x = e.changedTouches[0].clientX
+    this.touch_s_y = e.changedTouches[0].clientY
+  }
+
+  handleTouchEnd = e => {
+    this.touch_e_x = e.changedTouches[0].clientX
+    this.touch_e_y = e.changedTouches[0].clientY
+
+    const {touch_e_x, touch_e_y, touch_s_x, touch_s_y} = this
+
+    const turn = getTouchData(touch_e_x, touch_e_y, touch_s_x, touch_s_y)
+
+    const {type} = this.state
+    console.log(turn)
+
+    if (turn === 'right') {
+      type === 2 && this.changeTab(1)
+    } else {
+      type === 1 && this.changeTab(2)
+    }
+  }
+
   render() {
     const {theme} = this.props
     const {type, lists, firstId, isShowCancelWarn} = this.state
 
     return (
-      <View className='order-list'>
+      <View className='order-list' onTouchStart={this.handleTouchStart} onTouchEnd={this.handleTouchEnd}>
         <View className='title'>
           <View
             className={classnames('normal', type === 1 ? 'active' + ' theme-c-' + theme : '')}

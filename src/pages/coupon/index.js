@@ -4,6 +4,7 @@ import {connect} from '@tarojs/redux'
 import {AtIcon} from 'taro-ui'
 import classnames from 'classnames'
 import Copyright from '../../components/copyright'
+import {getTouchData} from '../../utils/utils'
 import './index.less'
 
 @connect(({common}) => ({...common}))
@@ -109,7 +110,26 @@ class Coupon extends Component {
   }
 
   handleTouchStart = e => {
-    console.log(e)
+    this.touch_s_x = e.changedTouches[0].clientX
+    this.touch_s_y = e.changedTouches[0].clientY
+  }
+
+  handleTouchEnd = e => {
+    this.touch_e_x = e.changedTouches[0].clientX
+    this.touch_e_y = e.changedTouches[0].clientY
+
+    const {touch_e_x, touch_e_y, touch_s_x, touch_s_y} = this
+
+    const turn = getTouchData(touch_e_x, touch_e_y, touch_s_x, touch_s_y)
+
+    const {type} = this.state
+    console.log(turn)
+
+    if (turn === 'right') {
+      type === 2 && this.changeTab(1)
+    } else {
+      type === 1 && this.changeTab(2)
+    }
   }
 
   render() {
@@ -117,7 +137,7 @@ class Coupon extends Component {
     const {type, lists, openIndex} = this.state
 
     return (
-      <View className='coupon' onTouchStart={this.handleTouchStart}>
+      <View className='coupon' onTouchStart={this.handleTouchStart} onTouchEnd={this.handleTouchEnd}>
         <View className='title'>
           <View
             className={classnames('normal', type === 1 ? 'active theme-c-' + theme : '')}

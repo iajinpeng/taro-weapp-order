@@ -176,6 +176,8 @@ class Order extends Component {
   }
 
   autoInputMobile = (e) => {
+    if (!e.detail.encryptedData) return
+
     const { encryptedData, iv } = e.detail
     this.props.dispatch({
       type: 'common/getUserMobile',
@@ -701,7 +703,8 @@ class Order extends Component {
                       <Image src={`${baseUrl}/static/addons/diancan/img/style/style_${theme}_5.png`}/>
                       <Text>优惠券</Text>
                     </View>
-                    <View className='handle'>
+                    <View className={classnames('handle',
+                      (couponList.length === 0 || curCouponIndex === 99) ? 'disabled' : '')}>
                       {
                         (couponList.length === 0 || curCouponIndex === 99) ?
                           '暂无可用' : couponList[curCouponIndex].uc_name

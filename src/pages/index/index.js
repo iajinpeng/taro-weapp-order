@@ -52,7 +52,10 @@ class Index extends Component {
     })
     this.setSessionId().then(() => {
       this.props.dispatch({
-        type: 'common/initRequest'
+        type: 'common/requestHomeInfo',
+        payload: {
+          type: 1
+        }
       }).then(res => {
 
         // if (res.under_review) {
