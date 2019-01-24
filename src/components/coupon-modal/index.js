@@ -59,7 +59,11 @@ class CouponModal extends Component {
                   <View className='info'>
                     <View className='name'>{item.uc_name}</View>
                     <View className='memo'>
-                      满{item.uc_min_amount}元可用
+                      {
+                        item.uc_min_amount == 0 ? '无门槛' :
+                          `满${item.uc_min_amount}元可用`
+                      }
+
                     </View>
                   </View>
                   <View className='gap'>

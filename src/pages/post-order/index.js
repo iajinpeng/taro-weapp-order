@@ -56,6 +56,13 @@ class Order extends Component {
     })
 
     this.initPage()
+
+    this.props.dispatch({
+      type: 'order/setCouponIndex',
+      payload: {
+        curCouponIndex: 0
+      }
+    })
   }
 
   componentDidShow() {
@@ -219,9 +226,9 @@ class Order extends Component {
 
   requestSaveOrder = () => {
 
-    const {carts} = this.props
+    const {carts, curCouponIndex} = this.props
 
-    const {orderType, takeType, userPhoneNum, reserveTime, dayTimeIndexs, memo} = this.state
+    const {orderType, takeType, userPhoneNum, reserveTime, dayTimeIndexs, memo, couponList} = this.state
 
     const goods = carts[this.$router.params.store_id].map(cart => {
       let {g_id, num, send_goods, fs_id} = cart
@@ -285,7 +292,8 @@ class Order extends Component {
         o_reserve_time: reserveTime[dayTimeIndexs[0]].date + ' ' + reserveTime[dayTimeIndexs[0]].time[dayTimeIndexs[1]].time,
         o_remark: memo,
         goods,
-        address_id: this.useAddress.da_id
+        address_id: this.useAddress.da_id,
+        coupon_id: curCouponIndex !== 99 && couponList.length > 0 && couponList[curCouponIndex].uc_id
       }
     })
   }
@@ -336,7 +344,7 @@ class Order extends Component {
 
     if (!pay) {
       const res = await this.requestPayOrder(order_id)
-
+      console.log(res)
       const isPayed =  await Taro.requestPayment({
         ...res,
         timeStamp: res.timestamp
@@ -373,7 +381,7 @@ class Order extends Component {
 
       setTimeout(() => {
         Taro.redirectTo({
-          url: '/pages/order-detail/index?id=' + order_id
+          url: '/pages/order-detail/index?id=' + order_id + '&store_id=' + store_id
         })
       }, 2000)
 
@@ -383,7 +391,7 @@ class Order extends Component {
       })
       setTimeout(() => {
         Taro.redirectTo({
-          url: '/pages/order-detail/index?id=' + order_id
+          url: '/pages/order-detail/index?id=' + order_id + + '&store_id=' + store_id
         })
       }, 2000)
     }
@@ -704,10 +712,10 @@ class Order extends Component {
                       <Text>优惠券</Text>
                     </View>
                     <View className={classnames('handle',
-                      (couponList.length === 0 || curCouponIndex === 99) ? 'disabled' : '')}>
+                      (couponList.length === 0) ? 'disabled' : '')}>
                       {
-                        (couponList.length === 0 || curCouponIndex === 99) ?
-                          '暂无可用' : couponList[curCouponIndex].uc_name
+                        couponList.length === 0 ? '暂无可用' : curCouponIndex === 99 ? '请选择' :
+                          couponList[curCouponIndex].uc_name
                       }
                       <AtIcon value='chevron-right' size='16'/>
                     </View>

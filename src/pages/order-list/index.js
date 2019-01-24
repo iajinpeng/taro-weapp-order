@@ -123,8 +123,8 @@ class OrderList extends Component {
     })
   }
 
-  requestOrderRepeat = (order_id, store_id) => {
-
+  requestOrderRepeat = (order_id, store_id, e) => {
+    e.stopPropagation()
     this.props.dispatch({
       type: 'order/requestOrderRepeat',
       payload: {
@@ -153,11 +153,10 @@ class OrderList extends Component {
     const turn = getTouchData(touch_e_x, touch_e_y, touch_s_x, touch_s_y)
 
     const {type} = this.state
-    console.log(turn)
 
     if (turn === 'right') {
       type === 2 && this.changeTab(1)
-    } else {
+    } else if (turn === 'left') {
       type === 1 && this.changeTab(2)
     }
   }

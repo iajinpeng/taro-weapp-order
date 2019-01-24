@@ -67,26 +67,28 @@
     .others-item{
       display: flex;
       margin-bottom: 20px;
-      border-radius: 0 20px 20px 0;
+      border-radius: 20px;
       background: #fff;
+      height: 180px;
       .pic{
         width: 180px;
         height: 180px;
         border-radius: 20px 0 0 20px;
-        background: @default-color;
         margin-right: 24px;
       }
       .info{
         flex: 1;
         .name{
           font-size: 30px;
-          margin-top: 20px;
+          margin-top: 14px;
           font-weight: bold;
           color: @c-40;
         }
         .standard{
           font-size: 28px;
-          margin: 10px 0 30px;
+          margin-top: 20px;
+          height: 58px;
+          .lines-clamp(2);
           color: @c-999;
         }
         .price{
@@ -96,7 +98,7 @@
       }
       .num-box{
         width: 185px;
-        margin: 112px 24px 0 0;
+        margin: 100px 24px 0 0;
         justify-content: flex-end;
         .num{
           width: 80px;

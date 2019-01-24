@@ -19,6 +19,8 @@ export default {
 
     menu_banner: [],
     menu_cart: {},
+
+    initDone: false
   },
 
   effects: {

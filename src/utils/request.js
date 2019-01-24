@@ -46,6 +46,12 @@ export default async (options = { method: 'GET', data: {} }) => {
 
         let response = await request(r.sessionId)
         return loopFetch(response)
+      } else {
+        Taro.showToast({
+          title: data.message || '数据请求错误',
+          icon: 'none'
+        })
+        return data
       }
 
     } else {

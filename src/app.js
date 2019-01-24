@@ -41,9 +41,7 @@ class App extends Component {
 
 
   componentDidMount () {
-    store.dispatch({
-      type: 'common/initRequest'
-    })
+    this.init()
   }
 
   componentDidShow () {}
@@ -53,6 +51,23 @@ class App extends Component {
   componentCatchError () {}
 
   componentDidCatchError () {}
+
+  init = async () => {
+    if(!Taro.getStorageSync('sessionId')){
+      await store.dispatch({
+        type: 'common/requestLogin'
+      })
+    }
+    store.dispatch({
+      type: 'common/initRequest'
+    })
+    Taro.getSystemInfo().then(res => {
+      store.dispatch({
+        type: 'common/setSistemInfo',
+        payload: res
+      })
+    })
+  }
 
   // 在 App 类中的 render() 函数没有实际作用
   // 请勿修改此函数

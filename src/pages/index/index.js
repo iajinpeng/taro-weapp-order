@@ -38,51 +38,12 @@ class Index extends Component {
     isFirstShow: ''
   }
 
-  componentWillMount () {
+  componentDidMount () {
 
     Taro.showShareMenu({
       withShareTicket: true
     })
-
-    Taro.getSystemInfo().then(res => {
-      this.props.dispatch({
-        type: 'common/setSistemInfo',
-        payload: res
-      })
-    })
-    this.setSessionId().then(() => {
-      this.props.dispatch({
-        type: 'common/requestHomeInfo',
-        payload: {
-          type: 1
-        }
-      }).then(res => {
-
-        // if (res.under_review) {
-        //   Taro.redirectTo({
-        //     url: '/pages/alias/index'
-        //   })
-        //   return
-        // }
-
-
-        this.setState({
-          ...res
-        })
-
-        this.coupon = res.coupon
-        this.curCouponIndex = 0
-
-        if (res.coupon.length > 0) {
-          setTimeout(() => {
-            this.setState({
-              isShowCoupon: true,
-              curCoupon: res.coupon[0],
-            })
-          }, 1500)
-        }
-      })
-    })
+    this.getIndexInfo()
   }
 
   componentWillUnmount () { }
@@ -97,19 +58,41 @@ class Index extends Component {
 
   componentDidHide () { }
 
-  showOrHideModal = (bool) => {
-    this.setState({isShowModal: bool})
+  getIndexInfo = () => {
+    this.props.dispatch({
+      type: 'common/requestHomeInfo',
+      payload: {
+        type: 1
+      }
+    }).then(res => {
+
+      // if (res.under_review) {
+      //   Taro.redirectTo({
+      //     url: '/pages/alias/index'
+      //   })
+      //   return
+      // }
+
+      this.setState({
+        ...res
+      })
+
+      this.coupon = res.coupon
+      this.curCouponIndex = 0
+
+      if (res.coupon.length > 0) {
+        setTimeout(() => {
+          this.setState({
+            isShowCoupon: true,
+            curCoupon: res.coupon[0],
+          })
+        }, 1500)
+      }
+    })
   }
 
-  setSessionId = async () => {
-    if(!Taro.getStorageSync('sessionId')){
-      await this.props.dispatch({
-        type: 'common/requestLogin'
-      })
-      return
-    } else{
-      return
-    }
+  showOrHideModal = (bool) => {
+    this.setState({isShowModal: bool})
   }
 
   toChoosePage = (present) => {
@@ -191,6 +174,26 @@ class Index extends Component {
     }
   }
 
+  calcHourZoom = () => {
+    let hour = new Date().getHours()
+
+    if (hour < 6) {
+      return '凌晨好';
+    } else if (hour > 6 && hour < 9) {
+      return '早上好';
+    } else if (hour >= 9 && hour < 12) {
+      return '上午好';
+    } else if (hour >= 12 && hour < 14) {
+      return '中午好';
+    } else if (hour >= 14 && hour < 18) {
+      return '下午好';
+    } else if (hour >= 18 && hour < 22) {
+      return '晚上好';
+    } else {
+      return '夜里好'
+    }
+  }
+
   render () {
     const {theme, userInfo} = this.props
 
@@ -204,7 +207,7 @@ class Index extends Component {
     return (
       <View className='index-page' style={{display: home_banner.banner ? 'block' : 'none'}}>
         <View className={classnames('icon-help-wrap', 'theme-c-' + theme)}>
-          <Text className='greed'>晚上好!</Text>
+          <Text className='greed'>{this.calcHourZoom()}!</Text>
           <AtIcon value='help' size='14' onClick={this.toNoticePage} />
         </View>
 
