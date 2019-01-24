@@ -1,9 +1,9 @@
 import Taro, {Component} from '@tarojs/taro'
 import {View, Text, Block, Image, ScrollView} from '@tarojs/components'
-import {AtIcon} from 'taro-ui'
 import {connect} from '@tarojs/redux'
 import classnames from 'classnames'
 import PayBox from '../../components/pay-box'
+import Numbox from '../../components/num-box'
 
 import './index.less'
 
@@ -166,21 +166,14 @@ class StandardDetail extends Component {
                         <View className='standard'>{good.gn_append}</View>
                         <View className='price'>加&yen;{good.gn_price}</View>
                       </View>
-                      <View className='num-box'>
-                        {
-                          good.num && good.num > 0 &&
-                          <Block>
-                            <AtIcon
-                              onClick={this.selectOther.bind(this, index, i, -1)}
-                              value='subtract-circle' size={26}
-                            />
-                            <Text className='num'>{good.num}</Text>
-                          </Block>
-                        }
-                        <View
-                          onClick={this.selectOther.bind(this, index, i, 1)}
-                          className={classnames('add-circle', 'theme-bg-' + theme)}
-                        >+</View>
+
+                      <View className='num-wrap'>
+                        <Numbox
+                          num={good.num}
+                          showNum={good.num && good.num > 0}
+                          onReduce={this.selectOther.bind(this, index, i, -1)}
+                          onAdd={this.selectOther.bind(this, index, i, 1)}
+                        />
                       </View>
                     </View>
                   ))

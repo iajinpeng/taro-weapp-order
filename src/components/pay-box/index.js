@@ -64,7 +64,13 @@ class PayBox extends Component {
             carts.length && !totalPrice &&
             <View
               className='badge' style={{color: themeInfo.text_color, backgroundColor: themeInfo.background_color}}
-            >{carts.length}</View>
+            >
+              {
+                carts.reduce((total, good) => {
+                  return total += good.num
+                }, 0)
+              }
+            </View>
           }
           <View className='price'>
             <Text>&yen;</Text>

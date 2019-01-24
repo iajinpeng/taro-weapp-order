@@ -98,6 +98,7 @@ export default {
 
   reducers: {
     setUserInfo(state, {payload}) {
+      Taro.setStorageSync('userInfo', payload)
       return {...state, userInfo: payload};
     },
     setSistemInfo(state, {payload}) {

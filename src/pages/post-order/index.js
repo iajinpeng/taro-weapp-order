@@ -185,13 +185,14 @@ class Order extends Component {
   autoInputMobile = (e) => {
     if (!e.detail.encryptedData) return
 
-    const { encryptedData, iv } = e.detail
+    const {encryptedData, iv} = e.detail
     this.props.dispatch({
       type: 'common/getUserMobile',
       payload: {
         encryptedData, iv
       }
     }).then(res => {
+      (typeof res === 'number' || typeof res === 'string') &&
       this.setState({userPhoneNum: res})
     })
   }
@@ -331,10 +332,13 @@ class Order extends Component {
       }
     }
 
-    const res = await this.requestSaveOrder()
-    console.log(res)
-    return
-    const {pay, order_id} = res
+    const response = await this.requestSaveOrder()
+
+    if (!response) {
+      return
+    }
+
+    const {pay, order_id} = response
 
     if (order_id) {
       this.props.dispatch({
@@ -347,8 +351,7 @@ class Order extends Component {
 
     if (!pay) {
       const res = await this.requestPayOrder(order_id)
-      console.log(res)
-      const isPayed =  await Taro.requestPayment({
+      const isPayed = await Taro.requestPayment({
         ...res,
         timeStamp: res.timestamp
       }).then(r => {
@@ -394,7 +397,7 @@ class Order extends Component {
       })
       setTimeout(() => {
         Taro.redirectTo({
-          url: '/pages/order-detail/index?id=' + order_id + + '&store_id=' + store_id
+          url: '/pages/order-detail/index?id=' + order_id + +'&store_id=' + store_id
         })
       }, 2000)
     }
@@ -428,15 +431,17 @@ class Order extends Component {
 
   render() {
     const {theme, curCouponIndex} = this.props
-    const {orderType, isShowPicker, takeType, store, memo, s_take,
+    const {
+      orderType, isShowPicker, takeType, store, memo, s_take,
       couponList, userAddress, amount, isShowTextarea, reserveTime,
       dayTimeIndexs, isShowAddress, userPhoneNum, selectedAddress,
-      alertPhone, alertPhoneText, goods} = this.state
+      alertPhone, alertPhoneText, goods
+    } = this.state
 
     const isIphoneX = !!(this.props.systemInfo.model &&
       this.props.systemInfo.model.replace(' ', '').toLowerCase().indexOf('iphonex') > -1)
 
-    this.useAddress = selectedAddress || (userAddress.length >0 ? userAddress.find(item => item.optional) : [])
+    this.useAddress = selectedAddress || (userAddress.length > 0 ? userAddress.find(item => item.optional) : [])
 
     const {useAddress} = this
 
@@ -447,6 +452,8 @@ class Order extends Component {
     }
     if (couponList[curCouponIndex] && couponList[curCouponIndex].uc_price) {
       totalAmout -= +couponList[curCouponIndex].uc_price
+
+      totalAmout < 0 && (totalAmout = 0)
     }
 
     return (
@@ -463,14 +470,16 @@ class Order extends Component {
                     className={classnames('wrap', orderType !== 1 ? 'un-active' : 'theme-c-' + theme,
                       s_take.indexOf(1) > -1 ? '' : 'disabled')}
                     onClick={this.changeOrderType.bind(this, 1)}>
-                    <Image src={orderType !== 1 ? require('../../images/icon-shop.png') : `${baseUrl}/static/addons/diancan/img/style/style_${theme}_1.png`}/>
+                    <Image
+                      src={orderType !== 1 ? require('../../images/icon-shop.png') : `${baseUrl}/static/addons/diancan/img/style/style_${theme}_1.png`}/>
                     <Text>到店取餐</Text>
                   </View>
                   <View
                     className={classnames('wrap wrap-2', orderType !== 3 ? 'un-active' : 'theme-c-' + theme,
                       s_take.indexOf(3) > -1 ? '' : 'disabled')}
                     onClick={this.changeOrderType.bind(this, 3)}>
-                    <Image src={orderType !== 3 ? require('../../images/icon-bike.png') : `${baseUrl}/static/addons/diancan/img/style/style_${theme}_4.png`}/>
+                    <Image
+                      src={orderType !== 3 ? require('../../images/icon-bike.png') : `${baseUrl}/static/addons/diancan/img/style/style_${theme}_4.png`}/>
                     <Text>外卖配送</Text>
                   </View>
 
@@ -576,22 +585,10 @@ class Order extends Component {
                     goods.map((good, index) => (
                       !good.optionalnumstr ?
                         <View className='good' key={index}>
-                          <Image className='pic' src={baseUrl + good.g_image_100} />
+                          <Image className='pic' src={baseUrl + good.g_image_100}/>
                           <View className='info'>
                             <View className='name'>
                               {good.g_title}
-                              {
-                                good.property && <Text>/</Text>
-                              }
-                              {
-                                good.property &&
-                                good.property.map((prop, i) => (
-                                  <Text key={i}>
-                                    {prop.list_name[good.propertyTagIndex[i]]}
-                                    {i !== good.property.length -1 ? '+' : ''}
-                                  </Text>
-                                ))
-                              }
                             </View>
                             <View className='standard'>
                               {
@@ -599,7 +596,7 @@ class Order extends Component {
                                 good.optional.map((opt, i) => (
                                   <Text key={i}>
                                     {opt.list[good.optionalTagIndex[i]].gn_name}
-                                    {i !== good.optional.length -1 ? '+' : ''}
+                                    {i !== good.optional.length - 1 ? '+' : ''}
                                   </Text>
                                 ))
                               }
@@ -630,7 +627,7 @@ class Order extends Component {
                         </View>
                         :
                         <View className='good'>
-                          <Image className='pic' src={baseUrl + good.g_image} />
+                          <Image className='pic' src={baseUrl + good.g_image}/>
                           <View className='info'>
                             <View className='name'>
                               {good.g_title}
@@ -745,12 +742,13 @@ class Order extends Component {
                 <View className='block-content memo'>
                   {
                     isShowTextarea &&
-                    <Textarea autoFocus
-                              className='textarea' maxlength={30} value={memo}
-                              onInput={this.handleMemoChange}
-                              onBlur={this.hideOrShowTextarea.bind(this, false)}
-                              placeholderClass='textarea-placeholder'
-                              placeholder='饮品中规格可参阅订单详情中的显示，若有其它要求,请说明。'
+                    <Textarea
+                      autoFocus
+                      className='textarea' maxlength={30} value={memo}
+                      onInput={this.handleMemoChange}
+                      onBlur={this.hideOrShowTextarea.bind(this, false)}
+                      placeholderClass='textarea-placeholder'
+                      placeholder='饮品中规格可参阅订单详情中的显示，若有其它要求,请说明。'
                     />
                   }
 
@@ -765,7 +763,7 @@ class Order extends Component {
                   <Text>{memo.length}/30个字</Text>
                 </View>
               </View>
-              <Copyright />
+              <Copyright/>
             </View>
           </View>
         </ScrollView>
@@ -784,10 +782,10 @@ class Order extends Component {
                 {
                   (
                     totalAmout + +store.s_take_money
-                  + (orderType === 3 && reserveTime.length > 0 ?
-                    (
-                      +reserveTime[dayTimeIndexs[0]].time[dayTimeIndexs[1]].price
-                    ) : 0)
+                    + (orderType === 3 && reserveTime.length > 0 ?
+                      (
+                        +reserveTime[dayTimeIndexs[0]].time[dayTimeIndexs[1]].price
+                      ) : 0)
                   ).toFixed(2)
                 }
               </Text>
@@ -802,7 +800,7 @@ class Order extends Component {
           showPrice={orderType === 3}
         />
 
-        <ChooseAddress show={isShowAddress} address={userAddress} theme={theme} onClose={this.hideAddress} />
+        <ChooseAddress show={isShowAddress} address={userAddress} theme={theme} onClose={this.hideAddress}/>
 
         <AtToast
           isOpened={alertPhone} text={alertPhoneText} iconSize={40} duration={2000}

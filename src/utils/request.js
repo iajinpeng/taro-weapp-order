@@ -40,6 +40,8 @@ export default async (options = { method: 'GET', data: {} }) => {
 
       } else if(+data.code === 201 && !options.no_const) {
 
+        Taro.removeStorageSync('userInfo')
+
         let r = await store.dispatch({
           type: 'common/requestLogin'
         })

@@ -1,11 +1,12 @@
 import Taro, {Component} from '@tarojs/taro'
 import {View, Text, Button, Image, ScrollView, Block} from '@tarojs/components'
-import {AtIcon, AtCurtain} from 'taro-ui'
+import {AtCurtain} from 'taro-ui'
 import {connect} from '@tarojs/redux'
 import classnames from 'classnames'
 import {baseUrl} from '../../config/index'
 import Modal from '../../components/modal'
 import PayBox from '../../components/pay-box'
+import Numbox from '../../components/num-box'
 
 import '../shop-index/index.less'
 import './index.less'
@@ -280,23 +281,12 @@ class PresentGood extends Component {
                         <Block>
                           {
                             good.g_has_norm === 2 &&
-                            <View className='num-box'>
-                              {
-                                cartGood && cartGood.num !== 0 &&
-                                <Block>
-                                  <AtIcon
-                                    value='subtract-circle' size={26}
-                                    onClick={this.setCart.bind(this, good, -1)}
-                                  />
-                                  <Text className='num'>{cartGood.num}</Text>
-                                </Block>
-                              }
-                              <View
-                                onClick={this.setCart.bind(this, good, 1)}
-                                className={classnames('add-circle', 'theme-bg-' + theme)}>
-                                +
-                              </View>
-                            </View>
+                            <Numbox
+                              num={cartGood.num}
+                              showNum={cartGood && cartGood.num !== 0}
+                              onReduce={this.setCart.bind(this, good, -1)}
+                              onAdd={this.setCart.bind(this, good, 1)}
+                            />
                           }
                           {
                             good.g_has_norm === 1 &&
@@ -385,28 +375,19 @@ class PresentGood extends Component {
                 </View>
               </View>
               {
-                (!curCart.num || curCart.num === 0 ||
-                  curCart.optionalstr !== (propertyTagIndex.join('') + optionalTagIndex.join(''))) &&
-                <Button
-                  className={'theme-grad-bg-' + theme} onClick={this.setLocalCart.bind(this, 1)}
-                >
-                  加入购物车
-                </Button>
-              }
-              {
-                curCart.num && curCart.num !== 0 && curCart.optionalstr &&
-                // (curCart.optionalstr === (propertyTagIndex.join('') + optionalTagIndex.join(''))) &&
-                <View className='num-box'>
-                  <AtIcon
-                    value='subtract-circle' size={26}
-                    onClick={this.setLocalCart.bind(this, -1)}
+                (curCart.optionalstr !== (propertyTagIndex.join('') + optionalTagIndex.join('')) &&
+                  !curCart.num || curCart.num === 0) ?
+                  <Button
+                    className={'theme-grad-bg-' + theme} onClick={this.setLocalCart.bind(this, 1)}
+                  >
+                    加入购物车
+                  </Button>
+                  :
+                  <Numbox
+                    num={curCart.num} showNum
+                    onReduce={this.setLocalCart.bind(this, -1)}
+                    onAdd={this.setLocalCart.bind(this, 1)}
                   />
-                  <Text className='num'>{curCart.num}</Text>
-                  <View
-                    onClick={this.setLocalCart.bind(this, 1)}
-                    className={classnames('add-circle', 'theme-bg-' + theme)}
-                  >+</View>
-                </View>
               }
             </View>
           </View>
@@ -443,17 +424,11 @@ class PresentGood extends Component {
                 {
                   curGood.g_has_norm === 2 && curCart.num &&
                   curCart.num !== 0 &&
-                  <View className='num-box'>
-                    <AtIcon
-                      value='subtract-circle' size={26}
-                      onClick={this.setLocalCart.bind(this, -1)}
-                    />
-                    <Text className='num'>{curCart.num}</Text>
-                    <View
-                      onClick={this.setLocalCart.bind(this, 1)}
-                      className={classnames('add-circle', 'theme-bg-' + theme)}
-                    >+</View>
-                  </View>
+                  <Numbox
+                    num={curCart.num} showNum
+                    onReduce={this.setLocalCart.bind(this, -1)}
+                    onAdd={this.setLocalCart.bind(this, 1)}
+                  />
                 }
 
                 {

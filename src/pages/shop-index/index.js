@@ -1,12 +1,13 @@
 import Taro, {Component} from '@tarojs/taro'
 import {View, Text, Button, Image, Swiper, SwiperItem, ScrollView, Block} from '@tarojs/components'
-import {AtIcon, AtToast, AtCurtain} from 'taro-ui'
+import {AtToast, AtCurtain} from 'taro-ui'
 import {connect} from '@tarojs/redux'
 import classnames from 'classnames'
 import Modal from '../../components/modal'
 import PayBox from '../../components/pay-box'
 import ConfirmModal from '../../components/confirm-modal'
 import Loading from '../../components/Loading'
+import Numbox from '../../components/num-box'
 import './index.less'
 import {baseUrl} from '../../config'
 
@@ -461,23 +462,12 @@ class ShopIndex extends Component {
                                     <Block>
                                       {
                                         good.g_has_norm === 2 &&
-                                        <View className='num-box'>
-                                          {
-                                            cartGood && cartGood.num !== 0 &&
-                                            <Block>
-                                              <AtIcon
-                                                value='subtract-circle' size={26}
-                                                onClick={this.this.setCart.bind(this, good, -1, cartGood)}
-                                              />
-                                              <Text className='num'>{cartGood.num}</Text>
-                                            </Block>
-                                          }
-                                          <View
-                                            onClick={this.setCart.bind(this, good, 1)}
-                                            className={classnames('add-circle', 'theme-bg-' + theme)}>
-                                            +
-                                          </View>
-                                        </View>
+                                        <Numbox
+                                          num={cartGood.num}
+                                          showNum={cartGood && cartGood.num !== 0}
+                                          onReduce={this.this.setCart.bind(this, good, -1, cartGood)}
+                                          onAdd={this.setCart.bind(this, good, 1)}
+                                        />
                                       }
                                       {
                                         good.g_has_norm === 1 &&
@@ -568,17 +558,12 @@ class ShopIndex extends Component {
                       </Text>
                       <Text className='pre-price'>&yen;{good.g_original_price}</Text>
                     </View>
-                    <View className='num-box'>
-                      <AtIcon
-                        value='subtract-circle' size={26}
-                        onClick={this.this.setCart.bind(this, good, -1, good)}
-                      />
-                      <Text className='num'>{good.num}</Text>
-                      <View
-                        onClick={this.setCart.bind(this, good, 1)}
-                        className={classnames('add-circle', 'theme-bg-' + theme)}
-                      >+</View>
-                    </View>
+
+                    <Numbox
+                      num={good.num} showNum
+                      onReduce={this.this.setCart.bind(this, good, -1, good)}
+                      onAdd={this.setCart.bind(this, good, 1)}
+                    />
                   </View>
                     :
                   <View className='item' key={index}>
@@ -619,17 +604,12 @@ class ShopIndex extends Component {
                         {good.total_price ? good.total_price.toFixed(2) : '0.00'}
                       </Text>
                     </View>
-                    <View className='num-box'>
-                      <AtIcon
-                        value='subtract-circle' size={26}
-                        onClick={this.setComboCart.bind(this, good, -1)}
-                      />
-                      <Text className='num'>{good.num}</Text>
-                      <View
-                        onClick={this.setComboCart.bind(this, good, 1)}
-                        className={classnames('add-circle', 'theme-bg-' + theme)}
-                      >+</View>
-                    </View>
+
+                    <Numbox
+                      num={good.num} showNum
+                      onReduce={this.setComboCart.bind(this, good, -1)}
+                      onAdd={this.setComboCart.bind(this, good, 1)}
+                    />
                   </View>
                 )
               ))
@@ -639,70 +619,68 @@ class ShopIndex extends Component {
         </View>
 
         <AtCurtain isOpened={isShowDetail} onCLose={this.closeDetail}>
-          <View className='good-detail'>
-            <View className='image-wrap'>
-              <Image src={curGood.g_image_300 ? baseUrl + curGood.g_image_300 : ''}/>
-            </View>
-            <View className='info'>
-              <View className='title'>
-                {
-                  curGood.tag_name &&
-                  <Text className={classnames('tag', 'theme-grad-bg-' + theme)}>{curGood.tag_name}</Text>
-                }
-                <Text className='name'>{curGood.g_title}</Text>
+          {
+            curCart &&
+            <View className='good-detail'>
+              <View className='image-wrap'>
+                <Image src={curGood.g_image_300 ? baseUrl + curGood.g_image_300 : ''}/>
               </View>
-              <View className='desc'>{curGood.g_description}</View>
-              <View className='price-wrap'>
-                <View className={classnames('price', 'theme-c-' + theme)}>
-                  <Text>&yen;</Text>{curGood.g_price}
+              <View className='info'>
+                <View className='title'>
+                  {
+                    curGood.tag_name &&
+                    <Text className={classnames('tag', 'theme-grad-bg-' + theme)}>{curGood.tag_name}</Text>
+                  }
+                  <Text className='name'>{curGood.g_title}</Text>
                 </View>
-                <View className='pre-price'><Text>&yen;</Text>{curGood.g_original_price}</View>
-                {
-                  curGood.g_has_norm === 2 &&
-                  (!curCart.num || curCart.num === 0) &&
-                  <Button
-                    className={'theme-grad-bg-' + theme} onClick={this.setLocalCart.bind(this, 1)}
-                  >
-                    加入购物车
-                  </Button>
-                }
-                {
-                  curGood.g_has_norm === 2 && curCart.num &&
-                  curCart.num !== 0 &&
-                  <View className='num-box'>
-                    <AtIcon
-                      value='subtract-circle' size={26}
-                      onClick={this.setLocalCart.bind(this, -1)}
-                    />
-                    <Text className='num'>{curCart.num}</Text>
-                    <View
-                      onClick={this.setLocalCart.bind(this, 1)}
-                      className={classnames('add-circle', 'theme-bg-' + theme)}
-                    >+</View>
+                <View className='desc'>{curGood.g_description}</View>
+                <View className='price-wrap'>
+                  <View className={classnames('price', 'theme-c-' + theme)}>
+                    <Text>&yen;</Text>{curGood.g_price}
                   </View>
-                }
+                  <View className='pre-price'><Text>&yen;</Text>{curGood.g_original_price}</View>
+                  {
+                    curGood.g_has_norm === 2 &&
+                    (!curCart.num || curCart.num === 0) &&
+                    <Button
+                      className={'theme-grad-bg-' + theme} onClick={this.setLocalCart.bind(this, 1)}
+                    >
+                      加入购物车
+                    </Button>
+                  }
+                  {
+                    curGood.g_has_norm === 2 && curCart.num &&
+                    curCart.num !== 0 &&
+                    <Numbox
+                      num={curCart.num}
+                      showNum
+                      onReduce={this.setLocalCart.bind(this, -1)}
+                      onAdd={this.setLocalCart.bind(this, 1)}
+                    />
+                  }
 
-                {
-                  curGood.g_combination === 1 && curGood.g_has_norm === 1 &&
-                  <Button
-                    className={'theme-grad-bg-' + theme} onClick={this.toChooseStan}
-                  >
-                    选规格
-                  </Button>
-                }
+                  {
+                    curGood.g_combination === 1 && curGood.g_has_norm === 1 &&
+                    <Button
+                      className={'theme-grad-bg-' + theme} onClick={this.toChooseStan}
+                    >
+                      选规格
+                    </Button>
+                  }
 
-                {
-                  curGood.g_combination === 2 &&
-                  <Button
-                    className={'theme-grad-bg-' + theme} onClick={this.toStandardDetail.bind(this, curGood)}
-                  >
-                    选规格
-                  </Button>
-                }
+                  {
+                    curGood.g_combination === 2 &&
+                    <Button
+                      className={'theme-grad-bg-' + theme} onClick={this.toStandardDetail.bind(this, curGood)}
+                    >
+                      选规格
+                    </Button>
+                  }
 
+                </View>
               </View>
             </View>
-          </View>
+          }
         </AtCurtain>
 
         <Modal
@@ -766,28 +744,19 @@ class ShopIndex extends Component {
                 </View>
               </View>
               {
-                (!curCart.num || curCart.num === 0 ||
-                  curCart.optionalstr !== (propertyTagIndex.join('') + optionalTagIndex.join(''))) &&
+                (curCart.optionalstr !== (propertyTagIndex.join('') + optionalTagIndex.join('')) &&
+                  !curCart.num || curCart.num === 0) ?
                 <Button
                   className={'theme-grad-bg-' + theme} onClick={this.setLocalCart.bind(this, 1)}
                 >
                   加入购物车
                 </Button>
-              }
-              {
-                curCart.num && curCart.num !== 0 && curCart.optionalstr &&
-                // (curCart.optionalstr === (propertyTagIndex.join('') + optionalTagIndex.join(''))) &&
-                <View className='num-box'>
-                  <AtIcon
-                    value='subtract-circle' size={26}
-                    onClick={this.setLocalCart.bind(this, -1)}
+                  :
+                  <Numbox
+                    num={curCart.num} showNum
+                    onReduce={this.setLocalCart.bind(this, -1)}
+                    onAdd={this.setLocalCart.bind(this, 1)}
                   />
-                  <Text className='num'>{curCart.num}</Text>
-                  <View
-                    onClick={this.setLocalCart.bind(this, 1)}
-                    className={classnames('add-circle', 'theme-bg-' + theme)}
-                  >+</View>
-                </View>
               }
             </View>
           </View>
