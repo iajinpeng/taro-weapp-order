@@ -36,6 +36,8 @@ export default {
 
       Taro.setStorageSync('sessionId', res.sessionId)
 
+      Taro.eventCenter.trigger('loginedRequest', res.sessionId)
+
       return res
     },
     * postUserInfo({payload}, {put, call}) {

@@ -36,16 +36,34 @@ export default async (options = { method: 'GET', data: {} }) => {
 
         return data.data;
 
-      } else if(+data.code === 201 && !options.no_const) {
+      } else if(+data.code === 201 && !options.no_const) { //未登录
+        if (Taro.getStorageSync('stopLogin') === 1) {
 
-        Taro.removeStorageSync('userInfo')
+          // 并发请求正在登陆
+          let response = await (() => {
+            return new Promise((resolve) => {
+              Taro.eventCenter.on('loginedRequest', (sid) => {
+                console.log(sid)
+                request(sid).then(re => {
+                  resolve(re)
+                })
+              })
+            })
+          })()
+          Taro.removeStorageSync('stopLogin')
+          return loopFetch(response)
+        } else {
 
-        let r = await store.dispatch({
-          type: 'common/requestLogin'
-        })
+          //无并发请求正在登陆，执行登陆请求
+          Taro.removeStorageSync('userInfo')
 
-        let response = await request(r.sessionId)
-        return loopFetch(response)
+          let r = await store.dispatch({
+            type: 'common/requestLogin'
+          })
+
+          let response = await request(r.sessionId)
+          return loopFetch(response)
+        }
       } else {
 
         return data
