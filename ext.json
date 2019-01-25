@@ -1,5 +1,5 @@
 {
-  "extEnable": false,
+  "extEnable": true,
   "extAppid": "wx654caab9b4514216",
   "ext": {
     "domain": "https://wxapp.xiaomafeiteng.com",

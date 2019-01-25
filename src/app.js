@@ -59,7 +59,8 @@ class App extends Component {
 
     if (!conf.domain) {
       Taro.showToast({
-        title: '获取ext配置失败'
+        title: '获取ext配置失败',
+        icon: 'none'
       })
       return
     }

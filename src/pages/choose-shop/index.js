@@ -150,8 +150,8 @@ class Choose extends Component {
           fontSize: 12,
           padding: 8,
           display: 'ALWAYS',
-          // bgColor: 'transparent',
-          borderRadius: 4
+          bgColor: '#fff',
+          borderRadius: 4,
         }
       })
     })

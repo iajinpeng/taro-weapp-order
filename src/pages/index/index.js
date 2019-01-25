@@ -131,7 +131,6 @@ class Index extends Component {
   }
 
   getedUserInfo = (res) => {
-    console.log(this.props.userInfo.userInfo)
     if (this.props.userInfo.userInfo) return
 
     this.handleFetchUserInfo(res)

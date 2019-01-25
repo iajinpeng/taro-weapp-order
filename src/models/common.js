@@ -20,20 +20,22 @@ export default {
     menu_banner: [],
     menu_cart: {},
 
-    initDone: false,
-
     ext: {}
   },
 
   effects: {
-    * requestLogin({}, {put, call}) {
+    * requestLogin({}, {put, call, select}) {
+      Taro.setStorageSync('stopLogin', 1)
       const wxLoginInfo = yield Taro.login()
+      const accOpenid = (yield select(state => state.common)).ext.accOpenid
+
       const res =  yield call(requestLogin, {
-        accOpenid: 'ZWFvxKSRpQ',
+        accOpenid,
         code: wxLoginInfo.code
       })
 
       Taro.setStorageSync('sessionId', res.sessionId)
+
       return res
     },
     * postUserInfo({payload}, {put, call}) {
