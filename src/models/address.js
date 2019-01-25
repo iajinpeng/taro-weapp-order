@@ -1,4 +1,4 @@
-import {postAddress} from "../services/address";
+import {postAddress, delAddress} from "../services/address";
 
 export default {
   namespace: 'address',
@@ -8,6 +8,9 @@ export default {
 
   effects: {
     * postAddress({payload}, {put, call}) {
+      return yield call(postAddress, payload)
+    },
+    * delAddress({payload}, {put, call}) {
       return yield call(postAddress, payload)
     },
   },

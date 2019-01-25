@@ -4,21 +4,12 @@ import { connect } from '@tarojs/redux'
 import { AtIcon } from 'taro-ui'
 import classnames from 'classnames'
 
-import { baseUrl } from '../../config'
+import { baseUrl, themeBtnShadowColors } from '../../config'
 import Modal from '../../components/modal'
 import CouponModal from '../../components/coupon-modal'
 
 
 import './index.less'
-
-const themeBtnShadowColors = {
-  1: '#feb37d',
-  2: '#d7f0cb',
-  3: '#ffe6bb',
-  4: '#fdb4b6',
-  5: '#bedbf4',
-  6: '#ffcad0'
-}
 
 
 @connect(({common}) => ({...common}))
@@ -183,7 +174,7 @@ class Index extends Component {
     }
   }
 
-  calcHourZoom = () => {
+  calcHourZone = () => {
     let hour = new Date().getHours()
 
     if (hour < 6) {
@@ -215,9 +206,9 @@ class Index extends Component {
 
     return (
       <View className='index-page' style={{display: home_banner.banner ? 'block' : 'none'}}>
-        <View className={classnames('icon-help-wrap', 'theme-c-' + theme)}>
-          <Text className='greed'>{this.calcHourZoom()}!</Text>
-          <AtIcon value='help' size='14' onClick={this.toNoticePage} />
+        <View className={classnames('icon-help-wrap', 'theme-c-' + theme)} onClick={this.toNoticePage}>
+          <Text className='greed'>{this.calcHourZone()}!</Text>
+          <AtIcon value='help' size='14' />
         </View>
 
         <View className='banner'>

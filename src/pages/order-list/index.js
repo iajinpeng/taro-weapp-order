@@ -214,7 +214,7 @@ class OrderList extends Component {
                   <Text className='c-time'>{order.o_reserve_time}</Text>
                 </View>
                 <View className='order-type'>
-                  <Text>已购商品</Text>
+                  <Text className='name'>已购商品</Text>
                   <Text className='tag'>{order.o_take_type === 3 ? '外卖单' : '堂食单'}</Text>
                 </View>
                 {
@@ -282,7 +282,7 @@ class OrderList extends Component {
                     </View>
                   }
 
-                  <View className={classnames('post-order-price', 'theme-c-' + theme)}>
+                  <View className={classnames('order-price', 'theme-c-' + theme)}>
                     <Text className='yen'>&yen;</Text>{order.o_pay_amount}
                   </View>
                 </View>

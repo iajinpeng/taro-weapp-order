@@ -32,3 +32,13 @@ export const outOrderTypes = {
   6: '订单已关闭',
   7: '订单已关闭',
 }
+
+// 大按钮投影色
+export const themeBtnShadowColors = {
+  1: '#feb37d',
+  2: '#d7f0cb',
+  3: '#ffe6bb',
+  4: '#fdb4b6',
+  5: '#bedbf4',
+  6: '#ffcad0'
+}

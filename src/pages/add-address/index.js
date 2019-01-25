@@ -2,10 +2,10 @@ import Taro, {Component} from '@tarojs/taro'
 import {View, Button, Text, Image, Input} from '@tarojs/components'
 import {connect} from '@tarojs/redux'
 import {AtToast} from 'taro-ui'
-import {baseUrl} from '../../config/index';
+import classnames from 'classnames'
+import {baseUrl, themeBtnShadowColors} from '../../config/index';
 import Copyright from '../../components/copyright'
 import './index.less'
-import address from '../../models/address';
 
 @connect(({common, address}) => ({...common, ...address}))
 class AddAddress extends Component {
@@ -21,6 +21,7 @@ class AddAddress extends Component {
     user_telephone: '',
     alertPhone: false,
     alertPhoneText: '',
+    da_id: null
   }
 
   componentWillMount () {
@@ -97,6 +98,17 @@ class AddAddress extends Component {
     })
   }
 
+  delAddress = () => {
+    this.props.dispatch({
+      type: 'address/delAddress',
+      payload: {
+        da_id: this.state.da_id
+      }
+    }).then(res => {
+      console.log(res)
+    })
+  }
+
   alertPhoneClose = () => {
     this.setState({
       alertPhone: false,
@@ -105,7 +117,7 @@ class AddAddress extends Component {
 
   render () {
     const {theme, curAddress} = this.props
-    const {address_detail, user_name, user_telephone, alertPhone, alertPhoneText} = this.state
+    const {address_detail, user_name, user_telephone, alertPhone, alertPhoneText, da_id} = this.state
 
     const isCanPost = curAddress.name && address_detail && user_name && user_telephone
 
@@ -128,21 +140,21 @@ class AddAddress extends Component {
           <View className='item'>
             <View className='label'>门牌号</View>
             <Input
-              className='input' placeholder='输入详细地址' placeholderClass='input' maxLength='30'
+              className='input' placeholder='输入详细地址' placeholderClass='input-place' maxLength='30'
               value={address_detail} onInput={this.handleInput.bind(this, 'address_detail')}
             />
           </View>
           <View className='item'>
             <View className='label'>联系人</View>
             <Input
-              className='input' placeholder='输入联系人名称' placeholderClass='input' maxLength='10'
+              className='input' placeholder='输入联系人名称' placeholderClass='input-place' maxLength='10'
               value={user_name} onInput={this.handleInput.bind(this, 'user_name')}
             />
           </View>
           <View className='item'>
             <View className='label'>手机号</View>
             <Input
-              className='input' placeholder='输入联系人手机号' placeholderClass='input' maxLength='15'
+              className='input' placeholder='输入联系人手机号' placeholderClass='input-place' maxLength='15'
               value={user_telephone} onInput={this.handleInput.bind(this, 'user_telephone')}
             />
           </View>
@@ -150,8 +162,19 @@ class AddAddress extends Component {
 
         <Button
           className={isCanPost ? 'theme-grad-bg-' + theme : 'disabled'} disabled={!isCanPost}
+          style={{boxShadow: isCanPost ? '0 40rpx 40rpx -30rpx ' + themeBtnShadowColors[theme] :
+            '0 40rpx 40rpx -30rpx #ddd'}}
           onClick={this.postAddress}
         >确认保存</Button>
+
+        {
+          da_id &&
+          <Button
+            className={classnames('theme-bd-' + theme, 'theme-c-' + theme, 'delete-btn')}
+            onClick={this.delAddress}
+          >
+            删除地址</Button>
+        }
 
         <View className='copy-box'>
           <Copyright />

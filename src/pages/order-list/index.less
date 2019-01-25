@@ -107,8 +107,12 @@
         font-weight: 300;
         align-items: center;
         color: @c-666;
+        .name{
+          color: @c-666;
+          font-weight: bold;
+        }
         .tag{
-          border: 1px solid #999;
+          border: 1px solid @c-ccc;
           padding: 0 10px;
           border-radius: 20px;
           font-size: 24px;
@@ -121,12 +125,12 @@
         display: flex;
         justify-content: space-between;
         margin-bottom: 36px;
-        align-items: center;
+        //align-items: center;
         &-info{
           view:first-child{
-            font-size: 32px;
+            font-size: 34px;
             font-weight: bold;
-            color: @c-40;
+            color: @c-666;
           }
           view:last-child{
             font-size: 26px;
@@ -161,10 +165,11 @@
       .order-price{
         font-size: 48px;
         .yen{
-          font-size: 28px;
+          font-size: 30px;
           color: @c-999;
           position: relative;
-          top: -12px;
+          top: -10px;
+          margin-right: 7px;
         }
       }
     }

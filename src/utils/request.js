@@ -43,7 +43,6 @@ export default async (options = { method: 'GET', data: {} }) => {
           let response = await (() => {
             return new Promise((resolve) => {
               Taro.eventCenter.on('loginedRequest', (sid) => {
-                console.log(sid)
                 request(sid).then(re => {
                   resolve(re)
                 })

@@ -66,7 +66,7 @@ class Notice extends Component {
     const {diancan, quxiao, question} = this.state
 
     return (
-      diancan &&
+      diancan.title &&
       <ScrollView scrollY className='notice'>
         <View className='wrap'>
           <View className='block'>

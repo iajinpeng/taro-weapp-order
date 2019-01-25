@@ -472,7 +472,11 @@ class Order extends Component {
                     onClick={this.changeOrderType.bind(this, 1)}>
                     <Image
                       src={orderType !== 1 ? require('../../images/icon-shop.png') : `${baseUrl}/static/addons/diancan/img/style/style_${theme}_1.png`}/>
-                    <Text>到店取餐</Text>
+                    <Text>
+                      {
+                        s_take.indexOf(1) > -1 ? '到店取餐' : '暂不自取'
+                      }
+                    </Text>
                   </View>
                   <View
                     className={classnames('wrap wrap-2', orderType !== 3 ? 'un-active' : 'theme-c-' + theme,
@@ -480,7 +484,11 @@ class Order extends Component {
                     onClick={this.changeOrderType.bind(this, 3)}>
                     <Image
                       src={orderType !== 3 ? require('../../images/icon-bike.png') : `${baseUrl}/static/addons/diancan/img/style/style_${theme}_4.png`}/>
-                    <Text>外卖配送</Text>
+                    <Text>
+                      {
+                        s_take.indexOf(1) > -1 ? '外卖配送' : '暂不配送'
+                      }
+                    </Text>
                   </View>
 
                 </View>
@@ -548,7 +556,7 @@ class Order extends Component {
                         useAddress.address &&
                         <View className='address-msg'>
                           <View className='left'>
-                            <View className='desc'>{useAddress.address + ' ' + useAddress.address_detail}</View>
+                            <View className='desc'>{useAddress.address + ' ' + (useAddress.address_detail && useAddress.address_detail.split('|')[1])}</View>
                             <View className='user'>
                               <Text>{useAddress.user_name}</Text>
                               <Text>{useAddress.user_telephone}</Text>

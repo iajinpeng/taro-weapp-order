@@ -191,7 +191,6 @@ class OrderDetail extends Component {
   }
 
   contactVendor = (phoneNumber) => {
-    console.log(phoneNumber)
     Taro.makePhoneCall({phoneNumber})
   }
 
