@@ -11,6 +11,15 @@ import CouponModal from '../../components/coupon-modal'
 
 import './index.less'
 
+const themeBtnShadowColors = {
+  1: '#feb37d',
+  2: '#d7f0cb',
+  3: '#ffe6bb',
+  4: '#fdb4b6',
+  5: '#bedbf4',
+  6: '#ffcad0'
+}
+
 
 @connect(({common}) => ({...common}))
 class Index extends Component {
@@ -122,6 +131,7 @@ class Index extends Component {
   }
 
   getedUserInfo = (res) => {
+    console.log(this.props.userInfo.userInfo)
     if (this.props.userInfo.userInfo) return
 
     this.handleFetchUserInfo(res)
@@ -237,6 +247,7 @@ class Index extends Component {
         </View>
         <Button
           className={classnames('do-btn', 'theme-grad-bg-' + theme)}
+          style={{boxShadow: '0 40rpx 40rpx -30rpx ' + themeBtnShadowColors[theme]}}
           openType={userInfo.userInfo ? '' : 'getUserInfo'}
           onGetUserInfo={this.getedUserInfo}
           formType='submit'

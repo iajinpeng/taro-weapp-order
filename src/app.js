@@ -23,7 +23,8 @@ class App extends Component {
       'pages/present-good/index',
       'pages/add-address/index',
       'pages/choose-coupon/index',
-      'pages/alias/index'
+      'pages/alias/index',
+      'pages/auth-setting/index'
 
     ],
     permission: {
@@ -53,6 +54,21 @@ class App extends Component {
   componentDidCatchError () {}
 
   init = async () => {
+
+    const conf = Taro.getExtConfigSync()
+
+    if (!conf.domain) {
+      Taro.showToast({
+        title: '获取ext配置失败'
+      })
+      return
+    }
+
+    store.dispatch({
+      type: 'common/setExt',
+      payload: conf
+    })
+
     if(!Taro.getStorageSync('sessionId')){
       await store.dispatch({
         type: 'common/requestLogin'

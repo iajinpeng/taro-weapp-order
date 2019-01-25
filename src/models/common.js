@@ -20,7 +20,9 @@ export default {
     menu_banner: [],
     menu_cart: {},
 
-    initDone: false
+    initDone: false,
+
+    ext: {}
   },
 
   effects: {
@@ -65,12 +67,25 @@ export default {
               let [longitude, latitude] = location.split(',')
 
               resolve({location, longitude, latitude, locationCity})
+            },
+            fail(err) {
+              reject(err)
             }
           })
         })
       }
 
-      const localInfo = yield getRegeo()
+      const localInfo = yield getRegeo().then(res => res).catch(err => ({error: 1}))
+      if (localInfo.error === 1) {
+        Taro.showToast({
+          title: '获取定位失败',
+          icon: 'none'
+        })
+        Taro.redirectTo({
+          url: '/pages/auth-setting/index'
+        })
+        return
+      }
       yield put({
         type: 'setLocalInfo',
         payload: {localInfo}
@@ -109,6 +124,9 @@ export default {
     },
     setThemeInfo(state, {payload}) {
       return {...state, ...payload};
+    },
+    setExt(state, {payload}) {
+      return {...state, ext: payload};
     },
 },
 

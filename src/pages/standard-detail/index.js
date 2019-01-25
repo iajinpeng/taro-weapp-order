@@ -186,7 +186,7 @@ class StandardDetail extends Component {
 
         <View className='pay-wrap'>
           <PayBox
-            simple onClick={this.addCart}
+            active onClick={this.addCart}
             theme={theme}
             totalPrice={((g_price || 0) + this.optPrice).toFixed(2)} storeId={+this.$router.params.id}
             themeInfo={menu_cart} btnText='选好了'
