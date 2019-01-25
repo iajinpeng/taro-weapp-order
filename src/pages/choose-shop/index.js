@@ -264,16 +264,16 @@ class Choose extends Component {
                 <AtIcon value={isShowCitys ? 'chevron-up' : 'chevron-down'} size='18'/>
               </View>
               <View className={classnames('search-box', isSearching ? 'full' : '')}>
-                <AtIcon value='search' className='icon' size='16'/>
+                <AtIcon value='search' className='search-icon' size='18'/>
                 <View className='input-alias' onClick={this.toSearch}>搜索餐厅</View>
-                <AtIcon value='close' className='search-cancel' size='14'/>
+                <AtIcon value='close' className='search-cancel' size='16'/>
               </View>
             </Block>
           }
           {
             isSearching &&
             <View className={classnames('search-box', isSearching ? 'full' : '')}>
-              <AtIcon value='search' className='icon' size='16'/>
+              <AtIcon value='search' className='search-icon' size='18'/>
               <Input
                 focus placeholderClass='placeholder'
                 placeholder='搜索餐厅' value={keyword}
@@ -281,7 +281,7 @@ class Choose extends Component {
               />
               <AtIcon
                 value='close'
-                className='search-cancel' size='14' onClick={this.cacelSearch}
+                className='search-cancel' size='16' onClick={this.cacelSearch}
               />
             </View>
           }
