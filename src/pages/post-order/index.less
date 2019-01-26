@@ -31,6 +31,7 @@
         display: flex;
         align-items: flex-end;
         font-weight: bold;
+        position: relative;
         .wrap{
           width: 50%;
           background: #fff;
@@ -40,7 +41,7 @@
           &.disabled{
             color: @c-999;
             image{
-              filter: grayscale;
+              filter: grayscale(.6);
             }
           }
           image{
@@ -66,6 +67,15 @@
           &.un-active{
             border-radius: 0 20px 0 20px;
           }
+        }
+        .bg-fix{
+          width: 100%;
+          height: 20px;
+          background: #fff;
+          position: absolute;
+          left: 0;
+          bottom: 0;
+          z-index: -1;
         }
       }
       .info{
@@ -141,8 +151,8 @@
             }
             .icon-bag{
               width: 38px;
-              height: 38px;
-              transform: translateY(12px);
+              //height: 38px;
+              transform: translateY(9px);
             }
           }
         }
@@ -322,6 +332,9 @@
             font-size: 28px;
             color: @c-ccc;
             line-height: 1.2;
+          }
+          .textarea{
+            padding: 10px 10px;
           }
           .textarea-placeholder{
             color: @c-ccc;

@@ -70,6 +70,10 @@ class App extends Component {
       payload: conf
     })
 
+    store.dispatch({
+      type: 'common/getSetLocalInfo'
+    })
+
     if(!Taro.getStorageSync('sessionId')){
       await store.dispatch({
         type: 'common/requestLogin'

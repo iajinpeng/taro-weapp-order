@@ -168,9 +168,34 @@ class Order extends Component {
       this.setState({
         store, couponList, userAddress, amount,
         s_take: store.s_take.map(v => +v)
-      })
+      }, this.calcTextareaRect)
       return amount
     })
+  }
+
+  calcTextareaRect = () => {
+    const Query = Taro.createSelectorQuery()
+    Query
+      .select('.footer')
+      .boundingClientRect(rect => {
+        this.footerScreenTop = rect.top
+        this.footerHeight = rect.height
+      })
+      .exec()
+  }
+
+  handleScroll = () => {
+    let Query = Taro.createSelectorQuery()
+    Query
+      .select('.memo')
+      .boundingClientRect(rect => {
+        let {top, height} = rect
+
+        this.setState({
+          isShowTextarea: !(top + height - 30 > this.footerScreenTop) || (top + 50 < this.footerHeight)
+        })
+      })
+      .exec()
   }
 
   handleMemoChange = e => {
@@ -215,7 +240,7 @@ class Order extends Component {
 
 
   chooseReserveTime = () => {
-    if (this.state.reserveTime.length === 0) return
+    if (this.state.orderType === 3 && this.state.reserveTime.length === 0) return
     this.setState({isShowPicker: true})
   }
 
@@ -360,7 +385,7 @@ class Order extends Component {
     }
 
     const response = await this.requestSaveOrder()
-    
+
     if (!response) {
       return
     } else if (+response.code === 500) {
@@ -416,12 +441,14 @@ class Order extends Component {
         Taro.hideLoading()
 
         Taro.showToast({
-          title: '下单成功'
+          title: '下单成功',
+          mask: true
         })
       } else {
         Taro.showToast({
           title: '您已取消支付',
-          icon: 'none'
+          icon: 'none',
+          mask: true
         })
       }
 
@@ -433,7 +460,8 @@ class Order extends Component {
 
     } else {
       Taro.showToast({
-        title: '下单成功'
+        title: '下单成功',
+        mask: true
       })
       setTimeout(() => {
         Taro.redirectTo({
@@ -449,13 +477,8 @@ class Order extends Component {
     })
   }
 
-  hideOrShowTextarea = bool => {
-    this.setState({isShowTextarea: bool})
-  }
-
   toChooseCouponPage = () => {
     const {couponList} = this.state
-    if (couponList.length === 0) return
 
     this.props.dispatch({
       type: 'order/setCouponOptions',
@@ -507,7 +530,7 @@ class Order extends Component {
     return (
       theme &&
       <View className='post-order'>
-        <ScrollView
+        <ScrollView onScroll={this.handleScroll}
           scrollY={!isShowPicker} className={classnames('scroll-view', isIphoneX ? 'iphonex' : '')}
         >
           <View className={classnames('wrap', isIphoneX ? 'iphonex' : '')}>
@@ -538,7 +561,7 @@ class Order extends Component {
                       }
                     </Text>
                   </View>
-
+                  <View className='bg-fix' />
                 </View>
                 {
                   orderType === 1 &&
@@ -581,7 +604,7 @@ class Order extends Component {
                         onClick={this.changeTakeType.bind(this, 3)}
                       >
                         <Image
-                          className='icon-drink' mode='widthFix'
+                          className='icon-drink icon-bag' mode='widthFix'
                           src={takeType === 3 ? require('../../images/icon-bag-active.png') : require('../../images/icon-bag.png')}
                         />
                         外带
@@ -762,8 +785,7 @@ class Order extends Component {
                       <Image src={`${baseUrl}/static/addons/diancan/img/style/style_${theme}_5.png`}/>
                       <Text>优惠券</Text>
                     </View>
-                    <View className={classnames('handle',
-                      (couponList.length === 0) ? 'disabled' : '')}>
+                    <View className={classnames('handle')}>
                       {
                         couponList.length === 0 ? '暂无可用' : curCouponIndex === 99 ? '请选择' :
                           couponList[curCouponIndex].uc_name
@@ -792,29 +814,26 @@ class Order extends Component {
                 <View className='title'>备注</View>
                 <View className='block-content memo'>
                   {
-                    isShowTextarea &&
+                    isShowTextarea && !isShowPicker && !isShowAddress ?
                     <Textarea
-                      autoFocus
+                      id='textarea'
                       className='textarea' maxlength={30} value={memo}
                       onInput={this.handleMemoChange}
-                      onBlur={this.hideOrShowTextarea.bind(this, false)}
                       placeholderClass='textarea-placeholder'
                       placeholder='饮品中规格可参阅订单详情中的显示，若有其它要求,请说明。'
                     />
+                      :
+                      <View className='alias'>
+                        {
+                          memo || '饮品中规格可参阅订单详情中的显示，若有其它要求,请说明。'
+                        }
+                      </View>
                   }
 
-                  {
-                    !isShowTextarea &&
-                    <View className='alias' onClick={this.hideOrShowTextarea.bind(this, true)}>
-                      {
-                        memo || '饮品中规格可参阅订单详情中的显示，若有其它要求,请说明。'
-                      }
-                    </View>
-                  }
                   <Text>{memo.length}/30个字</Text>
                 </View>
               </View>
-              <Copyright/>
+              <Copyright />
             </View>
           </View>
         </ScrollView>

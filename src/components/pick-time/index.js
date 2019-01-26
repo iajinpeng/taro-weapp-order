@@ -20,11 +20,11 @@ class PickTime extends Component {
   }
 
   state = {
-    dayIndex: 0
+    dayIndex: null
   }
 
   componentDidMount () {
-    this.setState({dayIndex: this.props.dayIndex})
+    // this.setState({dayIndex: this.props.dayIndex})
   }
 
   chooseDay = index => {
@@ -33,8 +33,13 @@ class PickTime extends Component {
   }
 
   chooseTime = index => {
-    if (index === this.props.timeIndex) return
-    this.props.onChangeTime(this.state.dayIndex, index)
+    if (this.state.dayIndex === this.props.dayIndex && index === this.props.timeIndex) return
+    this.props.onChangeTime(this.state.dayIndex || this.props.dayIndex || 0, index)
+  }
+
+  handleClose = () => {
+    this.setState({dayIndex: null})
+    this.props.onClose()
   }
 
   stopPro = e => {
@@ -44,23 +49,25 @@ class PickTime extends Component {
   render() {
     const {show, reserveTime, theme, showPrice, timeIndex} = this.props
     const {dayIndex} = this.state
+    const realDay = dayIndex || this.props.dayIndex || 0
 
     return (
       <Block>
         <View
           className='mask' style={{display: show ? 'block' : 'none'}}
-          onClick={this.props.onClose} onTouchMove={this.stopPro}
+          onClick={this.handleClose} onTouchMove={this.stopPro}
         />
         <View className={classnames('pick-time', show ? 'active' : '')}>
           <View className='title'>选择预约时间
-            <Text className='cacel' onClick={this.props.onClose}>取消</Text>
+            <Text className='cacel' onClick={this.handleClose}>取消</Text>
           </View>
           <View className='picker'>
             <ScrollView scrollY className='day-list' onTouchMove={this.stopPro}>
               {
                 reserveTime.map((day, index) => (
                   <View
-                    className={classnames('day-item', dayIndex === index ? 'active theme-c-' + theme : '')}
+                    className={classnames('day-item',
+                      realDay === index ? 'active theme-c-' + theme : '')}
                     key={index}
                     onClick={this.chooseDay.bind(this, index)}
                   >{day.title}</View>
@@ -69,20 +76,20 @@ class PickTime extends Component {
             </ScrollView>
             <ScrollView scrollY className='time-list'>
               {
-                reserveTime.length > 0 && reserveTime[dayIndex].time.length > 0 &&
-                reserveTime[dayIndex].time.map((time, index) => (
+                reserveTime.length > 0 && reserveTime[realDay].time.length > 0 &&
+                reserveTime[realDay].time.map((time, index) => (
                   <View
-                    className={classnames('time-item', dayIndex === this.props.dayIndex && timeIndex === index ? 'active theme-c-' + theme : '')}
+                    className={classnames('time-item', (!realDay || realDay === this.props.dayIndex) && timeIndex === index ? 'active theme-c-' + theme : '')}
                     key={index}
                     onClick={this.chooseTime.bind(this, index)}
                   >
                     <Text className='time'>
                       {
-                        dayIndex === 0 && index === 0 &&
+                        realDay === 0 && index === 0 &&
                         <Text>现在下单，</Text>
                       }
                       {
-                        dayIndex === 0 && index === 0 ? '预计' : ''
+                        realDay === 0 && index === 0 ? '预计' : ''
                       }
                       {time.time}
                     </Text>

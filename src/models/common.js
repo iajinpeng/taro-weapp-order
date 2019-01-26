@@ -60,7 +60,6 @@ export default {
       return yield call(getNotice, payload)
     },
     * getSetLocalInfo({}, {put, call}) {
-
       const getRegeo  = () => {
         return new Promise((resolve, reject) => {
           const myAmapFun = new amapFile.AMapWX({key: mapKey})
@@ -106,9 +105,6 @@ export default {
       yield put({
         type: 'setThemeInfo',
         payload: {menu_banner, menu_cart, theme: data.style_color, bottom_logo, b_logo}
-      })
-      yield put({
-        type: 'getSetLocalInfo'
       })
 
       return indexState
