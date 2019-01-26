@@ -54,6 +54,7 @@ cover-view{
   height: 0;
   transform: translate(-50%, 100%);
   border-bottom: 1px solid transparent;
+
   &:before{
     content: '';
     display: block;
@@ -76,6 +77,15 @@ cover-view{
     left: 0;
     z-index: 20;
   }
+}
+.bottom-shadow{
+  width: 100%;
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  height: 5px;
+  transform: translate(-50%, 100%);
+  box-shadow: 0 15px 40px #ddd;
 }
 
 

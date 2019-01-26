@@ -20,29 +20,21 @@ class PickTime extends Component {
   }
 
   state = {
-    dayIndex: 0,
-    timeIndex: 0
+    dayIndex: 0
+  }
+
+  componentDidMount () {
+    this.setState({dayIndex: this.props.dayIndex})
   }
 
   chooseDay = index => {
     if (index === this.state.dayIndex) return
-    this.setState({
-      dayIndex: index,
-      timeIndex: 0
-    })
+    this.setState({dayIndex: index})
   }
 
   chooseTime = index => {
-    this.setState({timeIndex: index})
-  }
-
-  handleClose = () => {
-    const {dayIndex, timeIndex} = this.state
-    this.props.onClose([dayIndex, timeIndex])
-    this.setState({
-      dayIndex: 0,
-      timeIndex: 0
-    })
+    if (index === this.props.timeIndex) return
+    this.props.onChangeTime(this.state.dayIndex, index)
   }
 
   stopPro = e => {
@@ -50,18 +42,18 @@ class PickTime extends Component {
   }
 
   render() {
-    const {dayIndex, timeIndex} = this.state
-    const {show, reserveTime, theme, showPrice} = this.props
+    const {show, reserveTime, theme, showPrice, timeIndex} = this.props
+    const {dayIndex} = this.state
 
     return (
       <Block>
         <View
           className='mask' style={{display: show ? 'block' : 'none'}}
-          onClick={this.handleClose} onTouchMove={this.stopPro}
+          onClick={this.props.onClose} onTouchMove={this.stopPro}
         />
         <View className={classnames('pick-time', show ? 'active' : '')}>
           <View className='title'>选择预约时间
-            <Text className='cacel' onClick={this.props.onClose.bind(this, null)}>取消</Text>
+            <Text className='cacel' onClick={this.props.onClose}>取消</Text>
           </View>
           <View className='picker'>
             <ScrollView scrollY className='day-list' onTouchMove={this.stopPro}>
@@ -80,7 +72,7 @@ class PickTime extends Component {
                 reserveTime.length > 0 && reserveTime[dayIndex].time.length > 0 &&
                 reserveTime[dayIndex].time.map((time, index) => (
                   <View
-                    className={classnames('time-item', timeIndex === index ? 'active theme-c-' + theme : '')}
+                    className={classnames('time-item', dayIndex === this.props.dayIndex && timeIndex === index ? 'active theme-c-' + theme : '')}
                     key={index}
                     onClick={this.chooseTime.bind(this, index)}
                   >
@@ -90,7 +82,7 @@ class PickTime extends Component {
                         <Text>现在下单，</Text>
                       }
                       {
-                        index === 0 ? '预计' : ''
+                        dayIndex === 0 && index === 0 ? '预计' : ''
                       }
                       {time.time}
                     </Text>

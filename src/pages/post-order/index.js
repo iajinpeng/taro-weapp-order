@@ -36,7 +36,8 @@ class Order extends Component {
     isShowTextarea: false,
     memo: '',
     reserveTime: [],
-    dayTimeIndexs: [0, 0],
+    dayIndex: 0,
+    timeIndex: 0,
     userPhoneNum: '',
     selectedAddress: null,
     alertPhone: false,
@@ -96,10 +97,9 @@ class Order extends Component {
     this.setState({takeType})
   }
 
-  closeTimePicker = (dayTimeIndexs) => {
+  closeTimePicker = () => {
     this.setState({
       isShowPicker: false,
-      dayTimeIndexs: dayTimeIndexs || [0, 0]
     })
 
   }
@@ -229,7 +229,7 @@ class Order extends Component {
 
     const {carts, curCouponIndex} = this.props
 
-    const {orderType, takeType, userPhoneNum, reserveTime, dayTimeIndexs, memo, couponList} = this.state
+    const {orderType, takeType, userPhoneNum, reserveTime, memo, couponList, dayIndex, timeIndex} = this.state
 
     const goods = carts[this.$router.params.store_id].map(cart => {
       let {g_id, num, send_goods, fs_id} = cart
@@ -290,7 +290,7 @@ class Order extends Component {
         store_id: this.$router.params.store_id,
         take_type: orderType === 3 ? 3 : (takeType === 1 ? 1 : 2),
         contact_mobile: userPhoneNum,
-        o_reserve_time: reserveTime[dayTimeIndexs[0]].date + ' ' + reserveTime[dayTimeIndexs[0]].time[dayTimeIndexs[1]].time,
+        o_reserve_time: reserveTime[dayIndex].date + ' ' + reserveTime[dayIndex].time[timeIndex].time,
         o_remark: memo,
         goods,
         address_id: this.useAddress.da_id,
@@ -429,13 +429,20 @@ class Order extends Component {
     })
   }
 
+  changeTime = (dayIndex, timeIndex) => {
+    this.setState({
+      dayIndex, timeIndex,
+      isShowPicker: false
+    })
+  }
+
   render() {
     const {theme, curCouponIndex} = this.props
     const {
       orderType, isShowPicker, takeType, store, memo, s_take,
       couponList, userAddress, amount, isShowTextarea, reserveTime,
-      dayTimeIndexs, isShowAddress, userPhoneNum, selectedAddress,
-      alertPhone, alertPhoneText, goods
+      isShowAddress, userPhoneNum, selectedAddress,
+      alertPhone, alertPhoneText, goods, dayIndex, timeIndex,
     } = this.state
 
     const isIphoneX = !!(this.props.systemInfo.model &&
@@ -486,7 +493,7 @@ class Order extends Component {
                       src={orderType !== 3 ? require('../../images/icon-bike.png') : `${baseUrl}/static/addons/diancan/img/style/style_${theme}_4.png`}/>
                     <Text>
                       {
-                        s_take.indexOf(1) > -1 ? '外卖配送' : '暂不配送'
+                        s_take.indexOf(3) > -1 ? '外卖配送' : '暂不配送'
                       }
                     </Text>
                   </View>
@@ -502,8 +509,8 @@ class Order extends Component {
                         {
                           reserveTime.length > 0 ?
                             (
-                              (dayTimeIndexs[0] === 0 ? '' : reserveTime[dayTimeIndexs[0]].title)
-                              + reserveTime[dayTimeIndexs[0]].time[dayTimeIndexs[1]].time
+                              (dayIndex === 0 ? '' : reserveTime[dayIndex].title + ' ')
+                              + ' ' + reserveTime[dayIndex].time[timeIndex].time
                             ) : ''
                         }
                         <Image src={`${baseUrl}/static/addons/diancan/img/style/style_${theme}_3.png`}/>
@@ -574,8 +581,8 @@ class Order extends Component {
                         {
                           reserveTime.length > 0 ?
                             (
-                              (dayTimeIndexs[0] === 0 ? '' : reserveTime[dayTimeIndexs[0]].title)
-                              + reserveTime[dayTimeIndexs[0]].time[dayTimeIndexs[1]].time
+                              (dayIndex === 0 ? '' : reserveTime[dayIndex].title)
+                              + reserveTime[dayIndex].time[timeIndex].time
                             ) : ''
                         }
                         <Image src={`${baseUrl}/static/addons/diancan/img/style/style_${theme}_3.png`}/>
@@ -707,7 +714,7 @@ class Order extends Component {
                         {
                           reserveTime.length > 0 ?
                             (
-                              reserveTime[dayTimeIndexs[0]].time[dayTimeIndexs[1]].price
+                              reserveTime[dayIndex].time[timeIndex].price
                             ) : ''
                         }
                       </View>
@@ -736,7 +743,7 @@ class Order extends Component {
                           totalAmout + +store.s_take_money
                           + (orderType === 3 && reserveTime.length > 0 ?
                             (
-                              +reserveTime[dayTimeIndexs[0]].time[dayTimeIndexs[1]].price
+                              +reserveTime[dayIndex].time[timeIndex].price
                             ) : 0)
                         ).toFixed(2)
                       }
@@ -792,7 +799,7 @@ class Order extends Component {
                     totalAmout + +store.s_take_money
                     + (orderType === 3 && reserveTime.length > 0 ?
                       (
-                        +reserveTime[dayTimeIndexs[0]].time[dayTimeIndexs[1]].price
+                        +reserveTime[dayIndex].time[timeIndex].price
                       ) : 0)
                   ).toFixed(2)
                 }
@@ -805,7 +812,9 @@ class Order extends Component {
         <PickTime
           show={isShowPicker} reserveTime={reserveTime}
           theme={theme} onClose={this.closeTimePicker}
+          dayIndex={dayIndex} timeIndex={timeIndex}
           showPrice={orderType === 3}
+          onChangeTime={this.changeTime}
         />
 
         <ChooseAddress show={isShowAddress} address={userAddress} theme={theme} onClose={this.hideAddress}/>

@@ -287,7 +287,8 @@ class OrderList extends Component {
                   </View>
                 </View>
 
-                <View className='tooth-border'/>
+                <View className='tooth-border' />
+                <View className='bottom-shadow' />
               </View>
             ))
           }

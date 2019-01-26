@@ -37,6 +37,7 @@ export default {
       Taro.setStorageSync('sessionId', res.sessionId)
 
       Taro.eventCenter.trigger('loginedRequest', res.sessionId)
+      Taro.removeStorageSync('stopLogin')
 
       return res
     },

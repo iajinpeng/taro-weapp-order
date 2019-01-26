@@ -49,7 +49,6 @@ export default async (options = { method: 'GET', data: {} }) => {
               })
             })
           })()
-          Taro.removeStorageSync('stopLogin')
           return loopFetch(response)
         } else {
 
