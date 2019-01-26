@@ -119,7 +119,13 @@ export default {
   reducers: {
     setUserInfo(state, {payload}) {
       Taro.setStorageSync('userInfo', payload)
-      return {...state, userInfo: payload};
+      let userInfo = {}
+      if (payload.userInfo) {
+        userInfo = payload
+      } else {
+        userInfo = {userInfo: {}}
+      }
+      return {...state, userInfo};
     },
     setSistemInfo(state, {payload}) {
       return {...state, systemInfo: payload};

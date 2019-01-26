@@ -360,8 +360,14 @@ class Order extends Component {
     }
 
     const response = await this.requestSaveOrder()
-
+    
     if (!response) {
+      return
+    } else if (+response.code === 500) {
+      Taro.showToast({
+        title: response.message,
+        icon: 'none'
+      })
       return
     }
 

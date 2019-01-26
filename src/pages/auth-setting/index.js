@@ -3,6 +3,7 @@ import {View, Image, Button} from '@tarojs/components'
 import {connect} from '@tarojs/redux'
 import classnames from 'classnames'
 import {baseUrl, themeBtnShadowColors} from "../../config/index";
+import './index.less'
 
 @connect(({common}) => ({...common}))
 class AuthSetting extends Component {
