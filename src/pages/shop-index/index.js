@@ -254,7 +254,6 @@ class ShopIndex extends Component {
   }
 
   setComboCart = (good, num) => {
-    console.log(good)
     this.props.dispatch({
       type: 'cart/setComboCart',
       payload: {

@@ -1,5 +1,5 @@
 import Taro, {Component} from '@tarojs/taro'
-import {View, Text, Button, Image, ScrollView, Input, Textarea} from '@tarojs/components'
+import {View, Text, Button, Image, ScrollView, Input, Textarea, Block} from '@tarojs/components'
 import {connect} from '@tarojs/redux'
 import {AtIcon, AtToast} from 'taro-ui'
 import classnames from 'classnames'
@@ -42,7 +42,9 @@ class Order extends Component {
     selectedAddress: null,
     alertPhone: false,
     alertPhoneText: '',
-    goods: []
+    goods: [],
+    isFullPrice: true,
+    fullPrice: null
   }
 
   componentWillMount() {
@@ -77,6 +79,10 @@ class Order extends Component {
         }
       })
     }
+  }
+
+  toBack = () => {
+    Taro.navigateBack()
   }
 
   changeOrderType = async orderType => {
@@ -218,9 +224,22 @@ class Order extends Component {
         amount
       }
     }).then(res => {
-      this.setState({
-        reserveTime: res,
-      })
+      if (Array.isArray(res)) {
+        this.setState({
+          reserveTime: res,
+        })
+      } else {
+        this.setState({
+          reserveTime: [],
+        })
+        if (+res.code === 301) {
+          this.setState({
+            isFullPrice: false,
+            fullPrice: +res.data.price
+          })
+        }
+      }
+
       return res
     })
   }
@@ -229,7 +248,8 @@ class Order extends Component {
 
     const {carts, curCouponIndex} = this.props
 
-    const {orderType, takeType, userPhoneNum, reserveTime, memo, couponList, dayIndex, timeIndex} = this.state
+    const {orderType, takeType, userPhoneNum, reserveTime, memo, couponList,
+      dayIndex, timeIndex} = this.state
 
     const goods = carts[this.$router.params.store_id].map(cart => {
       let {g_id, num, send_goods, fs_id} = cart
@@ -442,7 +462,8 @@ class Order extends Component {
       orderType, isShowPicker, takeType, store, memo, s_take,
       couponList, userAddress, amount, isShowTextarea, reserveTime,
       isShowAddress, userPhoneNum, selectedAddress,
-      alertPhone, alertPhoneText, goods, dayIndex, timeIndex,
+      alertPhone, alertPhoneText, goods, dayIndex, timeIndex, isFullPrice,
+      fullPrice
     } = this.state
 
     const isIphoneX = !!(this.props.systemInfo.model &&
@@ -706,17 +727,12 @@ class Order extends Component {
                   }
 
                   {
-                    orderType === 3 &&
+                    orderType === 3 && reserveTime.length > 0 &&
                     <View className='pack-fee'>
                       <Text>配送费</Text>
                       <View className='price'>
                         <Text>&yen;</Text>
-                        {
-                          reserveTime.length > 0 ?
-                            (
-                              reserveTime[dayIndex].time[timeIndex].price
-                            ) : ''
-                        }
+                        {reserveTime[dayIndex].time[timeIndex].price}
                       </View>
                     </View>
                   }
@@ -784,29 +800,47 @@ class Order extends Component {
         </ScrollView>
 
         <View className={classnames('footer', isIphoneX ? 'iphonex' : '')}>
-          <View className='price'>
-            <View className='discount'>
-              已优惠￥
-              {
-                couponList[curCouponIndex].uc_price || 0
-              }
-            </View>
-            <View className='total'>
-              合计￥
-              <Text>
-                {
-                  (
-                    totalAmout + +store.s_take_money
-                    + (orderType === 3 && reserveTime.length > 0 ?
+          {
+            (orderType !== 3 || isFullPrice) &&
+            <Block>
+              <View className='price'>
+                <View className='discount'>
+                  已优惠￥
+                  {
+                    couponList[curCouponIndex].uc_price || 0
+                  }
+                </View>
+                <View className='total'>
+                  合计￥
+                  <Text>
+                    {
                       (
-                        +reserveTime[dayIndex].time[timeIndex].price
-                      ) : 0)
-                  ).toFixed(2)
+                        totalAmout + +store.s_take_money
+                        + (orderType === 3 && reserveTime.length > 0 ?
+                          (
+                            +reserveTime[dayIndex].time[timeIndex].price
+                          ) : 0)
+                      ).toFixed(2)
+                    }
+                  </Text>
+                </View>
+              </View>
+              <IdButton className={'theme-grad-bg-' + theme} onClick={this.stepPay}>去支付</IdButton>
+
+            </Block>
+          }
+          {
+            orderType === 3 && !isFullPrice &&
+            <Block>
+              <View className='no-full'>
+                {
+                  `当前需满￥${fullPrice}起送，还差￥${fullPrice - amount}`
                 }
-              </Text>
-            </View>
-          </View>
-          <IdButton className={'theme-grad-bg-' + theme} onClick={this.stepPay}>去支付</IdButton>
+              </View>
+              <IdButton className={'theme-grad-bg-' + theme} onClick={this.toBack}>去凑单</IdButton>
+
+            </Block>
+          }
         </View>
 
         <PickTime
