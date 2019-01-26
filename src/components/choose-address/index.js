@@ -103,7 +103,7 @@ class ChooseAddress extends Component {
             {
               useAddress.length === 0 &&
               <View className='null' onClick={this.handleAdd}>
-                <View className={classnames('icon', 'theme-grad-bg-' + theme)}>+</View>
+                <Image className='icon' src={`${baseUrl}/static/addons/diancan/img/style/style_${theme}_8.png`} />
                 <View className={classnames('text', 'theme-c-' + theme)}>新增收货地址</View>
               </View>
             }
@@ -133,7 +133,7 @@ class ChooseAddress extends Component {
             {
               show && useAddress.length > 0 &&
               <View className='add' onClick={this.handleAdd}>
-                <Text className={classnames('icon', 'theme-bg-' + theme)}>+</Text>
+                <Image className='icon' src={`${baseUrl}/static/addons/diancan/img/style/style_${theme}_8.png`} />
                 <Text>新增收货地址</Text>
               </View>
             }

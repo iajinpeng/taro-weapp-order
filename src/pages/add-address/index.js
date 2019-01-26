@@ -94,6 +94,11 @@ class AddAddress extends Component {
         }
       })
 
+      this.props.dispatch({
+        type: 'address/setCurAddress',
+        payload: {}
+      })
+
       setTimeout(Taro.navigateBack, 1500)
     })
   }
@@ -105,7 +110,17 @@ class AddAddress extends Component {
         da_id: this.state.da_id
       }
     }).then(res => {
-      console.log(res)
+      Taro.showToast({
+        title: '删除成功!'
+      })
+      this.props.dispatch({
+        type: 'order/setKeyRefreshAddress',
+        payload: {
+          refreshAddress: true
+        }
+      })
+
+      setTimeout(Taro.navigateBack, 1500)
     })
   }
 

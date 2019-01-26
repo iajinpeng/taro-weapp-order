@@ -182,6 +182,12 @@ class Order extends Component {
   }
 
   hideAddress = (address) => {
+    if (this.useAddress.da_id !== address.da_id) {
+      Taro.showToast({
+        title: '由于配送地址/时间变化，您的配送费也发生了变化',
+        icon: 'none'
+      })
+    }
     this.setState({
       isShowAddress: false,
       selectedAddress: address ? address : this.state.selectedAddress
@@ -209,6 +215,7 @@ class Order extends Component {
 
 
   chooseReserveTime = () => {
+    if (this.state.reserveTime.length === 0) return
     this.setState({isShowPicker: true})
   }
 
@@ -621,7 +628,7 @@ class Order extends Component {
                     goods.map((good, index) => (
                       !good.optionalnumstr ?
                         <View className='good' key={index}>
-                          <Image className='pic' src={baseUrl + good.g_image_100}/>
+                          <Image className='pic' src={baseUrl + (good.g_image_100 || good.g_image)}/>
                           <View className='info'>
                             <View className='name'>
                               {good.g_title}
@@ -663,7 +670,7 @@ class Order extends Component {
                         </View>
                         :
                         <View className='good'>
-                          <Image className='pic' src={baseUrl + good.g_image}/>
+                          <Image className='pic' src={baseUrl + (good.g_image_100 || good.g_image)}/>
                           <View className='info'>
                             <View className='name'>
                               {good.g_title}
@@ -834,7 +841,7 @@ class Order extends Component {
             <Block>
               <View className='no-full'>
                 {
-                  `当前需满￥${fullPrice}起送，还差￥${fullPrice - amount}`
+                  `当前需满￥${fullPrice}起送，还差￥${(fullPrice - amount).toFixed(2)}`
                 }
               </View>
               <IdButton className={'theme-grad-bg-' + theme} onClick={this.toBack}>去凑单</IdButton>
