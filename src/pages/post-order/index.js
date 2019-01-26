@@ -378,6 +378,13 @@ class Order extends Component {
 
     if (!pay) {
       const res = await this.requestPayOrder(order_id)
+
+      if (+res.code === 500) {
+        Taro.showToast({
+          title: res.message,
+          icon: 'none'
+        })
+      }
       const isPayed = await Taro.requestPayment({
         ...res,
         timeStamp: res.timestamp
