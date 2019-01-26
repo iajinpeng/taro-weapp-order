@@ -417,7 +417,7 @@ class Order extends Component {
       })
       setTimeout(() => {
         Taro.redirectTo({
-          url: '/pages/order-detail/index?id=' + order_id + +'&store_id=' + store_id
+          url: '/pages/order-detail/index?id=' + order_id + '&store_id=' + store_id
         })
       }, 2000)
     }

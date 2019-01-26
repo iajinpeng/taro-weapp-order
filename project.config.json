@@ -2,7 +2,7 @@
   "miniprogramRoot": "./dist",
   "projectname": "taro-order",
   "description": "taro order",
-  "appid": "wx654caab9b4514216",
+  "appid": "wx30ea33add68ee255",
   "setting": {
     "urlCheck": true,
     "es6": false,
