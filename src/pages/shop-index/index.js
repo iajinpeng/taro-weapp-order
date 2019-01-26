@@ -347,6 +347,10 @@ class ShopIndex extends Component {
     })
   }
 
+  handlePay = () => {
+    this.setState({isShowOptions: false})
+  }
+
 
   render() {
     const {theme, menu_banner, menu_cart} = this.props
@@ -764,6 +768,7 @@ class ShopIndex extends Component {
         <PayBox
           theme={theme} carts={carts} storeId={+this.$router.params.id}
           themeInfo={menu_cart}
+          onPay={this.handlePay}
           onOpenCart={this.ToggleShowCart}
         />
 

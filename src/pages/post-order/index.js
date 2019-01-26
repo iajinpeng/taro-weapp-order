@@ -551,7 +551,7 @@ class Order extends Component {
                         onClick={this.changeTakeType.bind(this, 1)}
                       >
                         <Image
-                          className='icon-drink'
+                          className='icon-drink' mode='widthFix'
                           src={takeType === 1 ? require('../../images/icon-drink-active.png') : require('../../images/icon-drink.png')}
                         />
                         堂食
@@ -561,7 +561,7 @@ class Order extends Component {
                         onClick={this.changeTakeType.bind(this, 3)}
                       >
                         <Image
-                          className='icon-drink'
+                          className='icon-drink' mode='widthFix'
                           src={takeType === 3 ? require('../../images/icon-bag-active.png') : require('../../images/icon-bag.png')}
                         />
                         外带

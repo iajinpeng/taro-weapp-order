@@ -11,7 +11,7 @@ export default {
       return yield call(postAddress, payload)
     },
     * delAddress({payload}, {put, call}) {
-      return yield call(postAddress, payload)
+      return yield call(delAddress, payload)
     },
   },
 

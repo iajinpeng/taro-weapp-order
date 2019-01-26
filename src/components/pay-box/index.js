@@ -48,6 +48,7 @@ class PayBox extends Component {
     if (this.props.onClick) {
       this.props.onClick()
     } else {
+      this.props.onPay()
       this.toPostOrder()
     }
   }
