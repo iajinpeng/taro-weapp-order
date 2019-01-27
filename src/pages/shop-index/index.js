@@ -503,7 +503,8 @@ class ShopIndex extends Component {
         }
 
         {
-          isShowCart && carts.length > 0 && <Text className='mask' onClick={this.closeCart}/>
+          isShowCart && carts.length > 0 && !isShowCart &&
+          <Text className='mask' onClick={this.closeCart} />
         }
         <View className={classnames('cart', isShowCart && carts.length > 0 ? 'active' : '')}>
           <View className='cart-head'>

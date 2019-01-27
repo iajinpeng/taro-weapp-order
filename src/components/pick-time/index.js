@@ -24,21 +24,19 @@ class PickTime extends Component {
   }
 
   componentDidMount () {
-    // this.setState({dayIndex: this.props.dayIndex})
+    this.setState({dayIndex: 0})
   }
 
   chooseDay = index => {
-    if (index === this.state.dayIndex) return
     this.setState({dayIndex: index})
   }
 
   chooseTime = index => {
-    if (this.state.dayIndex === this.props.dayIndex && index === this.props.timeIndex) return
-    this.props.onChangeTime(this.state.dayIndex || this.props.dayIndex || 0, index)
+    // if ((this.state.dayIndex === this.props.dayIndex) && index === this.props.timeIndex) return
+    this.props.onChangeTime(this.state.dayIndex, index)
   }
 
   handleClose = () => {
-    this.setState({dayIndex: null})
     this.props.onClose()
   }
 
@@ -49,7 +47,7 @@ class PickTime extends Component {
   render() {
     const {show, reserveTime, theme, showPrice, timeIndex} = this.props
     const {dayIndex} = this.state
-    const realDay = dayIndex || this.props.dayIndex || 0
+    const realDay = dayIndex === null ? (this.props.dayIndex || 0) : dayIndex
 
     return (
       <Block>
@@ -79,7 +77,7 @@ class PickTime extends Component {
                 reserveTime.length > 0 && reserveTime[realDay].time.length > 0 &&
                 reserveTime[realDay].time.map((time, index) => (
                   <View
-                    className={classnames('time-item', (!realDay || realDay === this.props.dayIndex) && timeIndex === index ? 'active theme-c-' + theme : '')}
+                    className={classnames('time-item', (realDay === null || realDay === this.props.dayIndex) && timeIndex === index ? 'active theme-c-' + theme : '')}
                     key={index}
                     onClick={this.chooseTime.bind(this, index)}
                   >
