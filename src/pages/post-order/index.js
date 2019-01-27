@@ -18,7 +18,7 @@ class Order extends Component {
 
   config = {
     navigationBarTitleText: '提交订单',
-    disableScroll: true
+    // disableScroll: true,
   }
 
   state = {
@@ -185,6 +185,20 @@ class Order extends Component {
   }
 
   handleScroll = () => {
+    let Query = Taro.createSelectorQuery()
+    Query
+      .select('.memo')
+      .boundingClientRect(rect => {
+        let {top, height} = rect
+
+        this.setState({
+          isShowTextarea: !(top + height - 30 > this.footerScreenTop) || (top + 50 < this.footerHeight)
+        })
+      })
+      .exec()
+  }
+
+  onPageScroll () {
     let Query = Taro.createSelectorQuery()
     Query
       .select('.memo')
@@ -530,291 +544,295 @@ class Order extends Component {
     return (
       theme &&
       <View className='post-order'>
-        <ScrollView onScroll={this.handleScroll}
+        {/*<ScrollView onScroll={this.handleScroll}
           scrollY={!isShowPicker} className={classnames('scroll-view', isIphoneX ? 'iphonex' : '')}
         >
-          <View className={classnames('wrap', isIphoneX ? 'iphonex' : '')}>
-            <View className='content'>
-              <View className='order-type'>
-                <View className='tab'>
-                  <View
-                    className={classnames('wrap', orderType !== 1 ? 'un-active' : 'theme-c-' + theme,
-                      s_take.indexOf(1) > -1 ? '' : 'disabled')}
-                    onClick={this.changeOrderType.bind(this, 1)}>
-                    <Image
-                      src={orderType !== 1 ? require('../../images/icon-shop.png') : `${baseUrl}/static/addons/diancan/img/style/style_${theme}_1.png`}/>
-                    <Text>
-                      {
-                        s_take.indexOf(1) > -1 ? '到店取餐' : '暂不自取'
-                      }
-                    </Text>
-                  </View>
-                  <View
-                    className={classnames('wrap wrap-2', orderType !== 3 ? 'un-active' : 'theme-c-' + theme,
-                      s_take.indexOf(3) > -1 ? '' : 'disabled')}
-                    onClick={this.changeOrderType.bind(this, 3)}>
-                    <Image
-                      src={orderType !== 3 ? require('../../images/icon-bike.png') : `${baseUrl}/static/addons/diancan/img/style/style_${theme}_4.png`}/>
-                    <Text>
-                      {
-                        s_take.indexOf(3) > -1 ? '外卖配送' : '暂不配送'
-                      }
-                    </Text>
-                  </View>
-                  <View className='bg-fix' />
+
+        </ScrollView>*/}
+
+
+        <View className={classnames('wrap', isIphoneX ? 'iphonex' : '')}>
+          <View className='content'>
+            <View className='order-type'>
+              <View className='tab'>
+                <View
+                  className={classnames('wrap', orderType !== 1 ? 'un-active' : 'theme-c-' + theme,
+                    s_take.indexOf(1) > -1 ? '' : 'disabled')}
+                  onClick={this.changeOrderType.bind(this, 1)}>
+                  <Image
+                    src={orderType !== 1 ? require('../../images/icon-shop.png') : `${baseUrl}/static/addons/diancan/img/style/style_${theme}_1.png`}/>
+                  <Text>
+                    {
+                      s_take.indexOf(1) > -1 ? '到店取餐' : '暂不自取'
+                    }
+                  </Text>
                 </View>
-                {
-                  orderType === 1 &&
-                  <View className='info'>
-                    <View className='name'>{store.s_area ? store.s_area + store.s_address : ''}</View>
-                    <View className='time' onClick={this.chooseReserveTime}>
-                      <Text>自取时间</Text>
-                      <View>
-                        {
-                          reserveTime.length > 0 ?
-                            (
-                              (dayIndex === 0 ? '' : reserveTime[dayIndex].title + ' ')
-                              + ' ' + reserveTime[dayIndex].time[timeIndex].time
-                            ) : ''
-                        }
-                        <Image src={`${baseUrl}/static/addons/diancan/img/style/style_${theme}_3.png`}/>
-                      </View>
-                    </View>
-                    <View className='mobile'>
-                      <Image src={require('../../images/icon-mobile.png')}/>
-                      <Input value={userPhoneNum} onInput={this.phoneNumInput} placeholder='请输入手机号' maxlength='15'/>
-                      <Button open-type='getPhoneNumber' onGetphonenumber={this.autoInputMobile}>
-                        <Text className={'theme-c-' + theme}>自动填写</Text>
-                      </Button>
-
-                    </View>
-                    <View className='btn-box'>
-                      <Button
-                        className={takeType === 1 ? 'active theme-grad-bg-' + theme : ''}
-                        onClick={this.changeTakeType.bind(this, 1)}
-                      >
-                        <Image
-                          className='icon-drink' mode='widthFix'
-                          src={takeType === 1 ? require('../../images/icon-drink-active.png') : require('../../images/icon-drink.png')}
-                        />
-                        堂食
-                      </Button>
-                      <Button
-                        className={takeType === 3 ? 'active theme-grad-bg-' + theme : ''}
-                        onClick={this.changeTakeType.bind(this, 3)}
-                      >
-                        <Image
-                          className='icon-drink icon-bag' mode='widthFix'
-                          src={takeType === 3 ? require('../../images/icon-bag-active.png') : require('../../images/icon-bag.png')}
-                        />
-                        外带
-                      </Button>
-                    </View>
-                  </View>
-                }
-                {
-                  orderType === 3 &&
-                  <View className='info'>
-                    <View className='address' onClick={this.showAddress.bind(this, true)}>
-                      {
-                        !useAddress.address &&
-                        <View className='address-none'>
-                          选择收货地址
-                          <AtIcon value='chevron-right' size='16'/>
-                        </View>
-                      }
-                      {
-                        useAddress.address &&
-                        <View className='address-msg'>
-                          <View className='left'>
-                            <View className='desc'>{useAddress.address + ' ' + (useAddress.address_detail && useAddress.address_detail.split('|')[1])}</View>
-                            <View className='user'>
-                              <Text>{useAddress.user_name}</Text>
-                              <Text>{useAddress.user_telephone}</Text>
-                            </View>
-                          </View>
-                          <View className='right'>
-                            <AtIcon value='chevron-right' size='22'/>
-                          </View>
-                        </View>
-                      }
-                    </View>
-                    <View className='time' onClick={this.chooseReserveTime}>
-                      <Text>外卖下单</Text>
-                      <View>
-                        {
-                          reserveTime.length > 0 ?
-                            (
-                              (dayIndex === 0 ? '' : reserveTime[dayIndex].title)
-                              + reserveTime[dayIndex].time[timeIndex].time
-                            ) : ''
-                        }
-                        <Image src={`${baseUrl}/static/addons/diancan/img/style/style_${theme}_3.png`}/>
-                      </View>
-                    </View>
-                  </View>
-                }
+                <View
+                  className={classnames('wrap wrap-2', orderType !== 3 ? 'un-active' : 'theme-c-' + theme,
+                    s_take.indexOf(3) > -1 ? '' : 'disabled')}
+                  onClick={this.changeOrderType.bind(this, 3)}>
+                  <Image
+                    src={orderType !== 3 ? require('../../images/icon-bike.png') : `${baseUrl}/static/addons/diancan/img/style/style_${theme}_4.png`}/>
+                  <Text>
+                    {
+                      s_take.indexOf(3) > -1 ? '外卖配送' : '暂不配送'
+                    }
+                  </Text>
+                </View>
+                <View className='bg-fix' />
               </View>
-
-              <View className='block'>
-                <View className='title'>订单详情</View>
-                <View className='block-content'>
-                  {
-                    goods.length > 0 &&
-                    goods.map((good, index) => (
-                      !good.optionalnumstr ?
-                        <View className='good' key={index}>
-                          <Image className='pic' src={baseUrl + (good.g_image_100 || good.g_image)}/>
-                          <View className='info'>
-                            <View className='name'>
-                              {good.g_title}
-                            </View>
-                            <View className='standard'>
-                              {
-                                good.optional &&
-                                good.optional.map((opt, i) => (
-                                  <Text key={i}>
-                                    {opt.list[good.optionalTagIndex[i]].gn_name}
-                                    {i !== good.optional.length - 1 ? '+' : ''}
-                                  </Text>
-                                ))
-                              }
-                            </View>
-                          </View>
-                          <Text className='num'>x{good.num}</Text>
-                          <View className='price'>
-                            {
-                              good.g_original_price &&
-                              <View className='pre'>
-                                <Text>&yen;</Text>
-                                {good.g_original_price}
-                              </View>
-                            }
-                            <View className='cur'>
-                              <Text>&yen;</Text>
-                              {
-                                ((+good.g_price || 0) + (
-                                  good.optional ?
-                                    good.optional.reduce((total, item, i) => {
-                                      return total += +item.list[good.optionalTagIndex[i]].gn_price
-                                    }, 0)
-                                    : 0
-                                )).toFixed(2)
-                              }
-                            </View>
-                          </View>
-                        </View>
-                        :
-                        <View className='good'>
-                          <Image className='pic' src={baseUrl + (good.g_image_100 || good.g_image)}/>
-                          <View className='info'>
-                            <View className='name'>
-                              {good.g_title}
-                            </View>
-                            <View className='standard'>
-                              {
-                                good.fixed ?
-                                  good.fixed.reduce((total, fix) => {
-                                    total.push(`${fix.gn_name}(${fix.gn_num}份)`)
-
-                                    return total
-                                  }, []).join('+') : ''
-                              }
-                              {
-                                good.fixed.length > 0 && good.optional.length > 0 ? '+' : ''
-                              }
-                              {
-                                good.optional ?
-                                  good.optional.reduce((total, opt) => {
-
-                                    let str = opt.list.reduce((t, o) => {
-                                      o.num && (t.push(`${o.gn_name}(${o.num}份)`))
-                                      return t
-                                    }, [])
-
-                                    total.push(str.join('+'))
-
-                                    return total
-                                  }, []).join('+') : ''
-                              }
-                            </View>
-                          </View>
-                          <Text className='num'>x{good.num}</Text>
-                          <View className='price'>
-                            {
-                              good.g_original_price &&
-                              <View className='pre'>
-                                <Text>&yen;</Text>
-                                {good.g_original_price}
-                              </View>
-                            }
-                            <View className='cur'>
-                              <Text>&yen;</Text>
-                              {
-                                good.total_price ? good.total_price.toFixed(2) : '0.00'
-                              }
-                            </View>
-                          </View>
-                        </View>
-                    ))
-                  }
-
-                  {
-                    (orderType === 3 || takeType === 3) &&
-                    <View className='pack-fee'>
-                      <Text>打包费</Text>
-                      <View className='price'>
-                        <Text>&yen;</Text>{store.s_take_money}
-                      </View>
-                    </View>
-                  }
-
-                  {
-                    orderType === 3 && reserveTime.length > 0 &&
-                    <View className='pack-fee'>
-                      <Text>配送费</Text>
-                      <View className='price'>
-                        <Text>&yen;</Text>
-                        {reserveTime[dayIndex].time[timeIndex].price}
-                      </View>
-                    </View>
-                  }
-
-                  <View className='ticket' onClick={this.toChooseCouponPage}>
+              {
+                orderType === 1 &&
+                <View className='info'>
+                  <View className='name'>{store.s_area ? store.s_area + store.s_address : ''}</View>
+                  <View className='time' onClick={this.chooseReserveTime}>
+                    <Text>自取时间</Text>
                     <View>
-                      <Image src={`${baseUrl}/static/addons/diancan/img/style/style_${theme}_5.png`}/>
-                      <Text>优惠券</Text>
-                    </View>
-                    <View className={classnames('handle')}>
                       {
-                        couponList.length === 0 ? '暂无可用' : curCouponIndex === 99 ? '请选择' :
-                          couponList[curCouponIndex].uc_name
+                        reserveTime.length > 0 ?
+                          (
+                            (dayIndex === 0 ? '' : reserveTime[dayIndex].title + ' ')
+                            + ' ' + reserveTime[dayIndex].time[timeIndex].time
+                          ) : ''
                       }
-                      <AtIcon value='chevron-right' size='16'/>
+                      <Image src={`${baseUrl}/static/addons/diancan/img/style/style_${theme}_3.png`}/>
                     </View>
                   </View>
-                  <View className='subtotal'>
-                    共<Text className={'theme-c-' + theme}>{goods.length}</Text> 个商品，小计
-                    <Text className={classnames('price', 'theme-c-' + theme)}><Text>&yen;</Text>
-                      {
-                        (
-                          totalAmout + +store.s_take_money
-                          + (orderType === 3 && reserveTime.length > 0 ?
-                            (
-                              +reserveTime[dayIndex].time[timeIndex].price
-                            ) : 0)
-                        ).toFixed(2)
-                      }
-                    </Text>
+                  <View className='mobile'>
+                    <Image src={require('../../images/icon-mobile.png')}/>
+                    <Input value={userPhoneNum} onInput={this.phoneNumInput} placeholder='请输入手机号' maxlength='15'/>
+                    <Button open-type='getPhoneNumber' onGetphonenumber={this.autoInputMobile}>
+                      <Text className={'theme-c-' + theme}>自动填写</Text>
+                    </Button>
+
+                  </View>
+                  <View className='btn-box'>
+                    <Button
+                      className={takeType === 1 ? 'active theme-grad-bg-' + theme : ''}
+                      onClick={this.changeTakeType.bind(this, 1)}
+                    >
+                      <Image
+                        className='icon-drink' mode='widthFix'
+                        src={takeType === 1 ? require('../../images/icon-drink-active.png') : require('../../images/icon-drink.png')}
+                      />
+                      堂食
+                    </Button>
+                    <Button
+                      className={takeType === 3 ? 'active theme-grad-bg-' + theme : ''}
+                      onClick={this.changeTakeType.bind(this, 3)}
+                    >
+                      <Image
+                        className='icon-drink icon-bag' mode='widthFix'
+                        src={takeType === 3 ? require('../../images/icon-bag-active.png') : require('../../images/icon-bag.png')}
+                      />
+                      外带
+                    </Button>
                   </View>
                 </View>
-              </View>
+              }
+              {
+                orderType === 3 &&
+                <View className='info'>
+                  <View className='address' onClick={this.showAddress.bind(this, true)}>
+                    {
+                      !useAddress.address &&
+                      <View className='address-none'>
+                        选择收货地址
+                        <AtIcon value='chevron-right' size='16'/>
+                      </View>
+                    }
+                    {
+                      useAddress.address &&
+                      <View className='address-msg'>
+                        <View className='left'>
+                          <View className='desc'>{useAddress.address + ' ' + (useAddress.address_detail && useAddress.address_detail.split('|')[1])}</View>
+                          <View className='user'>
+                            <Text>{useAddress.user_name}</Text>
+                            <Text>{useAddress.user_telephone}</Text>
+                          </View>
+                        </View>
+                        <View className='right'>
+                          <AtIcon value='chevron-right' size='22'/>
+                        </View>
+                      </View>
+                    }
+                  </View>
+                  <View className='time' onClick={this.chooseReserveTime}>
+                    <Text>外卖下单</Text>
+                    <View>
+                      {
+                        reserveTime.length > 0 ?
+                          (
+                            (dayIndex === 0 ? '' : reserveTime[dayIndex].title)
+                            + reserveTime[dayIndex].time[timeIndex].time
+                          ) : ''
+                      }
+                      <Image src={`${baseUrl}/static/addons/diancan/img/style/style_${theme}_3.png`}/>
+                    </View>
+                  </View>
+                </View>
+              }
+            </View>
 
-              <View className='block'>
-                <View className='title'>备注</View>
-                <View className='block-content memo'>
-                  {
-                    isShowTextarea && !isShowPicker && !isShowAddress ?
+            <View className='block'>
+              <View className='title'>订单详情</View>
+              <View className='block-content'>
+                {
+                  goods.length > 0 &&
+                  goods.map((good, index) => (
+                    !good.optionalnumstr ?
+                      <View className='good' key={index}>
+                        <Image className='pic' src={baseUrl + (good.g_image_100 || good.g_image)}/>
+                        <View className='info'>
+                          <View className='name'>
+                            {good.g_title}
+                          </View>
+                          <View className='standard'>
+                            {
+                              good.optional &&
+                              good.optional.map((opt, i) => (
+                                <Text key={i}>
+                                  {opt.list[good.optionalTagIndex[i]].gn_name}
+                                  {i !== good.optional.length - 1 ? '+' : ''}
+                                </Text>
+                              ))
+                            }
+                          </View>
+                        </View>
+                        <Text className='num'>x{good.num}</Text>
+                        <View className='price'>
+                          {
+                            good.g_original_price &&
+                            <View className='pre'>
+                              <Text>&yen;</Text>
+                              {good.g_original_price}
+                            </View>
+                          }
+                          <View className='cur'>
+                            <Text>&yen;</Text>
+                            {
+                              ((+good.g_price || 0) + (
+                                good.optional ?
+                                  good.optional.reduce((total, item, i) => {
+                                    return total += +item.list[good.optionalTagIndex[i]].gn_price
+                                  }, 0)
+                                  : 0
+                              )).toFixed(2)
+                            }
+                          </View>
+                        </View>
+                      </View>
+                      :
+                      <View className='good'>
+                        <Image className='pic' src={baseUrl + (good.g_image_100 || good.g_image)}/>
+                        <View className='info'>
+                          <View className='name'>
+                            {good.g_title}
+                          </View>
+                          <View className='standard'>
+                            {
+                              good.fixed ?
+                                good.fixed.reduce((total, fix) => {
+                                  total.push(`${fix.gn_name}(${fix.gn_num}份)`)
+
+                                  return total
+                                }, []).join('+') : ''
+                            }
+                            {
+                              good.fixed.length > 0 && good.optional.length > 0 ? '+' : ''
+                            }
+                            {
+                              good.optional ?
+                                good.optional.reduce((total, opt) => {
+
+                                  let str = opt.list.reduce((t, o) => {
+                                    o.num && (t.push(`${o.gn_name}(${o.num}份)`))
+                                    return t
+                                  }, [])
+
+                                  total.push(str.join('+'))
+
+                                  return total
+                                }, []).join('+') : ''
+                            }
+                          </View>
+                        </View>
+                        <Text className='num'>x{good.num}</Text>
+                        <View className='price'>
+                          {
+                            good.g_original_price &&
+                            <View className='pre'>
+                              <Text>&yen;</Text>
+                              {good.g_original_price}
+                            </View>
+                          }
+                          <View className='cur'>
+                            <Text>&yen;</Text>
+                            {
+                              good.total_price ? good.total_price.toFixed(2) : '0.00'
+                            }
+                          </View>
+                        </View>
+                      </View>
+                  ))
+                }
+
+                {
+                  (orderType === 3 || takeType === 3) &&
+                  <View className='pack-fee'>
+                    <Text>打包费</Text>
+                    <View className='price'>
+                      <Text>&yen;</Text>{store.s_take_money}
+                    </View>
+                  </View>
+                }
+
+                {
+                  orderType === 3 && reserveTime.length > 0 &&
+                  <View className='pack-fee'>
+                    <Text>配送费</Text>
+                    <View className='price'>
+                      <Text>&yen;</Text>
+                      {reserveTime[dayIndex].time[timeIndex].price}
+                    </View>
+                  </View>
+                }
+
+                <View className='ticket' onClick={this.toChooseCouponPage}>
+                  <View>
+                    <Image src={`${baseUrl}/static/addons/diancan/img/style/style_${theme}_5.png`}/>
+                    <Text>优惠券</Text>
+                  </View>
+                  <View className={classnames('handle')}>
+                    {
+                      couponList.length === 0 ? '暂无可用' : curCouponIndex === 99 ? '请选择' :
+                        couponList[curCouponIndex].uc_name
+                    }
+                    <AtIcon value='chevron-right' size='16'/>
+                  </View>
+                </View>
+                <View className='subtotal'>
+                  共<Text className={'theme-c-' + theme}>{goods.length}</Text> 个商品，小计
+                  <Text className={classnames('price', 'theme-c-' + theme)}><Text>&yen;</Text>
+                    {
+                      (
+                        totalAmout + +store.s_take_money
+                        + (orderType === 3 && reserveTime.length > 0 ?
+                          (
+                            +reserveTime[dayIndex].time[timeIndex].price
+                          ) : 0)
+                      ).toFixed(2)
+                    }
+                  </Text>
+                </View>
+              </View>
+            </View>
+
+            <View className='block'>
+              <View className='title'>备注</View>
+              <View className='block-content memo'>
+                {
+                  isShowTextarea && !isShowPicker && !isShowAddress ?
                     <Textarea
                       id='textarea'
                       className='textarea' maxlength={30} value={memo}
@@ -822,22 +840,20 @@ class Order extends Component {
                       placeholderClass='textarea-placeholder'
                       placeholder='饮品中规格可参阅订单详情中的显示，若有其它要求,请说明。'
                     />
-                      :
-                      <View className='alias'>
-                        {
-                          memo || '饮品中规格可参阅订单详情中的显示，若有其它要求,请说明。'
-                        }
-                      </View>
-                  }
+                    :
+                    <View className='alias'>
+                      {
+                        memo || '饮品中规格可参阅订单详情中的显示，若有其它要求,请说明。'
+                      }
+                    </View>
+                }
 
-                  <Text>{memo.length}/30个字</Text>
-                </View>
+                <Text>{memo.length}/30个字</Text>
               </View>
-              <Copyright />
             </View>
+            <Copyright />
           </View>
-        </ScrollView>
-
+        </View>
         <View className={classnames('footer', isIphoneX ? 'iphonex' : '')}>
           {
             (orderType !== 3 || isFullPrice) &&

@@ -482,8 +482,8 @@ class OrderDetail extends Component {
                 </View>
               </View>
 
-              <View className='tooth-border'/>
               <View className='bottom-shadow' />
+              <View className='tooth-border'/>
             </View>
           </View>
         }

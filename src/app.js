@@ -37,6 +37,7 @@ class App extends Component {
       navigationBarBackgroundColor: '#f5f5f5',
       navigationBarTitleText: '🐎',
       navigationBarTextStyle: 'black',
+      backgroundColor: '#f5f5f5'
     },
   }
 

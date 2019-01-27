@@ -19,7 +19,7 @@ export default {
 
       !curCart && (curCart = [])
 
-      if (curCart.some(item => item.order_id === good.order_id)) {
+      if (good.order_id && curCart.some(item => item.order_id === good.order_id)) {
         return {...state}
       }
 
@@ -84,7 +84,7 @@ export default {
 
       !curCart && (curCart = [])
 
-      if (curCart.some(item => item.order_id === good.order_id)) {
+      if (good.order_id && curCart.some(item => item.order_id === good.order_id)) {
         return {...state}
       }
 

@@ -333,6 +333,8 @@ class ShopIndex extends Component {
 
   goodScroll = e => {
     const fix = e.detail.scrollHeight / (this.goodPosition[this.goodPosition.length - 1].bottom + 105)
+
+    if (e.detail.scrollTop + this.asideHeiInfo.wrapHeight > e.detail.scrollHeight) return
     this.goodPosition.map(item => {
       if (e.detail.scrollTop >= Math.floor(item.top * fix) && e.detail.scrollTop < (item.bottom) * fix) {
         if (this.curGroupGoodId !== this.state.group[item.index].group_id) {
@@ -396,7 +398,7 @@ class ShopIndex extends Component {
             <View className='aside'>
               <ScrollView
                 scrollWithAnimation
-                scrollY={!isShowCart} className='item-wrap'
+                scrollY className='item-wrap'
                 onScroll={this.asideScroll} scrollIntoView={curGroupId}
                 id='aside-scroll'>
                 <View className='bg-alias'>
@@ -428,7 +430,7 @@ class ShopIndex extends Component {
             <ScrollView
               scrollWithAnimation
               className='content'
-              scrollY={!isShowCart || carts.length === 0} scrollIntoView={curGroupGoodId}
+              scrollY scrollIntoView={curGroupGoodId}
               onScroll={this.goodScroll}
             >
               {
@@ -503,8 +505,8 @@ class ShopIndex extends Component {
         }
 
         {
-          isShowCart && carts.length > 0 && !isShowCart &&
-          <Text className='mask' onClick={this.closeCart} />
+          isShowCart && carts.length > 0 &&
+          <Text className='mask' onClick={this.closeCart} onTouchMove={this.stopPropagation} />
         }
         <View className={classnames('cart', isShowCart && carts.length > 0 ? 'active' : '')}>
           <View className='cart-head'>

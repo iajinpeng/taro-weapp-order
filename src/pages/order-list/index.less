@@ -35,10 +35,10 @@
 
   .content{
     height: ~"calc(100vh - 138px)";
-    padding-top: 40px;
+    padding-top: 20px;
     box-sizing: border-box;
     .null{
-      padding-top: 220px;
+      padding-top: 240px;
       .image-wrap{
         width: 218px;
         height: 240px;
@@ -78,99 +78,105 @@
       padding: 40px 30px 0;
 
     }
-    .order-item{
-      padding: 34px 40px 10px;
-      background: #fff;
-      box-shadow: 0 0 20px #ddd;
-      margin:0 30px 60px;
-      border-radius: 10px 10px 0 0;
-      position: relative;
-      .order-title{
-        font-size: 30px;
-        display: flex;
-        justify-content: space-between;
-        .status{
-          font-weight: bold;
-        }
-        image{
-          width: 30px;
-          height: 30px;
-          margin-right: 10px;
+    .list{
+      padding-top: 20px;
+      .order-item{
+        box-shadow: 0 0 40px #ddd;
+        border-radius: 10px 10px 0 0;
+        margin: 0 30px 50px;
+        padding-bottom: 10px;
+        .wrap{
           position: relative;
-          top: 3px;
+          padding: 34px 40px 10px;
+          background: #fff;
         }
-      }
-      .order-type{
-        font-size: 28px;
-        display: flex;
-        justify-content: space-between;
-        margin: 40px 0 24px;
-        font-weight: 300;
-        align-items: center;
-        color: @c-666;
-        .name{
-          color: @c-666;
-          font-weight: bold;
-        }
-        .tag{
-          border: 1px solid @c-ccc;
-          padding: 0 10px;
-          border-radius: 20px;
-          font-size: 24px;
-          height: 40px;
-          line-height: 40px;
-          font-weight: bold;
-        }
-      }
-      .good{
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 36px;
-        //align-items: center;
-        &-info{
-          view:first-child{
-            font-size: 34px;
+        .order-title{
+          font-size: 30px;
+          display: flex;
+          justify-content: space-between;
+          .status{
             font-weight: bold;
+          }
+          image{
+            width: 30px;
+            height: 30px;
+            margin-right: 10px;
+            position: relative;
+            top: 3px;
+          }
+        }
+        .order-type{
+          font-size: 28px;
+          display: flex;
+          justify-content: space-between;
+          margin: 40px 0 24px;
+          font-weight: 300;
+          align-items: center;
+          color: @c-666;
+          .name{
             color: @c-666;
+            font-weight: bold;
           }
-          view:last-child{
-            font-size: 26px;
-            color: @c-999;
-            margin-top: 20px;
+          .tag{
+            border: 1px solid @c-ccc;
+            padding: 0 10px;
+            border-radius: 20px;
+            font-size: 24px;
+            height: 40px;
+            line-height: 40px;
+            font-weight: bold;
           }
-          button{
-            width: 208px;
-            height: 80px;
-            line-height: 80px;
-            border-radius: 40px;
+        }
+        .good{
+          display: flex;
+          justify-content: space-between;
+          margin-bottom: 36px;
+          //align-items: center;
+          &-info{
+            view:first-child{
+              font-size: 34px;
+              font-weight: bold;
+              color: @c-666;
+            }
+            view:last-child{
+              font-size: 26px;
+              color: @c-999;
+              margin-top: 20px;
+            }
+            button{
+              width: 208px;
+              height: 80px;
+              line-height: 80px;
+              border-radius: 40px;
+              font-size: 32px;
+              font-weight: bold;
+              color: #fff;
+            }
+          }
+          &>text{
+            font-size: 36px;
+            color: @c-40;
+          }
+
+          .cancel{
             font-size: 32px;
             font-weight: bold;
-            color: #fff;
           }
-        }
-        &>text{
-          font-size: 36px;
-          color: @c-40;
-        }
 
-        .cancel{
-          font-size: 32px;
-          font-weight: bold;
         }
-
-      }
-      .remark{
-        display: flex;
-        justify-content: space-between;
-      }
-      .order-price{
-        font-size: 48px;
-        .yen{
-          font-size: 30px;
-          color: @c-999;
-          position: relative;
-          top: -10px;
-          margin-right: 7px;
+        .remark{
+          display: flex;
+          justify-content: space-between;
+        }
+        .order-price{
+          font-size: 48px;
+          .yen{
+            font-size: 30px;
+            color: @c-999;
+            position: relative;
+            top: -10px;
+            margin-right: 7px;
+          }
         }
       }
     }
