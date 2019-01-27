@@ -19,6 +19,10 @@ export default {
 
       !curCart && (curCart = [])
 
+      if (curCart.some(item => item.order_id === good.order_id)) {
+        return {...state}
+      }
+
 
       if (good.fs_id) {
         let index = curCart.findIndex(item => item.fs_id === good.fs_id)
@@ -77,7 +81,12 @@ export default {
     setComboCart(state, {payload}) {
       const {id, good, num} = payload
       let curCart = state.carts[id]
+
       !curCart && (curCart = [])
+
+      if (curCart.some(item => item.order_id === good.order_id)) {
+        return {...state}
+      }
 
       if (good.fs_id) {
         let index = curCart.findIndex(item => item.fs_id === good.fs_id)

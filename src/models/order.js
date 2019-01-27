@@ -46,7 +46,8 @@ export default {
     * requestOrderRepeat({payload}, {put, call}) {
       const {change, goods} = yield call(requestOrderRepeat, payload)
       if (!change) {
-        const {store_id} = payload
+        const {store_id, order_id} = payload
+
         const cartGoods = goods.map(good => {
 
           let {propertyTagIndex, optionalTagIndex, optionalnumstr} = good
@@ -84,7 +85,7 @@ export default {
 
           return {
             id: +store_id,
-            good: useGood,
+            good: {...useGood, order_id},
             num: good.od_num
           }
 
