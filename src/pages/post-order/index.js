@@ -164,9 +164,10 @@ class Order extends Component {
         lng: localInfo.longitude,
         take_type
       }
-    }).then(({store, couponList, userAddress, amount}) => {
+    }).then(({store, couponList, userAddress, amount, contact_mobile}) => {
       this.setState({
         store, couponList, userAddress, amount,
+        userPhoneNum: contact_mobile,
         s_take: store.s_take.map(v => +v)
       }, this.calcTextareaRect)
       return amount
@@ -221,7 +222,7 @@ class Order extends Component {
   }
 
   hideAddress = (address) => {
-    if (this.useAddress.da_id !== address.da_id) {
+    if (address && (this.useAddress.da_id !== address.da_id)) {
       Taro.showToast({
         title: '由于配送地址/时间变化，您的配送费也发生了变化',
         icon: 'none'
@@ -272,7 +273,7 @@ class Order extends Component {
     }).then(res => {
       if (Array.isArray(res)) {
         this.setState({
-          reserveTime: res,
+          reserveTime: res.filter(item => item.time.length > 0),
         })
       } else {
         this.setState({
@@ -816,7 +817,7 @@ class Order extends Component {
                   <Text className={classnames('price', 'theme-c-' + theme)}><Text>&yen;</Text>
                     {
                       (
-                        totalAmout + +store.s_take_money
+                        +totalAmout + +store.s_take_money
                         + (orderType === 3 && reserveTime.length > 0 ?
                           (
                             +reserveTime[dayIndex].time[timeIndex].price

@@ -1,5 +1,5 @@
 import Taro, {Component} from '@tarojs/taro'
-import {View, Text, Image, ScrollView} from '@tarojs/components'
+import {View, Text, Image} from '@tarojs/components'
 import {connect} from '@tarojs/redux'
 import {AtIcon} from 'taro-ui'
 import classnames from 'classnames'
@@ -15,7 +15,7 @@ class ChooseCoupon extends Component {
 
   config = {
     navigationBarTitleText: '选择优惠券',
-    disableScroll: true
+    // disableScroll: true
   }
 
   state = {
@@ -45,7 +45,7 @@ class ChooseCoupon extends Component {
     const {openIndex} = this.state
 
     return (
-      <ScrollView scrollY className='choose-coupon coupon'>
+      <View className='choose-coupon coupon'>
         <View className='main'>
           <View className='unuse' onClick={this.changeCoupon.bind(this, 99)}>
             {
@@ -105,7 +105,7 @@ class ChooseCoupon extends Component {
 
           <Copyright />
         </View>
-      </ScrollView>
+      </View>
     )
   }
 }

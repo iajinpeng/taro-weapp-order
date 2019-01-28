@@ -1,5 +1,5 @@
 import Taro, {Component} from '@tarojs/taro'
-import {View, Block, Text, Image} from '@tarojs/components'
+import {View, Block, Text, Image, ScrollView} from '@tarojs/components'
 import PropTypes from 'prop-types'
 import classnames from 'classnames'
 import {connect} from '@tarojs/redux'
@@ -95,11 +95,11 @@ class ChooseAddress extends Component {
           className='mask' style={{display: show ? 'block' : 'none'}}
           onClick={this.handleClose.bind(this, true, useAddress[defaultIndex])}
         />
-        <View className={classnames('choose-address', show ? 'active' : '')}>
+        <View className={classnames('choose-address', show ? 'active' : '')} onTouchMove={this.stopPro}>
           <View className='title'>选择收货地址
             <Text className='cacel' onClick={this.handleClose.bind(this, false)}>取消</Text>
           </View>
-          <View className='content'>
+          <ScrollView scrollY className='content'>
             {
               useAddress.length === 0 &&
               <View className='null' onClick={this.handleAdd}>
@@ -130,16 +130,14 @@ class ChooseAddress extends Component {
               ))
             }
 
-            {
-              show && useAddress.length > 0 &&
-              <View className='add' onClick={this.handleAdd}>
-                <Image className='icon' src={`${baseUrl}/static/addons/diancan/img/style/style_${theme}_8.png`} />
-                <Text>新增收货地址</Text>
-              </View>
-            }
-
-          </View>
-
+          </ScrollView>
+          {
+            show && useAddress.length > 0 &&
+            <View className='add' onClick={this.handleAdd}>
+              <Image className='icon' src={`${baseUrl}/static/addons/diancan/img/style/style_${theme}_8.png`} />
+              <Text>新增收货地址</Text>
+            </View>
+          }
         </View>
       </Block>
     )
