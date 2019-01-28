@@ -59,13 +59,6 @@ class Order extends Component {
     })
 
     this.initPage()
-
-    this.props.dispatch({
-      type: 'order/setCouponIndex',
-      payload: {
-        curCouponIndex: 0
-      }
-    })
   }
 
   componentDidShow() {
@@ -94,9 +87,19 @@ class Order extends Component {
   }
 
   initPage = async (orderType) => {
-    const amount = await this.getPreOrderInfo(orderType)
+    const {amount, couponList} = await this.getPreOrderInfo(orderType)
 
-    await this.getReserveTime(amount, orderType)
+    this.getReserveTime(amount, orderType)
+
+    const index = couponList.findIndex(item => item.available) > -1 ?
+      couponList.findIndex(item => item.available) : 99
+
+    this.props.dispatch({
+      type: 'order/setCouponIndex',
+      payload: {
+        curCouponIndex: index
+      }
+    })
   }
 
   changeTakeType = takeType => {
@@ -170,7 +173,7 @@ class Order extends Component {
         userPhoneNum: contact_mobile,
         s_take: store.s_take.map(v => +v)
       }, this.calcTextareaRect)
-      return amount
+      return {amount, couponList}
     })
   }
 
@@ -495,10 +498,15 @@ class Order extends Component {
   toChooseCouponPage = () => {
     const {couponList} = this.state
 
+    const couponOptions = couponList.map(item => {
+      item.showDetail = !item.available
+      return item
+    })
+
     this.props.dispatch({
       type: 'order/setCouponOptions',
       payload: {
-        couponOptions: couponList
+        couponOptions
       }
     })
 
@@ -541,6 +549,7 @@ class Order extends Component {
 
       totalAmout < 0 && (totalAmout = 0)
     }
+    const availableCoupons = couponList.filter(item => item.available)
 
     return (
       theme &&
@@ -806,7 +815,8 @@ class Order extends Component {
                   </View>
                   <View className={classnames('handle')}>
                     {
-                      couponList.length === 0 ? '暂无可用' : curCouponIndex === 99 ? '请选择' :
+                      (couponList.length === 0 || availableCoupons.length === 0) ? '暂无可用'
+                        : curCouponIndex === -1 ? '请选择' :
                         couponList[curCouponIndex].uc_name
                     }
                     <AtIcon value='chevron-right' size='16'/>

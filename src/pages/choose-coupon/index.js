@@ -18,19 +18,21 @@ class ChooseCoupon extends Component {
     // disableScroll: true
   }
 
-  state = {
-    openIndex: null
-  }
-
   openCondition = (index, e) => {
     e.stopPropagation()
 
-    const {openIndex} = this.state
-    this.setState({openIndex: openIndex !== index ? index : null})
+    const {couponOptions} = this.props
+    couponOptions.showDetail = !couponOptions.showDetail
+    this.props.dispatch({
+      type: 'order/setCouponOptions',
+      payload: {
+        couponOptions
+      }
+    })
   }
 
-  changeCoupon = index => {
-    if (index === this.props.curCouponIndex) return
+  changeCoupon = (index, available) => {
+    if (index === this.props.curCouponIndex || (index !== -1 && !available)) return
 
     this.props.dispatch({
       type: 'order/setCouponIndex',
@@ -41,15 +43,14 @@ class ChooseCoupon extends Component {
   }
 
   render () {
-    const {theme, couponOptions, curCouponIndex} = this.props
-    const {openIndex} = this.state
+    const {theme, curCouponIndex, couponOptions} = this.props
 
     return (
       <View className='choose-coupon coupon'>
         <View className='main'>
-          <View className='unuse' onClick={this.changeCoupon.bind(this, 99)}>
+          <View className='unuse' onClick={this.changeCoupon.bind(this, -1)}>
             {
-              curCouponIndex === 99 ?
+              curCouponIndex === -1 ?
                 <Image src={`${baseUrl}/static/addons/diancan/img/style/style_${theme}_2.png`} />
                 :
                 <View className='un-select' />
@@ -62,7 +63,7 @@ class ChooseCoupon extends Component {
           {
             Array.isArray(couponOptions) &&
             couponOptions.map((coupon, index) => (
-              <View className='item' key={index} onClick={this.changeCoupon.bind(this, index)}>
+              <View className='item' key={index} onClick={this.changeCoupon.bind(this, index, coupon.available)}>
                 {
                   curCouponIndex === index ?
                     <Image src={`${baseUrl}/static/addons/diancan/img/style/style_${theme}_2.png`} />
@@ -72,7 +73,7 @@ class ChooseCoupon extends Component {
                 }
                 <View>
                   <View className='entity'>
-                    <View className={classnames('deno', 'theme-bg-' + theme)}>
+                    <View className={classnames('deno', coupon.available ? 'theme-bg-' + theme : '')}>
                       <View className='price'>
                         <Text>&yen;</Text>
                         {coupon.uc_price}
@@ -83,14 +84,18 @@ class ChooseCoupon extends Component {
                       <View className='name'>{coupon.uc_name}</View>
                       <View className='time'>{coupon.uc_start_time} 至 {coupon.uc_end_time}</View>
                       <View className='btn' onClick={this.openCondition.bind(this, index)}>使用条件
-                        <AtIcon value={openIndex === index ? 'chevron-up': 'chevron-down'} size='19' />
+                        <AtIcon value={coupon.showDetail ? 'chevron-up': 'chevron-down'} size='19' />
                       </View>
                     </View>
                   </View>
                   {
-                    openIndex === index &&
+                    coupon.showDetail &&
                     <View className='condi'>
-                      <View>优惠券使用条件</View>
+                      <View style={{color: !coupon.available ? '#F33C3C' : ''}}>
+                        {
+                          coupon.available ? '优惠券使用条件' : ' 本次不可用原因'
+                        }
+                      </View>
                       {
                         coupon.norm.map((item, i) => (
                           <View key={i}>{i + 1}, {item}</View>

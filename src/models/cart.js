@@ -19,10 +19,9 @@ export default {
 
       !curCart && (curCart = [])
 
-      if (good.order_id && curCart.some(item => item.order_id === good.order_id)) {
+      if (num === 1 && good.order_id && curCart.some(item => item.order_id === good.order_id)) {
         return {...state}
       }
-
 
       if (good.fs_id) {
         let index = curCart.findIndex(item => item.fs_id === good.fs_id)
@@ -84,7 +83,7 @@ export default {
 
       !curCart && (curCart = [])
 
-      if (good.order_id && curCart.some(item => item.order_id === good.order_id)) {
+      if (num === 1 && good.order_id && curCart.some(item => item.order_id === good.order_id)) {
         return {...state}
       }
 
