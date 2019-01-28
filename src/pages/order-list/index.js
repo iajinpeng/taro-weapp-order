@@ -24,6 +24,8 @@ class OrderList extends Component {
     total: 0,
     firstId: '',
     isShowCancelWarn: false,
+    isShowOrderAgainWarn: false,
+    addCartPayload: {},
     curOrder: {}
   }
 
@@ -131,12 +133,24 @@ class OrderList extends Component {
         store_id,
         order_id
       }
-    }).then(change => {
+    }).then(({change, payload}) => {
       if (change) {
         this.showOrHideAgainWarn(true)
+        this.setState({addCartPayload: payload})
       }
     })
 
+  }
+
+  againOk = () => {
+    this.props.dispatch({
+      type: 'order/repeatOrderAddCart',
+      payload: this.state.addCartPayload
+    })
+    Taro.navigateTo({
+      url: '/pages/shop-index/index?id=' + this.state.data.store_id
+    })
+    this.showOrHideAgainWarn(false)
   }
 
   handleTouchStart = e => {
@@ -163,7 +177,7 @@ class OrderList extends Component {
 
   render() {
     const {theme} = this.props
-    const {type, lists, firstId, isShowCancelWarn} = this.state
+    const {type, lists, firstId, isShowCancelWarn, isShowOrderAgainWarn} = this.state
 
     return (
       <View className='order-list' onTouchStart={this.handleTouchStart} onTouchEnd={this.handleTouchEnd}>
@@ -307,6 +321,16 @@ class OrderList extends Component {
           onOk={this.cancelOrder}
         >
           确定要取消吗
+        </ConfirmModal>
+
+        <ConfirmModal
+          show={isShowOrderAgainWarn}
+          className='order-again-modal'
+          theme={theme}
+          onCancel={this.showOrHideAgainWarn.bind(this, false)}
+          onOk={this.againOk}
+        >
+          商品规格属性已变更，是否重新选择？
         </ConfirmModal>
       </View>
     )

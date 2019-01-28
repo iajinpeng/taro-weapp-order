@@ -211,18 +211,20 @@ class ShopIndex extends Component {
 
     let stan = this.state[key]
     stan[index] = i
-    this.setState({[key]: stan}, () => {
-      const {propertyTagIndex, optionalTagIndex, curGood} = this.state
+    this.setState({[key]: stan}, this.setCurCart)
+  }
 
-      const carts = this.props.carts[(+this.$router.params.id)] || []
-      const optionalstr = propertyTagIndex.join('') + optionalTagIndex.join('')
-      const cartsAlike = carts.find(item => (
-        (item.g_id === curGood.g_id) && (item.optionalstr === optionalstr)
-      ))
-      const curCart = JSON.parse(JSON.stringify(cartsAlike || {}))
+  setCurCart = () => {
+    const {propertyTagIndex, optionalTagIndex, curGood} = this.state
 
-      this.setState({curCart})
-    })
+    const carts = this.props.carts[(+this.$router.params.id)] || []
+    const optionalstr = propertyTagIndex.join('') + optionalTagIndex.join('')
+    const cartsAlike = carts.find(item => (
+      (item.g_id === curGood.g_id) && (item.optionalstr === optionalstr)
+    ))
+    const curCart = JSON.parse(JSON.stringify(cartsAlike || {}))
+
+    this.setState({curCart})
   }
 
   toChooseStan = () => {
@@ -243,6 +245,7 @@ class ShopIndex extends Component {
 
   setCart = (good, num, cartGood) => {
     if (num === -1 && (!cartGood.num || cartGood.num <= 0)) return
+
     this.props.dispatch({
       type: 'cart/setCart',
       payload: {
@@ -251,6 +254,8 @@ class ShopIndex extends Component {
         num
       }
     })
+
+    this.setCurCart()
   }
 
   setComboCart = (good, num) => {
@@ -262,6 +267,7 @@ class ShopIndex extends Component {
         num
       }
     })
+    this.setCurCart()
   }
 
 
@@ -318,6 +324,7 @@ class ShopIndex extends Component {
   }
 
   toStandardDetail = (good) => {
+    this.setState({isShowDetail: false})
     Taro.navigateTo({
       url: `/pages/standard-detail/index?store_id=${this.$router.params.id}&id=${good.g_id}&name=${good.g_title}&g_price=${good.g_price}`
     })
@@ -569,7 +576,7 @@ class ShopIndex extends Component {
 
                     <Numbox
                       num={good.num} showNum
-                      onReduce={this.this.setCart.bind(this, good, -1, good)}
+                      onReduce={this.setCart.bind(this, good, -1, good)}
                       onAdd={this.setCart.bind(this, good, 1)}
                     />
                   </View>

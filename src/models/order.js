@@ -47,6 +47,25 @@ export default {
       const {change, goods} = yield call(requestOrderRepeat, payload)
       const {store_id, order_id} = payload
 
+      yield put({
+        type: 'repeatOrderAddCart',
+        payload: {store_id, order_id, goods}
+      })
+
+      if (change) {
+        return {change, payload: {store_id, order_id, goods}}
+      } else {
+        Taro.navigateTo({
+          url: '/pages/shop-index/index?id=' + store_id + '&showcart=1'
+        })
+        return {change}
+      }
+
+
+    },
+    * repeatOrderAddCart({payload}, {put}) {
+      const {store_id, order_id, goods} = payload
+
       const cartGoods = goods.map(good => {
 
         let {propertyTagIndex, optionalTagIndex, optionalnumstr} = good
@@ -96,15 +115,7 @@ export default {
           payload: cartGoods[i]
         })
       }
-
-      if (!change) {
-        Taro.navigateTo({
-          url: '/pages/shop-index/index?id=' + store_id + '&showcart=1'
-        })
-      }
-
-      return change
-    },
+    }
   },
 
   reducers: {

@@ -161,7 +161,7 @@ class Coupon extends Component {
                 lists.map((coupon, index) => (
                   <View className='item' key={index}>
                     <View className='entity'>
-                      <View className={classnames('deno', 'theme-grad-bg-' + theme)}>
+                      <View className={classnames('deno', type === 1 ? 'theme-grad-bg-' + theme : '')}>
                         <View className='price'>
                           <Text>&yen;</Text>
                           {coupon.uc_price}
@@ -176,11 +176,12 @@ class Coupon extends Component {
                         </View>
                       </View>
                       <Button
+                        disabled={type === 2}
                         openType={userInfo.userInfo ? '' : 'getUserInfo'}
                         onGetUserInfo={this.getedUserInfo}
                         formType='submit'
                         onClick={this.toChoosePage}
-                        className={classnames('handle', 'theme-grad-bg-' + theme)}
+                        className={classnames('handle', type === 1 ? 'theme-grad-bg-' + theme : '')}
                       >去使用</Button>
                     </View>
                     {

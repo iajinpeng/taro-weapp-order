@@ -24,7 +24,8 @@ class OrderDetail extends Component {
     isShowOrderAgainWarn: false,
     markers: [],
     includePoints: [],
-    polyline: []
+    polyline: [],
+    addCartPayload: {}
   }
 
   componentWillMount() {
@@ -126,6 +127,10 @@ class OrderDetail extends Component {
   }
 
   againOk = () => {
+    this.props.dispatch({
+      type: 'order/repeatOrderAddCart',
+      payload: this.state.addCartPayload
+    })
     Taro.navigateTo({
       url: '/pages/shop-index/index?id=' + this.state.data.store_id
     })
@@ -203,9 +208,10 @@ class OrderDetail extends Component {
         store_id,
         order_id: o_id
       }
-    }).then(change => {
+    }).then(({change, payload}) => {
       if (change) {
         this.showOrHideAgainWarn(true)
+        this.setState({addCartPayload: payload})
       }
     })
 

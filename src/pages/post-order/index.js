@@ -92,7 +92,7 @@ class Order extends Component {
     this.getReserveTime(amount, orderType)
 
     const index = couponList.findIndex(item => item.available) > -1 ?
-      couponList.findIndex(item => item.available) : 99
+      couponList.findIndex(item => item.available) : -1
 
     this.props.dispatch({
       type: 'order/setCouponIndex',
@@ -364,7 +364,7 @@ class Order extends Component {
         o_remark: memo,
         goods,
         address_id: this.useAddress.da_id,
-        coupon_id: curCouponIndex !== 99 && couponList.length > 0 && couponList[curCouponIndex].uc_id
+        coupon_id: curCouponIndex !== -1 && couponList.length > 0 && couponList[curCouponIndex].uc_id
       }
     })
   }
@@ -498,15 +498,10 @@ class Order extends Component {
   toChooseCouponPage = () => {
     const {couponList} = this.state
 
-    const couponOptions = couponList.map(item => {
-      item.showDetail = !item.available
-      return item
-    })
-
     this.props.dispatch({
       type: 'order/setCouponOptions',
       payload: {
-        couponOptions
+        couponOptions: couponList
       }
     })
 
@@ -541,7 +536,7 @@ class Order extends Component {
 
     let totalAmout = +amount
 
-    if (takeType === 3) {
+    if (orderType === 3) {
       totalAmout += +store.s_take_money
     }
     if (couponList[curCouponIndex] && couponList[curCouponIndex].uc_price) {
@@ -550,6 +545,14 @@ class Order extends Component {
       totalAmout < 0 && (totalAmout = 0)
     }
     const availableCoupons = couponList.filter(item => item.available)
+
+    const noConponAmount = +amount + +store.s_take_money
+
+    const finalAmount =  (totalAmout + +store.s_take_money
+      + (orderType === 3 && reserveTime.length > 0 ?
+        (
+          +reserveTime[dayIndex].time[timeIndex].price
+        ) : 0)).toFixed(2)
 
     return (
       theme &&
@@ -826,13 +829,7 @@ class Order extends Component {
                   共<Text className={'theme-c-' + theme}>{goods.length}</Text> 个商品，小计
                   <Text className={classnames('price', 'theme-c-' + theme)}><Text>&yen;</Text>
                     {
-                      (
-                        +totalAmout + +store.s_take_money
-                        + (orderType === 3 && reserveTime.length > 0 ?
-                          (
-                            +reserveTime[dayIndex].time[timeIndex].price
-                          ) : 0)
-                      ).toFixed(2)
+                      finalAmount
                     }
                   </Text>
                 </View>
@@ -873,21 +870,14 @@ class Order extends Component {
                 <View className='discount'>
                   已优惠￥
                   {
-                    couponList[curCouponIndex].uc_price || 0
+                    (couponList[curCouponIndex].uc_price || 0) >= noConponAmount ? noConponAmount :
+                      (couponList[curCouponIndex].uc_price || 0)
                   }
                 </View>
                 <View className='total'>
                   合计￥
                   <Text>
-                    {
-                      (
-                        totalAmout + +store.s_take_money
-                        + (orderType === 3 && reserveTime.length > 0 ?
-                          (
-                            +reserveTime[dayIndex].time[timeIndex].price
-                          ) : 0)
-                      ).toFixed(2)
-                    }
+                    {finalAmount}
                   </Text>
                 </View>
               </View>

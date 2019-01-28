@@ -18,17 +18,21 @@ class ChooseCoupon extends Component {
     // disableScroll: true
   }
 
+  state = {
+    openStatus: []
+  }
+
+  componentWillMount () {
+    let openStatus = this.props.couponOptions.map(item => !item.available)
+    this.setState({openStatus})
+  }
+
   openCondition = (index, e) => {
     e.stopPropagation()
+    let {openStatus} = this.state
 
-    const {couponOptions} = this.props
-    couponOptions.showDetail = !couponOptions.showDetail
-    this.props.dispatch({
-      type: 'order/setCouponOptions',
-      payload: {
-        couponOptions
-      }
-    })
+    openStatus[index] = !openStatus[index]
+    this.setState({openStatus})
   }
 
   changeCoupon = (index, available) => {
@@ -40,10 +44,13 @@ class ChooseCoupon extends Component {
         curCouponIndex: index
       }
     })
+
+    Taro.navigateBack()
   }
 
   render () {
     const {theme, curCouponIndex, couponOptions} = this.props
+    const {openStatus} = this.state
 
     return (
       <View className='choose-coupon coupon'>
@@ -89,7 +96,7 @@ class ChooseCoupon extends Component {
                     </View>
                   </View>
                   {
-                    coupon.showDetail &&
+                    openStatus[index] &&
                     <View className='condi'>
                       <View style={{color: !coupon.available ? '#F33C3C' : ''}}>
                         {
