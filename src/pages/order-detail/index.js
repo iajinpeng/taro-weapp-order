@@ -37,7 +37,7 @@ class OrderDetail extends Component {
 
   getOrderDetail = () => {
     const {b_logo} = this.props
-    this.props.dispatch({
+    return this.props.dispatch({
       type: 'order/getOrderDetail',
       payload: {
         id: this.$router.params.id
@@ -91,9 +91,9 @@ class OrderDetail extends Component {
 
         if (+data.take_id === 2) {
           mapAttrs.markers.push({
-            iconPath: require('../../images/icon-bike.png'),
+            iconPath: require('../../images/icon-dada.png'),
             width: 36,
-            height: 28,
+            height: 36,
             id: '_' + data.o_id,
             longitude: data.transporter_lng,
             latitude: data.transporter_lat,
@@ -115,7 +115,14 @@ class OrderDetail extends Component {
         data,
         ...mapAttrs
       })
+      return data
     })
+  }
+
+  handleRefresh = async () => {
+    Taro.showLoading()
+    await this.getOrderDetail()
+    Taro.hideLoading()
   }
 
   showOrHideWarn = bool => {
@@ -259,7 +266,7 @@ class OrderDetail extends Component {
 
                 {
                   data.o_order_status === 42 && data.take_id === 2 &&
-                  <CoverView className='map-refresh' onClick={this.getOrderDetail}>
+                  <CoverView className='map-refresh' onClick={this.handleRefresh}>
                     <CoverImage src={require('../../images/icon-refresh.png')} />
                   </CoverView>
                 }

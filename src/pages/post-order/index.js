@@ -899,6 +899,11 @@ class Order extends Component {
           }
         </View>
 
+        {
+          isIphoneX &&
+          <View className='iphonex-footer-fix' />
+        }
+
         <PickTime
           show={isShowPicker} reserveTime={reserveTime}
           theme={theme} onClose={this.closeTimePicker}

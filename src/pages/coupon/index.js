@@ -190,7 +190,7 @@ class Coupon extends Component {
                         <View>优惠券使用条件</View>
                         {
                           coupon.norm.map((item, i) => (
-                            <View key={i}>{i + 1}, {item}</View>
+                            <View key={i}>{i + 1}. {item}</View>
                           ))
                         }
                       </View>
