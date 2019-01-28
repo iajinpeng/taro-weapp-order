@@ -508,7 +508,9 @@ class ShopIndex extends Component {
           isShowCart && carts.length > 0 &&
           <Text className='mask' onClick={this.closeCart} onTouchMove={this.stopPropagation} />
         }
-        <View className={classnames('cart', isShowCart && carts.length > 0 ? 'active' : '')}>
+        <View
+          onTouchMove={this.stopPropagation}
+          className={classnames('cart', isShowCart && carts.length > 0 ? 'active' : '')}>
           <View className='cart-head'>
             <Image src={require('../../images/icon-trash.png')}/>
             <Text onClick={this.showOrHideCartWarn.bind(this, true)}>清空购物车</Text>

@@ -9,7 +9,7 @@ import './index.less'
 class Notice extends Component {
   config = {
     navigationBarTitleText: '顾客须知',
-    disableScroll: true
+    // disableScroll: true
   }
 
   state = {

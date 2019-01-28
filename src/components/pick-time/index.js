@@ -55,12 +55,12 @@ class PickTime extends Component {
           className='mask' style={{display: show ? 'block' : 'none'}}
           onClick={this.handleClose} onTouchMove={this.stopPro}
         />
-        <View className={classnames('pick-time', show ? 'active' : '')}>
+        <View className={classnames('pick-time', show ? 'active' : '')} onTouchMove={this.stopPro}>
           <View className='title'>选择预约时间
             <Text className='cacel' onClick={this.handleClose}>取消</Text>
           </View>
           <View className='picker'>
-            <ScrollView scrollY className='day-list' onTouchMove={this.stopPro}>
+            <ScrollView scrollY className='day-list'>
               {
                 reserveTime.map((day, index) => (
                   <View
