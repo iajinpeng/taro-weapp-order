@@ -45,9 +45,6 @@ class Choose extends Component {
   componentWillMount() {
     this.getStoreList()
 
-    setTimeout(() => {
-      this.setState({isRenderCity: true})
-    }, 300)
   }
 
   componentDidShow() {
@@ -55,9 +52,17 @@ class Choose extends Component {
   }
 
   toggleShowCitys = () => {
-    this.setState({
-      isShowCitys: !this.state.isShowCitys
-    })
+    if (!this.state.isShowCitys) {
+      Taro.showLoading()
+      this.setState({
+        isShowCitys: true
+      }, Taro.hideLoading)
+    } else {
+      this.setState({
+        isShowCitys: false
+      })
+    }
+
   }
 
   getStoreList = () => {
@@ -242,7 +247,7 @@ class Choose extends Component {
 
     const {
       keyword, city,
-      isShowCitys, isSearching, markers, isRenderCity,
+      isShowCitys, isSearching, markers,
       store, selectedStoreIndex, isShowDistanceWarn, warnDistance,
       isShowNullWarn, isShowMap, scrollStoreId, storeFilter
     } = this.state
@@ -287,8 +292,8 @@ class Choose extends Component {
           }
         </View>
         {
-          isRenderCity &&
-          <View className='select-city' style={{display: isShowCitys ? 'block' : 'none'}}>
+          isShowCitys &&
+          <View className='select-city'>
             <AtIndexes list={Citys} topKey='' onClick={this.chooseCity} animation>
               <View className='city-block' id='local' onClick={this.chooseCity.bind(this, {name: locationCity})}>
                 <View className='title'>当前定位城市</View>
