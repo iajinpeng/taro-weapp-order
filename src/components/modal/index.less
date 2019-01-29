@@ -9,22 +9,29 @@
   left: 0;
   top: 0;
   opacity: 0;
-  transition: opacity 200ms ease-in;
+  .transition(opacity);
   visibility: hidden;
   z-index: 101;
   &.modal-fade{
     opacity: 1;
     visibility: visible;
+    .modal{
+      transform: scale(1);
+    }
   }
-  .modal{
+  .modal-wrap-inner{
     width: 630px;
-    background: #fff;
     position: absolute;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
+  }
+  .modal{
+    background: #fff;
     border-radius: 20px;
     padding: 28px 0 0;
+    transform: scale(.5);
+    transition: transform linear 300ms;
     .title{
       font-size: 36px;
       margin: 0 32px;

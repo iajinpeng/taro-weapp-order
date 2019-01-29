@@ -170,10 +170,9 @@ class ShopIndex extends Component {
 
     this.setState({
       isShowCart: false,
-      isShowOptions: true,
       curGood: good,
-
     })
+    Taro.showNavigationBarLoading()
     this.props.dispatch({
       type: 'shop/getGoodsNorm',
       payload: {
@@ -193,11 +192,12 @@ class ShopIndex extends Component {
       const curCart = JSON.parse(JSON.stringify(cartsAlike || {}))
 
       this.setState({
+        isShowOptions: true,
         stanInfo: res,
         curCart,
         propertyTagIndex,
         optionalTagIndex,
-      })
+      }, Taro.hideNavigationBarLoading)
 
     })
   }

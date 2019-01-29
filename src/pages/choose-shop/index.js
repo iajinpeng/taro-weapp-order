@@ -191,7 +191,7 @@ class Choose extends Component {
   selectShop = (item, index) => {
     this.setState({
       selectedStoreIndex: index,
-      scrollStoreId: 'id' + item.s_id,
+      // scrollStoreId: 'id' + item.s_id,
       longitude: item.s_address_lng,
       latitude: item.s_address_lat,
       isSearching: false

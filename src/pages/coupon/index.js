@@ -40,6 +40,7 @@ class Coupon extends Component {
 
     this.requestCouponList(i).then(({total, rows}) => {
       this.setState({
+        openIndex: null,
         type: i,
         lists: rows,
         total

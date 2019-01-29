@@ -524,7 +524,7 @@ class OrderDetail extends Component {
         </ConfirmModal>
 
         {
-          this.$router.params.from === '1' &&
+          // this.$router.params.from === '1' &&
           <BackToHome />
         }
 
