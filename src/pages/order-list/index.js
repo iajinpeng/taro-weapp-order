@@ -1,5 +1,5 @@
 import Taro, {Component} from '@tarojs/taro'
-import {View, Text, Button, Image, ScrollView} from '@tarojs/components'
+import {View, Text, Button, Image, ScrollView, Block} from '@tarojs/components'
 import {connect} from '@tarojs/redux'
 import classnames from 'classnames'
 
@@ -268,10 +268,38 @@ class OrderList extends Component {
                       }
 
                       {
+                        +order.o_take_type !== 3 &&
                         (order.o_order_status.toString()[0] === '3' || order.o_order_status.toString()[0] === '4') &&
                         <View className='good-info'>
                           <View>取餐号: <Text className={classnames('theme-c-' + theme)}>{order.o_take_no}</Text></View>
                           <View>{order.status_remark}</View>
+                        </View>
+                      }
+
+                      {
+                        +order.o_take_type === 3 &&
+                        +order.take_status !== 9 && +order.take_status !== 10 &&
+                        (order.o_order_status.toString()[0] === '3' || order.o_order_status.toString()[0] === '4') &&
+                        <View className='good-info'>
+                          <View className={classnames('out', 'theme-c-' + theme)}>{order.status_remark}</View>
+                        </View>
+                      }
+
+                      {
+                        +order.o_take_type === 3 &&
+                        +order.take_status === 9 &&
+                        order.o_order_status.toString()[0] === '4' &&
+                        <View className='good-info'>
+                          <View className={classnames('out', 'red')}>物品配送异常，正在返回商家中</View>
+                        </View>
+                      }
+
+                      {
+                        +order.o_take_type === 3 &&
+                        +order.take_status === 10 &&
+                        order.o_order_status.toString()[0] === '4' &&
+                        <View className='good-info'>
+                          <View className={classnames('out', 'red')}>配送异常物品已返回商家</View>
                         </View>
                       }
 

@@ -544,22 +544,26 @@ class Order extends Component {
 
     if (orderType === 3) {
       totalAmout += +store.s_take_money
+
+      if (reserveTime.length) {
+        totalAmout += +reserveTime[dayIndex].time[timeIndex].price
+      }
     }
     if (couponList[curCouponIndex] && couponList[curCouponIndex].uc_price) {
       totalAmout -= +couponList[curCouponIndex].uc_price
 
       totalAmout < 0 && (totalAmout = 0)
     }
-    const availableCoupons = couponList.filter(item => item.available)
 
-    const noConponAmount = +amount + +store.s_take_money
-
-    const finalAmount =  (totalAmout + +store.s_take_money
+    const noConponAmount = (+amount + +store.s_take_money
       + (orderType === 3 && reserveTime.length > 0 ?
         (
           +reserveTime[dayIndex].time[timeIndex].price
         ) : 0)).toFixed(2)
 
+    const finalAmount =  (totalAmout + +store.s_take_money).toFixed(2)
+
+    const availableCoupons = couponList.filter(item => item.available)
     return (
       theme &&
       <View className='post-order'>

@@ -6,6 +6,7 @@ import classnames from 'classnames'
 import './index.less'
 import {orderTypes, outOrderTypes, baseUrl} from '../../config'
 import ConfirmModal from '../../components/confirm-modal'
+import BackToHome from '../../components/back-to-home'
 
 @connect(({common}) => ({
   ...common
@@ -521,6 +522,11 @@ class OrderDetail extends Component {
         >
           商品规格属性已变更，是否重新选择？
         </ConfirmModal>
+
+        {
+          this.$router.params.from === '1' &&
+          <BackToHome />
+        }
 
       </Block>
     )

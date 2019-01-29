@@ -4,6 +4,7 @@ import {connect} from '@tarojs/redux'
 import {AtIcon} from 'taro-ui'
 import classnames from 'classnames'
 import Copyright from '../../components/copyright'
+import BackToHome from '../../components/back-to-home'
 import {getTouchData} from '../../utils/utils'
 import './index.less'
 
@@ -205,6 +206,10 @@ class Coupon extends Component {
 
 
         </ScrollView>
+        {
+          this.$router.params.from === '1' &&
+          <BackToHome />
+        }
       </View>
     )
   }

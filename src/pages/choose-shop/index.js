@@ -30,7 +30,6 @@ class Choose extends Component {
     isShowDistanceWarn: false,
     isShowNullWarn: false,
     isShowMap: true,
-    isRenderCity: false,
     keyword: '',
     markers: [],
     store: null,
