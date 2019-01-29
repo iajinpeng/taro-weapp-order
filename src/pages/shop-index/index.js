@@ -116,10 +116,11 @@ class ShopIndex extends Component {
     const asideScrollTop = this.asideScrollTop || 0
     const itemNums = Math.ceil(wrapHeight / itemHeight)
     let curGroupId
+    console.log(asideScrollTop)
 
     if (index === 0) {
       curGroupId = 'asid-' + group[0].group_id
-    } else if (index * itemHeight <= asideScrollTop) {
+    } else if ((index - 1) * itemHeight <= asideScrollTop) {
       curGroupId = 'asid-' + group[index - 1].group_id
     } else if ((index + 2) * itemHeight > (asideScrollTop + wrapHeight) && index > itemNums - 3) {
       curGroupId = 'asid-' + group[index - itemNums + 3].group_id
@@ -706,23 +707,6 @@ class ShopIndex extends Component {
           <View className='option-modal-content'>
             <ScrollView scrollY>
               {
-                stanInfo.property.map((item, index) => (
-                  <View className='block' key={index}>
-                    <View className='name'>{item.name}</View>
-                    <View className='options'>
-                      {
-                        item.list_name.map((option, i) => (
-                          <View
-                            onClick={this.selectTag.bind(this, 'propertyTagIndex', index, i)} key={i}
-                            className={propertyTagIndex[index] === i ? 'active theme-grad-bg-' + theme : ''}
-                          >{option}</View>
-                        ))
-                      }
-                    </View>
-                  </View>
-                ))
-              }
-              {
                 stanInfo.norm.optional.map((item, index) => (
                   <View className='block' key={index}>
                     <View className='name'>{item.title}</View>
@@ -733,6 +717,23 @@ class ShopIndex extends Component {
                             onClick={this.selectTag.bind(this, 'optionalTagIndex', index, i)} key={i}
                             className={optionalTagIndex[index] === i ? 'active theme-grad-bg-' + theme : ''}
                           >{option.gn_name}</View>
+                        ))
+                      }
+                    </View>
+                  </View>
+                ))
+              }
+              {
+                stanInfo.property.map((item, index) => (
+                  <View className='block' key={index}>
+                    <View className='name'>{item.name}</View>
+                    <View className='options'>
+                      {
+                        item.list_name.map((option, i) => (
+                          <View
+                            onClick={this.selectTag.bind(this, 'propertyTagIndex', index, i)} key={i}
+                            className={propertyTagIndex[index] === i ? 'active theme-grad-bg-' + theme : ''}
+                          >{option}</View>
                         ))
                       }
                     </View>

@@ -37,24 +37,23 @@ class Coupon extends Component {
   changeTab = i => {
     if(this.state.type === i) return
 
-    this.setState({type: i}, () => {
-      this.requestCouponList().then(({total, rows}) => {
-        this.setState({
-          lists: rows,
-          total
-        })
+    this.requestCouponList(i).then(({total, rows}) => {
+      this.setState({
+        type: i,
+        lists: rows,
+        total
       })
     })
 
   }
 
-  requestCouponList = () => {
+  requestCouponList = (targetType) => {
     const {type, page, page_size} = this.state
 
     return this.props.dispatch({
       type: 'common/requestCouponList',
       payload: {
-        type: type,
+        type: targetType || type,
         page,
         page_size
       }

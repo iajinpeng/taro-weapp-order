@@ -247,8 +247,14 @@ class Order extends Component {
         encryptedData, iv
       }
     }).then(res => {
-      (typeof res === 'number' || typeof res === 'string') &&
-      this.setState({userPhoneNum: res})
+      if (typeof res === 'number' || typeof res === 'string') {
+        this.setState({userPhoneNum: res})
+      } else {
+        Taro.showToast({
+          title: '获取手机号失败，请重试或手动填写！',
+          icon: 'none'
+        })
+      }
     })
   }
 
@@ -820,7 +826,7 @@ class Order extends Component {
                     {
                       (couponList.length === 0 || availableCoupons.length === 0) ? '暂无可用'
                         : curCouponIndex === -1 ? '请选择' :
-                        couponList[curCouponIndex].uc_name
+                        `-￥${couponList[curCouponIndex].uc_price}`
                     }
                     <AtIcon value='chevron-right' size='16'/>
                   </View>

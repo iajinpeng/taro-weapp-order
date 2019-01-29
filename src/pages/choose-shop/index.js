@@ -79,6 +79,10 @@ class Choose extends Component {
         keyword
       }
     }).then(res => {
+      if (!res || !res.store) {
+        setTimeout(this.getStoreList, 100)
+        return
+      }
       this.setState({
         store: res.store,
         isShowNullWarn: res.store.length === 0
