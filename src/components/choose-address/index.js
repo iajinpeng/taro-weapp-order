@@ -108,27 +108,29 @@ class ChooseAddress extends Component {
               </View>
             }
 
-            {
-              useAddress.map((item, index) => (
-                <View className='address-item' key={index} onClick={this.choose.bind(this, index)}>
-                  {
-                    defaultIndex === index ?
-                    <Image src={`${baseUrl}/static/addons/diancan/img/style/style_${theme}_2.png`} />
-                      :
-                    <View className='alias' />
-                  }
-                  <View className='info'>
-                    <View className='addr'>{item.address + ' ' + item.address_detail}</View>
-                    <View className='user'>
-                      {item.user_name + ' ' + item.user_telephone}
+            <View className='list'>
+              {
+                useAddress.map((item, index) => (
+                  <View className='address-item' key={index} onClick={this.choose.bind(this, index)}>
+                    {
+                      defaultIndex === index ?
+                        <Image src={`${baseUrl}/static/addons/diancan/img/style/style_${theme}_2.png`} />
+                        :
+                        <View className='alias' />
+                    }
+                    <View className='info'>
+                      <View className='addr'>{item.address + ' ' + item.address_detail}</View>
+                      <View className='user'>
+                        {item.user_name + ' ' + item.user_telephone}
+                      </View>
+                    </View>
+                    <View className='edit' onClick={this.edit.bind(this, item)}>
+                      <Image src={require('../../images/icon-edit.png')} />
                     </View>
                   </View>
-                  <View className='edit' onClick={this.edit.bind(this, item)}>
-                    <Image src={require('../../images/icon-edit.png')} />
-                  </View>
-                </View>
-              ))
-            }
+                ))
+              }
+            </View>
 
           </ScrollView>
           {

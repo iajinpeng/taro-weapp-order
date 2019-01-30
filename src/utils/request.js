@@ -64,7 +64,7 @@ export default async (options = { method: 'GET', data: {} }) => {
             type: 'common/requestLogin'
           })
 
-          let response = await request(r)
+          let response = await request({sid: r.sessionId, idkey: r.idKey})
           return loopFetch(response)
         }
       } else {

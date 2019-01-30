@@ -107,15 +107,19 @@ class OrderDetail extends Component {
             }
           })
         }
-        setTimeout(() => {
-          this.getOrderDetail()
-        }, 10000)
       }
 
       this.setState({
         data,
         ...mapAttrs
       })
+
+      if (data.o_order_status !== 1 && data.o_order_status !== 5 &&
+        data.o_order_status !== 6 && data.o_order_status !== 7) {
+        setTimeout(() => {
+          this.getOrderDetail()
+        }, 10000)
+      }
       return data
     })
   }
