@@ -4,7 +4,7 @@ import request from '../utils/request'
  * 登陆
  * */
 export const requestLogin = data => request({
-  url: '/WeappLogin',
+  url: '/WeappLoginV2',
   method: 'POST',
   data,
   no_const: true

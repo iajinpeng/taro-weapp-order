@@ -8,6 +8,7 @@ import PayBox from '../../components/pay-box'
 import ConfirmModal from '../../components/confirm-modal'
 import Loading from '../../components/Loading'
 import Numbox from '../../components/num-box'
+import Curtain from '../../components/curtain'
 import './index.less'
 import {baseUrl} from '../../config'
 
@@ -633,7 +634,7 @@ class ShopIndex extends Component {
 
         </View>
 
-        <AtCurtain isOpened={isShowDetail} onCLose={this.closeDetail}>
+        <Curtain show={isShowDetail} onCLose={this.closeDetail}>
           {
             curCart &&
             <View className='good-detail'>
@@ -696,7 +697,7 @@ class ShopIndex extends Component {
               </View>
             </View>
           }
-        </AtCurtain>
+        </Curtain>
 
         <Modal
           show={isShowOptions} title={curGood.g_title}

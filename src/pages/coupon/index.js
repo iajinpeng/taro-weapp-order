@@ -163,7 +163,7 @@ class Coupon extends Component {
                   <View className='item' key={index}>
                     <View className='entity'>
                       <View className={classnames('deno', type === 1 ? 'theme-grad-bg-' + theme : '')}>
-                        <View className='price'>
+                        <View className={classnames('price', type === 2 ? 'disabled' : '')}>
                           <Text>&yen;</Text>
                           {coupon.uc_price}
                         </View>

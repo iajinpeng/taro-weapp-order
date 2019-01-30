@@ -5,23 +5,28 @@ export default async (options = { method: 'GET', data: {} }) => {
   let {domain, accOpenid} = store.getState().common.ext
 
   let sessionId = Taro.getStorageSync('sessionId')
+  let idKey = Taro.getStorageSync('idKey')
   let constance_data = options.no_const ? {} : {
     channel: 'wxapp',
     accOpenid
   }
 
-  let request = (sid) => Taro.request({
-    url: domain + options.url,
-    data: {
-      sessionId: sid || sessionId,
-      ...constance_data,
-      ...options.data,
-    },
-    header: {
-      'Content-Type': 'application/json',
-    },
-    method: options.method.toUpperCase(),
-  })
+  let request = (data = {}) => {
+    const {sid, idkey} = data
+    return Taro.request({
+      url: domain + options.url,
+      data: {
+        sessionId: sid || sessionId,
+        idKey: idkey || idKey,
+        ...constance_data,
+        ...options.data,
+      },
+      header: {
+        'Content-Type': 'application/json',
+      },
+      method: options.method.toUpperCase(),
+    })
+  }
 
   let resp = await request();
 
@@ -42,8 +47,8 @@ export default async (options = { method: 'GET', data: {} }) => {
           // 并发请求正在登陆
           let response = await (() => {
             return new Promise((resolve) => {
-              Taro.eventCenter.on('loginedRequest', (sid) => {
-                request(sid).then(re => {
+              Taro.eventCenter.on('loginedRequest', ({sid, idkey}) => {
+                request({sid, idkey}).then(re => {
                   resolve(re)
                 })
               })
@@ -59,7 +64,7 @@ export default async (options = { method: 'GET', data: {} }) => {
             type: 'common/requestLogin'
           })
 
-          let response = await request(r.sessionId)
+          let response = await request(r)
           return loopFetch(response)
         }
       } else {

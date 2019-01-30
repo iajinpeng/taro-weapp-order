@@ -1,0 +1,48 @@
+@import "../../minxin";
+
+.curtain {
+  //width: 100vw;
+  //height: 100vh;
+  position: fixed;
+  background: rgba(0, 0, 0, .3);
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  opacity: 0;
+  .transition(opacity);
+  visibility: hidden;
+  z-index: 101;
+  &.active {
+    opacity: 1;
+    visibility: visible;
+    .content{
+      transform: scale(1);
+    }
+  }
+
+  .content {
+    display: flex;
+    position: relative;
+    width: 80%;
+    height: 100%;
+    margin: 0 auto;
+    //padding: 100PX 0;
+    box-sizing: border-box;
+    align-items: center;
+    transform: scale(.5);
+    transition: transform linear 100ms;
+    .curtain-body{
+      position: relative;
+      width: 100%;
+      .icon{
+        text-align: center;
+        position: absolute;
+        bottom: -100px;
+        left: 0;
+        width: 100%;
+        color: #fff;
+      }
+    }
+  }
+}
