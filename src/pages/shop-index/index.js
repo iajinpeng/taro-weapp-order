@@ -116,7 +116,6 @@ class ShopIndex extends Component {
     const asideScrollTop = this.asideScrollTop || 0
     const itemNums = Math.ceil(wrapHeight / itemHeight)
     let curGroupId
-    console.log(asideScrollTop)
 
     if (index === 0) {
       curGroupId = 'asid-' + group[0].group_id
