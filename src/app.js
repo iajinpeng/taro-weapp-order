@@ -43,6 +43,7 @@ class App extends Component {
 
 
   componentDidMount () {
+    Taro.removeStorageSync('stopLogin')
     this.init()
   }
 

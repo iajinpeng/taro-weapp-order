@@ -33,7 +33,10 @@ class OrderDetail extends Component {
 
     this.getOrderDetail()
 
+  }
 
+  componentWillUnmount () {
+    clearTimeout(this.timeOut)
   }
 
   getOrderDetail = () => {
@@ -116,7 +119,7 @@ class OrderDetail extends Component {
 
       if (data.o_order_status !== 1 && data.o_order_status !== 5 &&
         data.o_order_status !== 6 && data.o_order_status !== 7) {
-        setTimeout(() => {
+        this.timeOut = setTimeout(() => {
           this.getOrderDetail()
         }, 10000)
       }
