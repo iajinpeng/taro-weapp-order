@@ -824,7 +824,12 @@ class Order extends Component {
                 <View className='ticket' onClick={this.toChooseCouponPage}>
                   <View>
                     <Image src={`${baseUrl}/static/addons/diancan/img/style/style_${theme}_5.png`}/>
-                    <Text>优惠券</Text>
+                    <Text>
+                      {
+                        (couponList.length === 0 || availableCoupons.length === 0 || curCouponIndex === -1) ?
+                          '优惠券' : couponList[curCouponIndex].uc_name
+                      }
+                    </Text>
                   </View>
                   <View className={classnames('handle')}>
                     {

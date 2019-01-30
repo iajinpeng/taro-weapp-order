@@ -14,7 +14,7 @@ import {baseUrl} from '../../config'
 class StandardDetail extends Component {
 
   config = {
-    navigationBarTitleText: '满单即送',
+    navigationBarTitleText: '套餐详情',
     disableScroll: true
   }
 
@@ -92,7 +92,7 @@ class StandardDetail extends Component {
       })
       total.push(curarr.join('|'))
       return total
-    }, []).join(',')
+    }, []).join(',') || ' '
 
     const good = {
       g_id: +id,

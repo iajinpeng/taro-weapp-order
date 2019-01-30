@@ -7,6 +7,7 @@ import classnames from 'classnames'
 import { baseUrl, themeBtnShadowColors } from '../../config'
 import Modal from '../../components/modal'
 import CouponModal from '../../components/coupon-modal'
+import Loading from '../../components/Loading'
 
 
 import './index.less'
@@ -43,7 +44,6 @@ class Index extends Component {
     Taro.showShareMenu({
       withShareTicket: true
     })
-    this.getIndexInfo()
   }
 
   componentWillUnmount () { }
@@ -54,6 +54,7 @@ class Index extends Component {
     } else {
       this.setState({isFirstShow: false})
     }
+    this.getIndexInfo()
   }
 
   componentDidHide () { }
@@ -205,6 +206,7 @@ class Index extends Component {
     const totStarsArr = new Array(full_num);
 
     return (
+      home_banner && home_banner.banner ?
       <View className='index-page' style={{display: home_banner.banner ? 'block' : 'none'}}>
         <View className={classnames('icon-help-wrap', 'theme-c-' + theme)} onClick={this.toNoticePage}>
           <Text className='greed'>{this.calcHourZone()}!</Text>
@@ -317,6 +319,8 @@ class Index extends Component {
         />
 
       </View>
+        :
+        <Loading />
     )
   }
 }

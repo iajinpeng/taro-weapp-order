@@ -42,8 +42,11 @@ class Choose extends Component {
   }
 
   componentWillMount() {
+    if (!this.props.localInfo.longitude) {
+      Taro.eventCenter.on('hadLocalInfo', this.getStoreList)
+      return
+    }
     this.getStoreList()
-
   }
 
   componentDidShow() {
@@ -78,10 +81,6 @@ class Choose extends Component {
         keyword
       }
     }).then(res => {
-      if (!res || !res.store) {
-        setTimeout(this.getStoreList, 100)
-        return
-      }
       this.setState({
         store: res.store,
         isShowNullWarn: res.store.length === 0

@@ -74,6 +74,8 @@ class App extends Component {
 
     store.dispatch({
       type: 'common/getSetLocalInfo'
+    }).then(() => {
+      Taro.eventCenter.emit('hadLocalInfo')
     })
 
     if(!Taro.getStorageSync('sessionId')){
