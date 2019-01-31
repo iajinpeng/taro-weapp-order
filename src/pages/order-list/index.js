@@ -9,6 +9,8 @@ import './index.less'
 
 import {orderTypes, baseUrl, outOrderTypes} from '../../config'
 
+import orderNull from '../../images/icon-order-null.png'
+
 @connect(({common}) => ({...common}))
 class OrderList extends Component {
   config = {
@@ -20,7 +22,8 @@ class OrderList extends Component {
     type: 1,
     page: 1,
     page_size: 5,
-    lists: [],
+    lists1: [],
+    lists2: [],
     total: 0,
     firstId: '',
     isShowCancelWarn: false,
@@ -33,19 +36,25 @@ class OrderList extends Component {
 
   componentDidShow() {
     this.requestOrderList().then(({total, rows}) => {
-      this.setState({total, lists: rows, firstId: rows && rows.length > 0 && rows[0].o_id})
+      this.setState({total, lists1: rows, firstId: rows && rows.length > 0 && rows[0].o_id})
     })
   }
 
   changeTab = i => {
     if (this.state.type === i) return
 
+    Taro.showNavigationBarLoading()
     this.setState({
+      page: 1,
       type: i,
-      page: 1
     }, () => {
       this.requestOrderList().then(({total, rows}) => {
-        this.setState({total, lists: rows, firstId: rows && rows.length > 0 && rows[0].o_id})
+        Taro.hideNavigationBarLoading()
+        this.setState({
+          total,
+          ['lists' + i]: rows,
+          firstId: rows && rows.length > 0 && rows[0].o_id,
+        })
       })
     })
 
@@ -177,7 +186,9 @@ class OrderList extends Component {
 
   render() {
     const {theme} = this.props
-    const {type, lists, firstId, isShowCancelWarn, isShowOrderAgainWarn} = this.state
+    const {type, firstId, isShowCancelWarn, isShowOrderAgainWarn} = this.state
+
+    const typeArr = [1, 2]
 
     return (
       <View className='order-list' onTouchStart={this.handleTouchStart} onTouchEnd={this.handleTouchEnd}>
@@ -190,167 +201,176 @@ class OrderList extends Component {
             onClick={this.changeTab.bind(this, 2)}>历史订单</View>
         </View>
 
-        <ScrollView
-          scrollY className='content'
-          scrollIntoView={'id' + firstId}
-          onScrollToLower={this.requestMore}
-        >
-          {
-            lists.length === 0 &&
-            <View className='null'>
-              <View className='image-wrap'>
-                <Image src={require('../../images/icon-order-null.png')}/>
-                <View/>
-                <View/>
-                <View className='short'/>
-              </View>
-              <View>
-                <Text>还没有任何订单~ \n 赶快快去下一单吧~~</Text>
-              </View>
-            </View>
-          }
-          <View className='list'>
-            {
-              lists.map((order, index) => (
-                <View
-                  className='order-item' key={index} id={'id' + order.o_id}
-                  onClick={this.toOrderDetail.bind(this, order.o_id, order.store_id)}
-                >
-                  <View className='wrap'>
-                    <View className='order-title'>
-                      <View className={classnames('status', 'theme-c-' + theme)}>
-                        {/*<Text className={classnames('icon', 'theme-grad-bg-' + theme, (order.o_order_status === 6 || order.o_order_status === 7) ? 'rotate' : '')}>
+        {
+          typeArr.map(i => {
+            const lists = this.state['lists' + i]
+
+            return (
+              <ScrollView
+                key={i}
+                scrollY className={classnames('content', 'content-' + i, i === type ? 'active' : '')}
+                onScrollToLower={this.requestMore}
+              >
+                {
+                  lists && lists.length === 0 &&
+                  <View className='null'>
+                    <View className='image-wrap'>
+                      <Image src={orderNull}/>
+                      <View/>
+                      <View/>
+                      <View className='short'/>
+                    </View>
+                    <View>
+                      <Text>还没有任何订单~ \n 赶快快去下一单吧~~</Text>
+                    </View>
+                  </View>
+                }
+                <View className='list'>
+                  {
+                    lists.map((order, index) => (
+                      <View
+                        className='order-item' key={index} id={'id' + order.o_id}
+                        onClick={this.toOrderDetail.bind(this, order.o_id, order.store_id)}
+                      >
+                        <View className='wrap'>
+                          <View className='order-title'>
+                            <View className={classnames('status', 'theme-c-' + theme)}>
+                              {/*<Text className={classnames('icon', 'theme-grad-bg-' + theme, (order.o_order_status === 6 || order.o_order_status === 7) ? 'rotate' : '')}>
                       {
                         (order.o_order_status === 6 || order.o_order_status === 7) ? '+' : '-'
                       }
                     </Text>*/}
-                        <Image
-                          src={`${baseUrl}/static/addons/diancan/img/style/style_${theme}_${(order.o_order_status === 6 || order.o_order_status === 7) ? 7 : 6}.png`}/>
-                        {
-                          order.o_take_type !== 3 ?
-                          <Text>{orderTypes[order.o_order_status.toString()[0]]}</Text>
-                            :
-                            <Text>{outOrderTypes[order.o_order_status]}</Text>
-                        }
-                      </View>
-                      <Text className='c-time'>{order.o_reserve_time}</Text>
-                    </View>
-                    <View className='order-type'>
-                      <Text className='name'>已购商品</Text>
-                      <Text className='tag'>{order.o_take_type === 3 ? '外卖单' : '堂食单'}</Text>
-                    </View>
-                    {
-                      order.goods.map((good, i) => (
-                        <View className='good' key={i}>
-                          <View className='good-info'>
-                            <View>{good.od_title}</View>
-                            {
-                              good.od_num &&
-                              <View>{good.od_norm_str}</View>
-                            }
-                          </View>
-                          <Text>x{good.od_num}</Text>
-                        </View>
-                      ))
-                    }
-                    <View className='good remark'>
-                      {
-                        order.o_order_status === 1 &&
-                        <View className='good-info'>
-                          <View>立即支付</View>
-                          <View>{order.status_remark}</View>
-                        </View>
-                      }
-
-                      {
-                        order.o_order_status === 2 &&
-                        <View className='good-info'>
-                          <View
-                            className={classnames('cancel', 'theme-c-' + theme)}
-                            onClick={this.showOrHideWarn.bind(this, true, order)}
-                          >取消订单</View>
-                        </View>
-                      }
-
-                      {
-                        (order.o_order_status.toString()[0] === '3') &&
-                        <View className='good-info'>
-                          <View>取餐号: <Text className={classnames('theme-c-' + theme)}>{order.o_take_no}</Text></View>
-                          <View>{order.status_remark}</View>
-                        </View>
-                      }
-
-                      {
-                        +order.o_take_type === 3 &&
-                        +order.take_status !== 9 && +order.take_status !== 10 &&
-                        (order.o_order_status.toString()[0] === '4') &&
-                        !!order.status_remark &&
-                        <View className='good-info'>
-                          <View className={classnames('out', 'theme-c-' + theme)}>{order.status_remark}</View>
-                        </View>
-                      }
-
-                      {
-                        +order.take_status === 9 &&
-                        order.o_order_status.toString()[0] === '4' &&
-                        <View className='good-info'>
-                          <View className={classnames('out', 'red')}>物品配送异常，正在返回商家中</View>
-                        </View>
-                      }
-
-                      {
-                        +order.take_status === 10 &&
-                        order.o_order_status.toString()[0] === '4' &&
-                        <View className='good-info'>
-                          <View className={classnames('out', 'red')}>配送异常物品已返回商家</View>
-                        </View>
-                      }
-
-                      {
-                        order.o_order_status.toString()[0] === '4' &&
-                        <View className='good-info'>
-                          <View className={classnames('theme-c-' + theme)}>
-                            <Text>等待骑手前来取餐，请耐心等待</Text>
-                          </View>
-                        </View>
-                      }
-
-                      {
-                        order.o_order_status === 5 &&
-                        <View className='good-info'>
-                          <Button
-                            className={'theme-grad-bg-' + theme}
-                            onClick={this.requestOrderRepeat.bind(this, order.o_id, order.store_id)}
-                          >再来一单</Button>
-                        </View>
-                      }
-
-                      {
-                        (order.o_order_status === 6 || order.o_order_status === 7) &&
-                        <View className='good-info'>
-                          <View className={classnames('theme-c-' + theme)}>
-                            <Text>
-                              {order.o_refund_remark}
+                              <Image
+                                src={`${baseUrl}/static/addons/diancan/img/style/style_${theme}_${(order.o_order_status === 6 || order.o_order_status === 7) ? 7 : 6}.png`}/>
                               {
-                                order.o_order_status === 6 ? '\n ' + '退款成功：预计1-7工作日到账' : ''
+                                order.o_take_type !== 3 ?
+                                  <Text>{orderTypes[order.o_order_status.toString()[0]]}</Text>
+                                  :
+                                  <Text>{outOrderTypes[order.o_order_status]}</Text>
                               }
-                            </Text>
+                            </View>
+                            <Text className='c-time'>{order.o_reserve_time}</Text>
                           </View>
+                          <View className='order-type'>
+                            <Text className='name'>已购商品</Text>
+                            <Text className='tag'>{order.o_take_type === 3 ? '外卖单' : '堂食单'}</Text>
+                          </View>
+                          {
+                            order.goods.map((good, i) => (
+                              <View className='good' key={i}>
+                                <View className='good-info'>
+                                  <View>{good.od_title}</View>
+                                  {
+                                    good.od_num &&
+                                    <View>{good.od_norm_str}</View>
+                                  }
+                                </View>
+                                <Text>x{good.od_num}</Text>
+                              </View>
+                            ))
+                          }
+                          <View className='good remark'>
+                            {
+                              order.o_order_status === 1 &&
+                              <View className='good-info'>
+                                <View>立即支付</View>
+                                <View>{order.status_remark}</View>
+                              </View>
+                            }
+
+                            {
+                              order.o_order_status === 2 &&
+                              <View className='good-info'>
+                                <View
+                                  className={classnames('cancel', 'theme-c-' + theme)}
+                                  onClick={this.showOrHideWarn.bind(this, true, order)}
+                                >取消订单</View>
+                              </View>
+                            }
+
+                            {
+                              (order.o_order_status.toString()[0] === '3') &&
+                              <View className='good-info'>
+                                <View>取餐号: <Text
+                                  className={classnames('theme-c-' + theme)}>{order.o_take_no}</Text></View>
+                                <View>{order.status_remark}</View>
+                              </View>
+                            }
+
+                            {
+                              +order.o_take_type === 3 &&
+                              +order.take_status !== 9 && +order.take_status !== 10 &&
+                              (order.o_order_status.toString()[0] === '4') &&
+                              !!order.status_remark &&
+                              <View className='good-info'>
+                                <View className={classnames('out', 'theme-c-' + theme)}>{order.status_remark}</View>
+                              </View>
+                            }
+
+                            {
+                              +order.take_status === 9 &&
+                              order.o_order_status.toString()[0] === '4' &&
+                              <View className='good-info'>
+                                <View className={classnames('out', 'red')}>物品配送异常，正在返回商家中</View>
+                              </View>
+                            }
+
+                            {
+                              +order.take_status === 10 &&
+                              order.o_order_status.toString()[0] === '4' &&
+                              <View className='good-info'>
+                                <View className={classnames('out', 'red')}>配送异常物品已返回商家</View>
+                              </View>
+                            }
+
+                            {
+                              order.o_order_status.toString()[0] === '4' &&
+                              <View className='good-info'>
+                                <View className={classnames('theme-c-' + theme)}>
+                                  <Text>等待骑手前来取餐，请耐心等待</Text>
+                                </View>
+                              </View>
+                            }
+
+                            {
+                              order.o_order_status === 5 &&
+                              <View className='good-info'>
+                                <Button
+                                  className={'theme-grad-bg-' + theme}
+                                  onClick={this.requestOrderRepeat.bind(this, order.o_id, order.store_id)}
+                                >再来一单</Button>
+                              </View>
+                            }
+
+                            {
+                              (order.o_order_status === 6 || order.o_order_status === 7) &&
+                              <View className='good-info'>
+                                <View className={classnames('theme-c-' + theme)}>
+                                  <Text>
+                                    {order.o_refund_remark}
+                                    {
+                                      order.o_order_status === 6 ? '\n ' + '退款成功：预计1-7工作日到账' : ''
+                                    }
+                                  </Text>
+                                </View>
+                              </View>
+                            }
+
+                            <View className={classnames('order-price', 'theme-c-' + theme)}>
+                              <Text className='yen'>&yen;</Text>{order.o_pay_amount}
+                            </View>
+                          </View>
+
+                          <View className='tooth-border'/>
                         </View>
-                      }
-
-                      <View className={classnames('order-price', 'theme-c-' + theme)}>
-                        <Text className='yen'>&yen;</Text>{order.o_pay_amount}
                       </View>
-                    </View>
-
-                    <View className='tooth-border' />
-                  </View>
+                    ))
+                  }
                 </View>
-              ))
-            }
-          </View>
-        </ScrollView>
+              </ScrollView>
+            )
+          })
+        }
 
         <ConfirmModal
           show={isShowCancelWarn}

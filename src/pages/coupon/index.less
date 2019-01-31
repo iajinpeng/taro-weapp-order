@@ -34,6 +34,22 @@
 
   .content{
     height: ~"calc(100vh - 122px)";
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    .transition(transform);
+    &-1{
+      transform: translate(-100%);
+      &.active{
+        transform: translate(0);
+      }
+    }
+    &-2{
+      transform: translate(100%);
+      &.active{
+        transform: translate(0);
+      }
+    }
     .null{
       padding-top: 290px;
       color: @c-ccc;
@@ -112,7 +128,7 @@
           color: @c-999;
         }
       }
-      .handle{
+      .handle, button{
         writing-mode: tb-rl;
         font-size: 28px;
         letter-spacing: 15px;

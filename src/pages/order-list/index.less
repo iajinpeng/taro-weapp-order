@@ -37,6 +37,22 @@
     height: ~"calc(100vh - 138px)";
     padding-top: 20px;
     box-sizing: border-box;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    .transition(transform);
+    &-1{
+      transform: translate(-100%);
+      &.active{
+        transform: translate(0);
+      }
+    }
+    &-2{
+      transform: translate(100%);
+      &.active{
+        transform: translate(0);
+      }
+    }
     .null{
       padding-top: 240px;
       .image-wrap{
