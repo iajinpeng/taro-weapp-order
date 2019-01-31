@@ -19,7 +19,11 @@ class Curtain extends Component {
   render () {
     const {show} = this.props
     return (
-      <View className={classnames('curtain', show ? 'active' : '')} onClick={this.props.onClose}>
+      <View
+        className={classnames('curtain', show ? 'active' : '')}
+        onClick={this.props.onClose}
+        onTouchMove={this.stopPro}
+      >
         <View className='content'>
           <View className='curtain-body' onClick={this.stopPro}>
             {this.props.children}

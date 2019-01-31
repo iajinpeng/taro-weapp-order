@@ -276,7 +276,7 @@ class Index extends Component {
                   formType='submit'
                   onClick={this.toChoosePage.bind(this, 'present')}
                 >
-                  去下单
+                  去领取
                 </Button>
               </View>
               <View className='star-box'>

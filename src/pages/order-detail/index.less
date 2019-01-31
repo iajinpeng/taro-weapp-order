@@ -288,6 +288,21 @@
           color: @c-666;
           font-weight: bold;
         }
+        &.address-info{
+          align-items: flex-start;
+          margin-top: 20px;
+          &>view{
+            width: 55%;
+            text-align: right;
+          }
+          .user{
+            .lines-clamp(1);
+            margin-right: 10px;
+          }
+          .address{
+            .lines-clamp(1);
+          }
+        }
       }
     }
 

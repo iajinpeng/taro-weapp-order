@@ -8,12 +8,15 @@ import './index.less'
 class Copyright extends Component {
 
   render () {
-    const {bottom_logo} = this.props
+    const {bottom_logo, b_bottom_status, b_bottom_content} = this.props
 
     return (
       <View className='copyright'>
         <Image src={bottom_logo ? baseUrl + bottom_logo : ''} mode='widthFix' />
-        <View>小马飞腾提供技术支持</View>
+        {
+          b_bottom_status === 1 &&
+          <View>{b_bottom_content}</View>
+        }
       </View>
     )
   }

@@ -163,14 +163,14 @@ class Coupon extends Component {
                   <View className='item' key={index}>
                     <View className='entity'>
                       <View className={classnames('deno', type === 1 ? 'theme-grad-bg-' + theme : '')}>
-                        <View className={classnames('price', type === 2 ? 'disabled' : '')}>
+                        <View className='price'>
                           <Text>&yen;</Text>
                           {coupon.uc_price}
                         </View>
                         <View>{coupon.uc_min_amount}</View>
                       </View>
                       <View className='desc'>
-                        <View className='name'>{coupon.uc_name}</View>
+                        <View className={classnames('name', type === 2 ? 'disabled' : '')}>{coupon.uc_name}</View>
                         <View className='time'>{coupon.uc_start_time} 至 {coupon.uc_end_time}</View>
                         <View className='btn' onClick={this.openCondition.bind(this, index)}>使用条件
                           <AtIcon value={openIndex === index ? 'chevron-up': 'chevron-down'} size='13' />

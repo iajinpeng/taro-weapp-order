@@ -400,11 +400,7 @@ class Choose extends Component {
 
                   })
                 }
-                <View className='alias-space' />
-                {
-                  store.length > 0 &&
-                  <Copyright />
-                }
+                
               </View>
 
             </ScrollView>

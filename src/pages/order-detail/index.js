@@ -466,10 +466,37 @@ class OrderDetail extends Component {
                   <Text>下单时间</Text>
                   <Text>{data.o_create_time}</Text>
                 </View>
-                <View className='item'>
-                  <Text>联系方式</Text>
-                  <Text>{data.o_contact_mobile}</Text>
-                </View>
+                {
+                  data.o_take_type !== 3 &&
+                  <View className='item'>
+                    <Text>联系方式</Text>
+                    <Text>{data.o_contact_mobile}</Text>
+                  </View>
+                }
+                {
+                  data.o_take_type === 3 &&
+                  <View className='item address-info'>
+                    <Text>收货信息</Text>
+                    <View>
+                      <View style={{display: 'flex'}}>
+                        <Text className='user'>{data.o_contact_name}姐夫的 v 白癜风1</Text>
+                        {data.o_contact_mobile}
+                      </View>
+                      <View className='address'>{data.o_address}</View>
+                    </View>
+                  </View>
+                }
+                {
+                  data.o_take_type === 3 &&
+                  <View className='item'>
+                    <Text>配送方式</Text>
+                    <Text>
+                      {
+                        data.take_id === 1 ? '商家配送' : '第三方配送'
+                      }
+                    </Text>
+                  </View>
+                }
                 {
                   data.o_pay_type !== 0 &&
                   <View className='item'>
@@ -531,7 +558,7 @@ class OrderDetail extends Component {
         </ConfirmModal>
 
         {
-          // this.$router.params.from === '1' &&
+          this.$router.params.from === '1' &&
           <BackToHome />
         }
 

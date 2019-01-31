@@ -167,7 +167,14 @@ class Order extends Component {
         lng: localInfo.longitude,
         take_type
       }
-    }).then(({store, couponList, userAddress, amount, contact_mobile}) => {
+    }).then((res) => {
+      if (!res.store) {
+        Taro.showToast({
+          title: res.data.message,
+          icon: 'none'
+        })
+      }
+      const {store, couponList, userAddress, amount, contact_mobile} = res
       this.setState({
         store, couponList, userAddress, amount,
         userPhoneNum: contact_mobile,

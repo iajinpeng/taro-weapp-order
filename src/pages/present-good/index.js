@@ -1,12 +1,13 @@
 import Taro, {Component} from '@tarojs/taro'
 import {View, Text, Button, Image, ScrollView, Block} from '@tarojs/components'
-import {AtCurtain} from 'taro-ui'
 import {connect} from '@tarojs/redux'
 import classnames from 'classnames'
 import {baseUrl} from '../../config/index'
 import Modal from '../../components/modal'
 import PayBox from '../../components/pay-box'
 import Numbox from '../../components/num-box'
+import Curtain from '../../components/curtain'
+import Loading from '../../components/Loading'
 
 import '../shop-index/index.less'
 import './index.less'
@@ -23,6 +24,7 @@ class PresentGood extends Component {
     image: null,
     isShowOptions: false,
     isShowDetail: false,
+    isShowCart: false,
     curCart: {},
     curGood: {},
     stanInfo: {},
@@ -77,6 +79,10 @@ class PresentGood extends Component {
     })
   }
 
+  ToggleShowCart = () => {
+    this.setState({isShowCart: !this.state.isShowCart})
+  }
+
   closeDetail = () => {
     this.setState({isShowDetail: false})
   }
@@ -84,9 +90,15 @@ class PresentGood extends Component {
   openOptions = (good, e) => {
     e && e.stopPropagation()
 
+    if ((this.props.carts[(this.$router.params.id)] || []).some(item => item.fs_id)) {
+      Taro.showToast({
+        title: '只可以选择一份赠品哦～',
+        icon: 'none'
+      })
+      return
+    }
+
     this.setState({
-      isShowCart: false,
-      isShowOptions: true,
       curGood: good,
 
     })
@@ -108,6 +120,7 @@ class PresentGood extends Component {
       const curCart = JSON.parse(JSON.stringify(cartsAlike || {}))
 
       this.setState({
+        isShowOptions: true,
         stanInfo: res,
         curCart,
         propertyTagIndex,
@@ -120,7 +133,12 @@ class PresentGood extends Component {
   closeOptions = () => {
     this.setState({
       isShowOptions: false,
+      isShowCart: false
     })
+  }
+
+  closeCart = () => {
+    this.setState({isShowCart: false})
   }
 
   selectTag = (key, index, i) => {
@@ -157,8 +175,7 @@ class PresentGood extends Component {
     })
   }
 
-  setCart = (good, num, cartGood) => {
-    if (num === -1 && (!cartGood.num || cartGood.num <= 0)) return
+  setCart = (good, num) => {
 
     if (num === 1 && (this.props.carts[(this.$router.params.id)] || []).some(item => item.fs_id)) {
       Taro.showToast({
@@ -251,216 +268,348 @@ class PresentGood extends Component {
   render() {
     const {theme, menu_cart} = this.props
     const {goods, image, curGood, isShowOptions, isShowDetail, stanInfo, curCart,
-      propertyTagIndex, optionalTagIndex} = this.state
+      propertyTagIndex, optionalTagIndex, isShowCart} = this.state
     const carts = (this.props.carts[(this.$router.params.id)] || []).filter(item => item.fs_id)
 
     return (
-      <View className='present-good'>
-        <Image className='banner' src={image ? baseUrl + image : ''}/>
+      goods.length > 0 ?
+        <View className='present-good'>
+          <Image className='banner' src={image ? baseUrl + image : ''}/>
 
-        <View className='good-list'>
-          {
-            goods.map((good, i) => {
-              const cartGood = carts.find(item => item.g_id === good.g_id)
-              return (
-                <View className='good' key={i} onClick={this.showDetail.bind(this, good)}>
-                  <View className='img-wrap'>
-                    {
-                      good.tag_name &&
-                      <Text className={classnames('tag', 'theme-grad-bg-' + theme)}>{good.tag_name}</Text>
-                    }
-                    <Image src={good.g_image_100 ? baseUrl + good.g_image_100 : ''}/>
-                  </View>
-                  <View className='info'>
-                    <View className='name'>{good.g_title}</View>
-                    <View className='pre-price'>&yen;{good.g_original_price}</View>
-                    <View className='price'><Text>&yen;</Text>{good.g_price}</View>
-                    <View className='handle' onClick={this.stopPropagation}>
+          <View className='good-list'>
+            {
+              goods.map((good, i) => {
+                const cartGood = carts.find(item => item.g_id === good.g_id)
+                return (
+                  <View className='good' key={i} onClick={this.showDetail.bind(this, good)}>
+                    <View className='img-wrap'>
                       {
-                        good.g_combination === 1 &&
-                        <Block>
-                          {
-                            good.g_has_norm === 2 &&
-                            <Numbox
-                              num={cartGood.num}
-                              showNum={cartGood && cartGood.num !== 0}
-                              onReduce={this.setCart.bind(this, good, -1)}
-                              onAdd={this.setCart.bind(this, good, 1)}
-                            />
-                          }
-                          {
-                            good.g_has_norm === 1 &&
-                            <Button
-                              onClick={this.openOptions.bind(this, good)}
-                              className={'theme-bg-' + theme}
-                            >选规格</Button>
-                          }
-                        </Block>
+                        good.tag_name &&
+                        <Text className={classnames('tag', 'theme-grad-bg-' + theme)}>{good.tag_name}</Text>
                       }
-
-                      {
-                        good.g_combination === 2 &&
-                        <Button
-                          onClick={this.toStandardDetail.bind(this, good)}
-                          className={'theme-bg-' + theme}
-                        >选规格</Button>
-                      }
+                      <Image src={good.g_image_100 ? baseUrl + good.g_image_100 : ''}/>
                     </View>
+                    <View className='info'>
+                      <View className='name'>{good.g_title}</View>
+                      <View className='pre-price'>&yen;{good.g_original_price}</View>
+                      <View className='price'><Text>&yen;</Text>{good.g_price}</View>
+                      <View className='handle' onClick={this.stopPropagation}>
+                        {
+                          good.g_combination === 1 &&
+                          <Block>
+                            {
+                              good.g_has_norm === 1 && !cartGood ?
+                                <Button
+                                  onClick={this.openOptions.bind(this, good)}
+                                  className={'theme-bg-' + theme}
+                                >选规格</Button>
+                                :
+                                <Numbox
+                                  num={cartGood.num}
+                                  showNum={cartGood && cartGood.num !== 0}
+                                  onReduce={this.setCart.bind(this, good, -1)}
+                                  onAdd={this.setCart.bind(this, good, 1)}
+                                />
+                            }
+                          </Block>
+                        }
+
+                        {
+                          good.g_combination === 2 &&
+                          <Button
+                            onClick={this.toStandardDetail.bind(this, good)}
+                            className={'theme-bg-' + theme}
+                          >选规格</Button>
+                        }
+                      </View>
+                    </View>
+                  </View>
+                )
+              })
+            }
+
+          </View>
+
+          <Modal
+            show={isShowOptions} title={curGood.g_title}
+            blackTitle
+            titleAlign='center' onHide={this.closeOptions.bind(this, curGood)}
+          >
+            <View className='option-modal-content'>
+              <ScrollView scrollY>
+                {
+                  stanInfo.property.map((item, index) => (
+                    <View className='block' key={index}>
+                      <View className='name'>{item.name}</View>
+                      <View className='options'>
+                        {
+                          item.list_name.map((option, i) => (
+                            <View
+                              onClick={this.selectTag.bind(this, 'propertyTagIndex', index, i)} key={i}
+                              className={propertyTagIndex[index] === i ? 'active theme-grad-bg-' + theme : ''}
+                            >{option}</View>
+                          ))
+                        }
+                      </View>
+                    </View>
+                  ))
+                }
+                {
+                  stanInfo.norm.optional.map((item, index) => (
+                    <View className='block' key={index}>
+                      <View className='name'>{item.title}</View>
+                      <View className='options'>
+                        {
+                          item.list.map((option, i) => (
+                            <View
+                              onClick={this.selectTag.bind(this, 'optionalTagIndex', index, i)} key={i}
+                              className={optionalTagIndex[index] === i ? 'active theme-grad-bg-' + theme : ''}
+                            >{option.gn_name}</View>
+                          ))
+                        }
+                      </View>
+                    </View>
+                  ))
+                }
+              </ScrollView>
+
+              <View className='price-wrap'>
+                <View className='price-box'>
+                  <View className={classnames('price', 'theme-c-' + theme)}>
+                    <Text>&yen;</Text>
+                    {
+                      (+curGood.g_price + (stanInfo.norm &&
+                        stanInfo.norm.optional.reduce((total, item, index) => {
+                          total += +item.list[optionalTagIndex[index]].gn_price
+                          return total
+                        }, 0))).toFixed(2)
+                    }
+                  </View>
+                  <View className='pre-price'>
+                    <Text>&yen;</Text>
+                    {curGood.g_original_price}
                   </View>
                 </View>
-              )
-            })
+                {
+                  (curCart.optionalstr !== (propertyTagIndex.join('') + optionalTagIndex.join('')) &&
+                    !curCart.num || curCart.num === 0) ?
+                    <Button
+                      className={'theme-grad-bg-' + theme} onClick={this.setLocalCart.bind(this, 1)}
+                    >
+                      加入购物车
+                    </Button>
+                    :
+                    <Numbox
+                      num={curCart.num} showNum
+                      onReduce={this.setLocalCart.bind(this, -1)}
+                      onAdd={this.setLocalCart.bind(this, 1)}
+                    />
+                }
+              </View>
+            </View>
+          </Modal>
+
+          <Curtain show={isShowDetail} onCLose={this.closeDetail}>
+            {
+              curCart &&
+              <View className='good-detail'>
+                <View className='image-wrap'>
+                  <Image src={curGood.g_image_300 ? baseUrl + curGood.g_image_300 : ''}/>
+                </View>
+                <View className='info'>
+                  <View className='title'>
+                    {
+                      curGood.tag_name &&
+                      <Text className={classnames('tag', 'theme-grad-bg-' + theme)}>{curGood.tag_name}</Text>
+                    }
+                    <Text className='name'>{curGood.g_title}</Text>
+                  </View>
+                  <View className='desc'>{curGood.g_description}</View>
+                  <View className='price-wrap'>
+                    <View className={classnames('price', 'theme-c-' + theme)}>
+                      <Text>&yen;</Text>{curGood.g_price}
+                    </View>
+                    <View className='pre-price'><Text>&yen;</Text>{curGood.g_original_price}</View>
+                    {
+                      curGood.g_has_norm === 2 &&
+                      (!curCart.num || curCart.num === 0) &&
+                      <Button
+                        className={'theme-grad-bg-' + theme} onClick={this.setLocalCart.bind(this, 1)}
+                      >
+                        加入购物车
+                      </Button>
+                    }
+                    {
+                      curGood.g_has_norm === 2 && curCart.num &&
+                      curCart.num !== 0 &&
+                      <Numbox
+                        num={curCart.num}
+                        showNum
+                        onReduce={this.setLocalCart.bind(this, -1)}
+                        onAdd={this.setLocalCart.bind(this, 1)}
+                      />
+                    }
+
+                    {
+                      curGood.g_combination === 1 && curGood.g_has_norm === 1 &&
+                      <Button
+                        className={'theme-grad-bg-' + theme} onClick={this.toChooseStan}
+                      >
+                        选规格
+                      </Button>
+                    }
+
+                    {
+                      curGood.g_combination === 2 &&
+                      <Button
+                        className={'theme-grad-bg-' + theme} onClick={this.toStandardDetail.bind(this, curGood)}
+                      >
+                        选规格
+                      </Button>
+                    }
+
+                  </View>
+                </View>
+              </View>
+            }
+          </Curtain>
+
+
+          {
+            isShowCart && carts.length > 0 &&
+            <Text className='mask' onClick={this.closeCart} onTouchMove={this.stopPropagation} />
           }
 
-        </View>
+          <View
+            onTouchMove={this.stopPropagation}
+            className={classnames('cart', isShowCart && carts.length > 0 ? 'active' : '')}>
+            <View className='cart-head'>
+              <Image src={require('../../images/icon-trash.png')}/>
+              <Text onClick={this.showOrHideCartWarn.bind(this, true)}>清空购物车</Text>
+            </View>
+            <ScrollView scrollY className='cart-list'>
+              {
+                carts.map((good, index) => (
+                  good.num && good.num !== 0 &&
+                  (
+                    !good.optionalnumstr ?
+                      <View className='item' key={index}>
+                        <View class='item-left'>
+                          <View className='name'>
+                            {good.g_title}
+                          </View>
+                          <View className='param'>
+                            {
+                              good.property &&
+                              good.property.map((prop, i) => (
+                                <Text key={i}>
+                                  {prop.list_name[good.propertyTagIndex[i]]}
+                                  {i !== good.property.length - 1 ? '+' : ''}
+                                </Text>
+                              ))
+                            }
+                            {
+                              good.property && good.property.length > 0 &&
+                              good.optional && good.optional.length > 0 ? '+' : ''
+                            }
+                            {
+                              good.optional &&
+                              good.optional.map((opt, i) => (
+                                <Text key={i}>
+                                  {opt.list[good.optionalTagIndex[i]].gn_name}
+                                  {i !== good.optional.length - 1 ? '+' : ''}
+                                </Text>
+                              ))
+                            }
+                          </View>
+                        </View>
+                        <View class='item-center'>
+                          <Text className={'theme-c-' + theme}>&yen;
+                            {
+                              (+good.g_price
+                                + (
+                                  good.optional ?
+                                    good.optional.reduce((total, item, i) => {
+                                      return total += +item.list[good.optionalTagIndex[i]].gn_price
+                                    }, 0)
+                                    : 0
+                                )).toFixed(2)
+                            }
+                          </Text>
+                          <Text className='pre-price'>&yen;{good.g_original_price}</Text>
+                        </View>
 
-        <Modal
-          show={isShowOptions} title={stanInfo.g_description}
-          blackTitle
-          titleAlign='center' onHide={this.closeOptions.bind(this, curGood)}
-        >
-          <View className='option-modal-content'>
-            <ScrollView scrollY>
-              {
-                stanInfo.property.map((item, index) => (
-                  <View className='block' key={index}>
-                    <View className='name'>{item.name}</View>
-                    <View className='options'>
-                      {
-                        item.list_name.map((option, i) => (
-                          <Button
-                            onClick={this.selectTag.bind(this, 'propertyTagIndex', index, i)} key={i}
-                            className={propertyTagIndex[index] === i ? 'active theme-grad-bg-' + theme : ''}
-                          >{option}</Button>
-                        ))
-                      }
-                    </View>
-                  </View>
-                ))
-              }
-              {
-                stanInfo.norm.optional.map((item, index) => (
-                  <View className='block' key={index}>
-                    <View className='name'>{item.title}</View>
-                    <View className='options'>
-                      {
-                        item.list.map((option, i) => (
-                          <Button
-                            onClick={this.selectTag.bind(this, 'optionalTagIndex', index, i)} key={i}
-                            className={optionalTagIndex[index] === i ? 'active theme-grad-bg-' + theme : ''}
-                          >{option.gn_name}</Button>
-                        ))
-                      }
-                    </View>
-                  </View>
+                        <Numbox
+                          num={good.num} showNum
+                          onReduce={this.setCart.bind(this, good, -1, good)}
+                          onAdd={this.setCart.bind(this, good, 1)}
+                        />
+                      </View>
+                      :
+                      <View className='item' key={index}>
+                        <View class='item-left'>
+                          <View className='name'>
+                            {good.g_title}
+                          </View>
+                          <View className='param'>
+                            {
+                              good.fixed ?
+                                good.fixed.reduce((total, fix) => {
+                                  total.push(`${fix.gn_name}(${fix.gn_num}份)`)
+
+                                  return total
+                                }, []).join('+') : ''
+                            }
+                            {
+                              good.fixed.length > 0 && good.optional.length > 0 ? '+' : ''
+                            }
+                            {
+                              good.optional ?
+                                good.optional.reduce((total, opt) => {
+
+                                  let str = opt.list.reduce((t, o) => {
+                                    o.num && (t.push(`${o.gn_name}(${o.num}份)`))
+                                    return t
+                                  }, [])
+
+                                  total.push(str.join('+'))
+
+                                  return total
+                                }, []).join('+') : ''
+                            }
+                          </View>
+                        </View>
+                        <View class='item-center'>
+                          <Text className={'theme-c-' + theme}>&yen;
+                            {good.total_price ? good.total_price.toFixed(2) : '0.00'}
+                          </Text>
+                        </View>
+
+                        <Numbox
+                          num={good.num} showNum
+                          onReduce={this.setComboCart.bind(this, good, -1)}
+                          onAdd={this.setComboCart.bind(this, good, 1)}
+                        />
+                      </View>
+                  )
                 ))
               }
             </ScrollView>
 
-            <View className='price-wrap'>
-              <View className='price-box'>
-                <View className={classnames('price', 'theme-c-' + theme)}>
-                  <Text>&yen;</Text>
-                  {
-                    (+curGood.g_price + (stanInfo.norm &&
-                      stanInfo.norm.optional.reduce((total, item, index) => {
-                        total += +item.list[optionalTagIndex[index]].gn_price
-                        return total
-                      }, 0))).toFixed(2)
-                  }
-                </View>
-                <View className='pre-price'>
-                  <Text>&yen;</Text>
-                  {curGood.g_original_price}
-                </View>
-              </View>
-              {
-                (curCart.optionalstr !== (propertyTagIndex.join('') + optionalTagIndex.join('')) &&
-                  !curCart.num || curCart.num === 0) ?
-                  <Button
-                    className={'theme-grad-bg-' + theme} onClick={this.setLocalCart.bind(this, 1)}
-                  >
-                    加入购物车
-                  </Button>
-                  :
-                  <Numbox
-                    num={curCart.num} showNum
-                    onReduce={this.setLocalCart.bind(this, -1)}
-                    onAdd={this.setLocalCart.bind(this, 1)}
-                  />
-              }
-            </View>
           </View>
-        </Modal>
 
-        <AtCurtain isOpened={isShowDetail} onCLose={this.closeDetail}>
-          <View className='good-detail'>
-            <View className='image-wrap'>
-              <Image src={curGood.g_image_300 ? baseUrl + curGood.g_image_300 : ''}/>
-            </View>
-            <View className='info'>
-              <View className='title'>
-                {
-                  curGood.tag_name &&
-                  <Text className={classnames('tag', 'theme-grad-bg-' + theme)}>{curGood.tag_name}</Text>
-                }
-                <Text className='name'>{curGood.g_title}</Text>
-              </View>
-              <View className='desc'>{curGood.g_description}</View>
-              <View className='price-wrap'>
-                <View className={classnames('price', 'theme-c-' + theme)}>
-                  <Text>&yen;</Text>{curGood.g_price}
-                </View>
-                <View className='pre-price'><Text>&yen;</Text>{curGood.g_original_price}</View>
-                {
-                  curGood.g_has_norm === 2 &&
-                  (!curCart.num || curCart.num === 0) &&
-                  <Button
-                    className={'theme-grad-bg-' + theme} onClick={this.setLocalCart.bind(this, 1)}
-                  >
-                    加入购物车
-                  </Button>
-                }
-                {
-                  curGood.g_has_norm === 2 && curCart.num &&
-                  curCart.num !== 0 &&
-                  <Numbox
-                    num={curCart.num} showNum
-                    onReduce={this.setLocalCart.bind(this, -1)}
-                    onAdd={this.setLocalCart.bind(this, 1)}
-                  />
-                }
+          <PayBox
+            present
+            theme={theme} carts={carts} storeId={+this.$router.params.id}
+            themeInfo={menu_cart}
+            onOpenCart={this.ToggleShowCart}
+          />
 
-                {
-                  curGood.g_combination === 1 && curGood.g_has_norm === 1 &&
-                  <Button
-                    className={'theme-grad-bg-' + theme} onClick={this.toChooseStan}
-                  >
-                    选规格
-                  </Button>
-                }
+          <Button className={classnames('more', 'theme-c-' + theme,)} onClick={this.toShopIndex}>选购更多</Button>
 
-                {
-                  curGood.g_combination === 2 &&
-                  <Button
-                    className={'theme-grad-bg-' + theme} onClick={this.toStandardDetail.bind(this, curGood)}
-                  >
-                    选规格
-                  </Button>
-                }
-
-              </View>
-            </View>
-          </View>
-        </AtCurtain>
-
-        <PayBox simple present
-          theme={theme} carts={carts} storeId={+this.$router.params.id}
-          themeInfo={menu_cart}
-        />
-
-        <Button className={classnames('more', 'theme-c-' + theme)} onClick={this.toShopIndex}>选购更多</Button>
-      </View>
+        </View>
+        :
+        <Loading />
     )
   }
 }

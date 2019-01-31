@@ -185,7 +185,7 @@ class AddAddress extends Component {
         {
           da_id &&
           <Button
-            className={classnames('theme-bd-' + theme, 'theme-c-' + theme, 'delete-btn')}
+            className={classnames('theme-c-' + theme, 'delete-btn')}
             onClick={this.delAddress}
           >
             删除地址</Button>

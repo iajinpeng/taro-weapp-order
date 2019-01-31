@@ -51,6 +51,9 @@ class ChooseAddress extends Component {
 
   choose = index => {
     this.setState({defaultIndex: index})
+    const {address} = this.props
+    const useAddress = address.length > 0 ? address.filter(v => v.optional) : []
+    this.handleClose(true, useAddress[index])
   }
 
   edit = (addressInfo, e) => {
@@ -93,7 +96,7 @@ class ChooseAddress extends Component {
       <Block>
         <View onTouchMove={this.stopPro}
           className='mask' style={{display: show ? 'block' : 'none'}}
-          onClick={this.handleClose.bind(this, true, useAddress[defaultIndex])}
+          onClick={this.handleClose.bind(this, false)}
         />
         <View className={classnames('choose-address', show ? 'active' : '')} onTouchMove={this.stopPro}>
           <View className='title'>选择收货地址
@@ -119,7 +122,7 @@ class ChooseAddress extends Component {
                         <View className='alias' />
                     }
                     <View className='info'>
-                      <View className='addr'>{item.address + ' ' + item.address_detail}</View>
+                      <View className='addr'>{item.address}</View>
                       <View className='user'>
                         {item.user_name + ' ' + item.user_telephone}
                       </View>
