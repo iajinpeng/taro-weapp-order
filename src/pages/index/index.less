@@ -58,7 +58,7 @@
     }
   }
   .do-btn{
-    width: 702px;
+    width: 690px;
     height: 96px;
     font-size: 36px;
     margin: 0 auto;
@@ -68,21 +68,32 @@
     //box-shadow: 0 40rpx 40rpx -30rpx #feb37d;
   }
   .icon-box{
-    padding: 56px 140px 40px;
-    view{
+    display: flex;
+    height: ~"calc(100vh - 1000px)";
+    justify-content: space-between;
+    width: 690px;
+    margin: 36px auto;
+    &.iphonex{
+      height: ~"calc(100vh - 1080px)";
+    }
+    &>view{
+      &:first-child{
+        margin-right: 30px;
+      }
       font-size: 32px;
       text-align: center;
+      width: 330px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      background: #fff;
+      border-radius: 20px;
       image{
         display: block;
         width: 100px;
         height: 100px;
         margin-bottom: 10px;
-      }
-      &:first-child{
-        float: left;
-      }
-      &:last-child{
-        float: right;
       }
     }
   }

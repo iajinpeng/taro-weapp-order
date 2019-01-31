@@ -205,6 +205,9 @@ class Index extends Component {
 
     const totStarsArr = new Array(full_num);
 
+    const isIphoneX = !!(this.props.systemInfo.model &&
+      this.props.systemInfo.model.replace(' ', '').toLowerCase().indexOf('iphonex') > -1)
+
     return (
       home_banner && home_banner.banner ?
       <View className='index-page' style={{display: home_banner.banner ? 'block' : 'none'}}>
@@ -247,14 +250,18 @@ class Index extends Component {
         >
           开始点餐</Button>
 
-        <View className={classnames('icon-box clearfix', 'theme-c-' + theme)}>
-          <View onClick={this.toOrderListPage}>
-            <Image src={baseUrl + home_button.order_image} />
-            <Text>订单</Text>
+        <View className={classnames('icon-box clearfix', 'theme-c-' + theme, isIphoneX ? 'iphonex' : '')}>
+          <View>
+            <View onClick={this.toOrderListPage}>
+              <Image src={baseUrl + home_button.order_image} />
+              <Text>订单</Text>
+            </View>
           </View>
-          <View onClick={this.toCouponPage}>
-            <Image src={baseUrl + home_button.coupon_image} />
-            <Text>优惠券</Text>
+          <View>
+            <View onClick={this.toCouponPage}>
+              <Image src={baseUrl + home_button.coupon_image} />
+              <Text>优惠券</Text>
+            </View>
           </View>
         </View>
 
