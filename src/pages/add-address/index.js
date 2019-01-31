@@ -94,12 +94,13 @@ class AddAddress extends Component {
         }
       })
 
-      this.props.dispatch({
-        type: 'address/setCurAddress',
-        payload: {}
-      })
-
-      setTimeout(Taro.navigateBack, 1500)
+      setTimeout(() => {
+        Taro.navigateBack()
+        this.props.dispatch({
+          type: 'address/setCurAddress',
+          payload: {}
+        })
+      }, 1500)
     })
   }
 

@@ -400,7 +400,7 @@ class Choose extends Component {
 
                   })
                 }
-                
+
               </View>
 
             </ScrollView>

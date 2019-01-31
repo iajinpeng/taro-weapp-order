@@ -81,9 +81,11 @@ class Order extends Component {
   changeOrderType = async orderType => {
     if (this.state.s_take.indexOf(orderType) === -1) return
 
-    this.setState({orderType})
-
-    this.initPage(orderType)
+    Taro.showLoading()
+    this.initPage(orderType).then(() => {
+      this.setState({orderType})
+      Taro.hideLoading()
+    })
   }
 
   initPage = async (orderType) => {
@@ -94,7 +96,7 @@ class Order extends Component {
     const index = couponList.findIndex(item => item.available) > -1 ?
       couponList.findIndex(item => item.available) : -1
 
-    this.props.dispatch({
+    return this.props.dispatch({
       type: 'order/setCouponIndex',
       payload: {
         curCouponIndex: index
@@ -572,7 +574,7 @@ class Order extends Component {
 
     const availableCoupons = couponList.filter(item => item.available)
     return (
-      theme &&
+      theme && goods && goods.length > 0 &&
       <View className='post-order'>
         {/*<ScrollView onScroll={this.handleScroll}
           scrollY={!isShowPicker} className={classnames('scroll-view', isIphoneX ? 'iphonex' : '')}
