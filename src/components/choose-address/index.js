@@ -49,7 +49,8 @@ class ChooseAddress extends Component {
       })
   }
 
-  choose = index => {
+  choose = (optional, index) => {
+    if (!optional) return
     this.setState({defaultIndex: index})
     const {address} = this.props
     const useAddress = address.length > 0 ? address.filter(v => v.optional) : []
@@ -92,6 +93,8 @@ class ChooseAddress extends Component {
 
     const useAddress = address.length > 0 ? address.filter(v => v.optional) : []
 
+    const uselessAddress = address.length > 0 ? address.filter(v => !v.optional) : []
+
     return (
       <Block>
         <View onTouchMove={this.stopPro}
@@ -114,13 +117,35 @@ class ChooseAddress extends Component {
             <View className='list'>
               {
                 useAddress.map((item, index) => (
-                  <View className='address-item' key={index} onClick={this.choose.bind(this, index)}>
+                  <View className='address-item' key={index} onClick={this.choose.bind(this, index, item.optional)}>
                     {
                       defaultIndex === index ?
                         <Image src={`${baseUrl}/static/addons/diancan/img/style/style_${theme}_2.png`} />
                         :
                         <View className='alias' />
                     }
+                    <View className='info'>
+                      <View className='addr'>{item.address}</View>
+                      <View className='user'>
+                        {item.user_name + ' ' + item.user_telephone}
+                      </View>
+                    </View>
+                    <View className='edit' onClick={this.edit.bind(this, item)}>
+                      <Image src={require('../../images/icon-edit.png')} />
+                    </View>
+                  </View>
+                ))
+              }
+
+              {
+                uselessAddress.length > 0 &&
+                <View className='useless-title'>以下地址不可用</View>
+              }
+
+              {
+                uselessAddress.map((item, index) => (
+                  <View className='address-item useless' key={index} onClick={this.choose.bind(this, index)}>
+                    <View className='alias' />
                     <View className='info'>
                       <View className='addr'>{item.address}</View>
                       <View className='user'>
