@@ -1,5 +1,5 @@
 export default [{
-  "title": "热门城",
+  "title": "热门城市",
   "key": "热门",
   "items": [{"name": "北京"}, {"name": "上海"}, {"name": "广州"}, {"name": "深圳"}, {"name": "成都"}, {"name": "重庆"}, {"name": "天津"}, {"name": "杭州"}, {"name": "南京"}, {"name": "苏州"}, {"name": "武汉"}, {"name": "西安"}]
 }, {

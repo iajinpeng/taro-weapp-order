@@ -205,7 +205,8 @@ class Order extends Component {
       if (userAddress.length === 0) {
         this.setState({selectedAddress: {}})
       } else {
-        this.setState({selectedAddress: userAddress.length > 0 ? userAddress.find(item => item.optional) : []})
+        const useAddress = userAddress.find(item => item.optional) || []
+        this.setState({selectedAddress: useAddress || {}})
       }
       return {amount, couponList}
     })
@@ -259,7 +260,7 @@ class Order extends Component {
   }
 
   hideAddress = (address) => {
-    if (address && (this.useAddress.da_id !== address.da_id)) {
+    if (address && (this.state.selectedAddress.da_id !== address.da_id)) {
       Taro.showToast({
         title: '由于配送地址/时间变化，您的配送费也发生了变化',
         icon: 'none'
@@ -339,7 +340,7 @@ class Order extends Component {
     const {carts, curCouponIndex} = this.props
 
     const {orderType, takeType, userPhoneNum, reserveTime, memo, couponList,
-      dayIndex, timeIndex} = this.state
+      dayIndex, timeIndex, selectedAddress} = this.state
 
     const goods = carts[this.$router.params.store_id].map(cart => {
       let {g_id, num, send_goods, fs_id} = cart
@@ -403,7 +404,7 @@ class Order extends Component {
         o_reserve_time: reserveTime[dayIndex].date + ' ' + reserveTime[dayIndex].time[timeIndex].time,
         o_remark: memo,
         goods,
-        address_id: this.useAddress.da_id,
+        address_id: this.state.selectedAddress.da_id,
         coupon_id: curCouponIndex !== -1 && couponList.length > 0 && couponList[curCouponIndex].uc_id
       }
     })
@@ -570,9 +571,9 @@ class Order extends Component {
     const isIphoneX = !!(this.props.systemInfo.model &&
       this.props.systemInfo.model.replace(' ', '').toLowerCase().indexOf('iphonex') > -1)
 
-    const useAddress = selectedAddress || (userAddress.length > 0 ? userAddress.find(item => item.optional) : [])
-
-    this.useAddress = useAddress
+    // const useAddress = selectedAddress || (userAddress.length > 0 ? userAddress.find(item => item.optional) : [])
+    //
+    // this.useAddress = useAddress
 
     let totalAmout = +amount
 
@@ -702,10 +703,10 @@ class Order extends Component {
                       selectedAddress.address &&
                       <View className='address-msg'>
                         <View className='left'>
-                          <View className='desc'>{useAddress.address + ' ' + (useAddress.address_detail && useAddress.address_detail.split('|')[1])}</View>
+                          <View className='desc'>{selectedAddress.address + ' ' + (selectedAddress.address_detail && selectedAddress.address_detail.split('|')[1])}</View>
                           <View className='user'>
-                            <Text>{useAddress.user_name}</Text>
-                            <Text>{useAddress.user_telephone}</Text>
+                            <Text>{selectedAddress.user_name}</Text>
+                            <Text>{selectedAddress.user_telephone}</Text>
                           </View>
                         </View>
                         <View className='right'>
