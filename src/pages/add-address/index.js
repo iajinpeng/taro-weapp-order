@@ -192,9 +192,9 @@ class AddAddress extends Component {
             删除地址</Button>
         }
 
-        <View className='copy-box'>
+        {/*<View className='copy-box'>
           <Copyright />
-        </View>
+        </View>*/}
 
         <AtToast
           isOpened={alertPhone} text={alertPhoneText} iconSize={40} duration={2000}

@@ -1,7 +1,9 @@
 import Taro, {Component} from '@tarojs/taro'
-import {View, Text, Block} from '@tarojs/components'
+import {View, Text, Block, Image} from '@tarojs/components'
 import {connect} from '@tarojs/redux'
 import classnames from 'classnames'
+
+import {baseUrl} from "../../config/index";
 
 import './index.less'
 import '../../app.less'
@@ -16,18 +18,19 @@ class Numbox extends Component {
         {
           showNum &&
           <Block>
-            <View
+            <Image
+              src={require('../../images/icon-reduce.png')}
               onClick={onReduce}
               className='icon-reduce'
-            >-</View>
+            >-</Image>
             <Text className='num'>{num}</Text>
           </Block>
         }
-        <View
+        <Image src={`${baseUrl}/static/addons/diancan/img/style/style_${theme}_8.png`}
           onClick={onAdd}
-          className={classnames('add-circle', 'theme-bg-' + theme)}>
+          className={classnames('add-circle')}>
           +
-        </View>
+        </Image>
       </View>
     )
   }

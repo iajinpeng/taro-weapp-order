@@ -7,6 +7,7 @@ import './index.less'
 import {orderTypes, outOrderTypes, baseUrl} from '../../config'
 import ConfirmModal from '../../components/confirm-modal'
 import BackToHome from '../../components/back-to-home'
+import CouponModal from '../../components/coupon-modal'
 
 @connect(({common}) => ({
   ...common
@@ -26,12 +27,26 @@ class OrderDetail extends Component {
     markers: [],
     includePoints: [],
     polyline: [],
-    addCartPayload: {}
+    addCartPayload: {},
+    curCoupon: {},
+    isShowCoupon: false
   }
 
   componentWillMount() {
 
-    this.getOrderDetail()
+    this.getOrderDetail().then(res => {
+      this.coupon = res.coupon
+      this.curCouponIndex = 0
+
+      if (res.coupon.length > 0) {
+        setTimeout(() => {
+          this.setState({
+            isShowCoupon: true,
+            curCoupon: res.coupon[0],
+          })
+        }, 500)
+      }
+    })
 
   }
 
@@ -233,12 +248,30 @@ class OrderDetail extends Component {
 
   }
 
+  couponClose = () => {
+    const {curCouponIndex, coupon} = this
+
+    this.setState({
+      isShowCoupon: false
+    })
+
+    if (curCouponIndex + 2 <= coupon.length) {
+      this.curCouponIndex  ++
+      setTimeout(() => {
+        this.setState({
+          isShowCoupon: true,
+          curCoupon: coupon[this.curCouponIndex],
+        })
+      }, 350)
+    }
+  }
+
   render() {
     const {theme, systemInfo} = this.props
     const isIphoneX = !!(systemInfo.model && systemInfo.model.replace(' ', '').toLowerCase().indexOf('iphonex') > -1)
 
     const {data, isShowCancelWarn, markers, isShowOrderAgainWarn, includePoints,
-      polyline} = this.state
+      polyline, curCoupon, isShowCoupon} = this.state
 
     return (
       <Block>
@@ -561,6 +594,11 @@ class OrderDetail extends Component {
           this.$router.params.from === '1' &&
           <BackToHome />
         }
+
+        <CouponModal
+          show={isShowCoupon} coupon={curCoupon}
+          onClose={this.couponClose}
+        />
 
       </Block>
     )

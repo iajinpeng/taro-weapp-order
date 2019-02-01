@@ -88,7 +88,7 @@ class Index extends Component {
             isShowCoupon: true,
             curCoupon: res.coupon[0],
           })
-        }, 1500)
+        }, 500)
       }
     })
   }

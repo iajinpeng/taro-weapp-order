@@ -14,7 +14,7 @@ class Copyright extends Component {
       <View className='copyright'>
         <Image src={bottom_logo ? baseUrl + bottom_logo : ''} mode='widthFix' />
         {
-          // b_bottom_status === 1 &&
+          b_bottom_status === 1 &&
           <View className='name'>
             <Text className='line' />
             <Text>{b_bottom_content}</Text>

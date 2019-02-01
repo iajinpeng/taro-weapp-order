@@ -33,13 +33,13 @@ class Order extends Component {
     couponList: [],
     userAddress: [],
     amount: '',
-    isShowTextarea: false,
+    // isShowTextarea: false,
     memo: '',
     reserveTime: [],
     dayIndex: 0,
     timeIndex: 0,
     userPhoneNum: '',
-    selectedAddress: null,
+    selectedAddress: {},
     alertPhone: false,
     alertPhoneText: '',
     goods: [],
@@ -188,14 +188,24 @@ class Order extends Component {
         userPhoneNum: contact_mobile,
         s_take: store.s_take.map(v => +v)
       }, this.calcTextareaRect)
-      console.log()
-      if (s_take.indexOf(1) > -1 || s_take.indexOf(2) > -1) {
-        this.setState({orderType: 1})
-        if (s_take.indexOf(1) === -1) {
-          this.setState({takeType: 2})
-        }
+
+      if (take_type) {
+        this.setState({orderType: take_type})
       } else {
-        this.setState({orderType: 3})
+        if (s_take.indexOf(1) > -1 || s_take.indexOf(2) > -1) {
+          this.setState({orderType: 1})
+          if (s_take.indexOf(1) === -1) {
+            this.setState({takeType: 2})
+          }
+        } else {
+          this.setState({orderType: 3})
+        }
+      }
+
+      if (userAddress.length === 0) {
+        this.setState({selectedAddress: {}})
+      } else {
+        this.setState({selectedAddress: userAddress.length > 0 ? userAddress.find(item => item.optional) : []})
       }
       return {amount, couponList}
     })
@@ -213,31 +223,31 @@ class Order extends Component {
   }
 
   handleScroll = () => {
-    let Query = Taro.createSelectorQuery()
-    Query
-      .select('.memo')
-      .boundingClientRect(rect => {
-        let {top, height} = rect
-
-        this.setState({
-          isShowTextarea: !(top + height - 30 > this.footerScreenTop) || (top + 50 < this.footerHeight)
-        })
-      })
-      .exec()
+    // let Query = Taro.createSelectorQuery()
+    // Query
+    //   .select('.memo')
+    //   .boundingClientRect(rect => {
+    //     let {top, height} = rect
+    //
+    //     this.setState({
+    //       isShowTextarea: !(top + height - 30 > this.footerScreenTop) || (top + 50 < this.footerHeight)
+    //     })
+    //   })
+    //   .exec()
   }
 
   onPageScroll () {
-    let Query = Taro.createSelectorQuery()
-    Query
-      .select('.memo')
-      .boundingClientRect(rect => {
-        let {top, height} = rect
-
-        this.setState({
-          isShowTextarea: !(top + height - 30 > this.footerScreenTop) || (top + 50 < this.footerHeight)
-        })
-      })
-      .exec()
+    // let Query = Taro.createSelectorQuery()
+    // Query
+    //   .select('.memo')
+    //   .boundingClientRect(rect => {
+    //     let {top, height} = rect
+    //
+    //     this.setState({
+    //       isShowTextarea: !(top + height - 30 > this.footerScreenTop) || (top + 50 < this.footerHeight)
+    //     })
+    //   })
+    //   .exec()
   }
 
   handleMemoChange = e => {
@@ -551,7 +561,7 @@ class Order extends Component {
     const {theme, curCouponIndex} = this.props
     const {
       orderType, isShowPicker, takeType, store, memo, s_take,
-      couponList, userAddress, amount, isShowTextarea, reserveTime,
+      couponList, userAddress, amount, reserveTime,
       isShowAddress, userPhoneNum, selectedAddress,
       alertPhone, alertPhoneText, goods, dayIndex, timeIndex, isFullPrice,
       fullPrice
@@ -560,9 +570,9 @@ class Order extends Component {
     const isIphoneX = !!(this.props.systemInfo.model &&
       this.props.systemInfo.model.replace(' ', '').toLowerCase().indexOf('iphonex') > -1)
 
-    this.useAddress = selectedAddress || (userAddress.length > 0 ? userAddress.find(item => item.optional) : [])
+    const useAddress = selectedAddress || (userAddress.length > 0 ? userAddress.find(item => item.optional) : [])
 
-    const {useAddress} = this
+    this.useAddress = useAddress
 
     let totalAmout = +amount
 
@@ -682,14 +692,14 @@ class Order extends Component {
                 <View className='info'>
                   <View className='address' onClick={this.showAddress.bind(this, true)}>
                     {
-                      !useAddress.address &&
+                      !selectedAddress.address &&
                       <View className='address-none'>
                         选择收货地址
                         <AtIcon value='chevron-right' size='16'/>
                       </View>
                     }
                     {
-                      useAddress.address &&
+                      selectedAddress.address &&
                       <View className='address-msg'>
                         <View className='left'>
                           <View className='desc'>{useAddress.address + ' ' + (useAddress.address_detail && useAddress.address_detail.split('|')[1])}</View>
