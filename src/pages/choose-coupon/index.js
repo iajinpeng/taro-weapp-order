@@ -124,7 +124,7 @@ class ChooseCoupon extends Component {
               <View>还没有任何优惠券哦~</View>
             </View>
         }
-        <Copyright />
+        {/*<Copyright />*/}
       </View>
     )
   }
