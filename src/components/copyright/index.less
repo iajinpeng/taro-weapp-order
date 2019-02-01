@@ -2,10 +2,7 @@
 
 .copyright{
   width: 100%;
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translate(-50%);
+  margin: 0 auto;
   padding-bottom: 60px;
   image{
     width: 165px;
@@ -13,9 +10,18 @@
     display: block;
     margin: 0 auto;
   }
-  view{
+  .name{
     font-size: 20px;
     text-align: center;
-    color: @c-666;
+    display: flex;
+    justify-content: center;
+    color: @c-999;
+    margin-top: 20px;
+    .line{
+      height: 3px;
+      width: 100px;
+      margin: 16px;
+      background: @c-999;
+    }
   }
 }

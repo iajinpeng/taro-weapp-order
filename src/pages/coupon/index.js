@@ -7,6 +7,7 @@ import Copyright from '../../components/copyright'
 import BackToHome from '../../components/back-to-home'
 import {getTouchData} from '../../utils/utils'
 import './index.less'
+import nullImage from '../../images/icon-coupon-null.png'
 
 @connect(({common}) => ({...common}))
 class Coupon extends Component {
@@ -151,7 +152,7 @@ class Coupon extends Component {
           {
             lists.length === 0 &&
             <View className='null'>
-              <Image src={require('../../images/icon-coupon-null.png')} />
+              <Image src={nullImage} />
               <View>还没有任何优惠券哦~</View>
             </View>
           }
@@ -200,7 +201,9 @@ class Coupon extends Component {
                 ))
               }
 
-              <Copyright />
+              <View style={{marginTop: '100px'}}>
+                <Copyright />
+              </View>
 
             </View>
           }

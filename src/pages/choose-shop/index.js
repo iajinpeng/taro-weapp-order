@@ -42,7 +42,7 @@ class Choose extends Component {
   }
 
   componentWillMount() {
-    if (!this.props.localInfo.longitude) {
+    if (!this.props.localInfo.longitude && !this.props.localInfo.district) {
       Taro.eventCenter.on('hadLocalInfo', this.getStoreList)
       return
     }
@@ -75,8 +75,8 @@ class Choose extends Component {
     this.props.dispatch({
       type: 'shop/getStoreList',
       payload: {
-        lat: latitude,
-        lng: longitude,
+        lat: latitude || '',
+        lng: longitude || '',
         city: city || locationCity,
         keyword
       }
@@ -399,6 +399,13 @@ class Choose extends Component {
                     )
 
                   })
+                }
+
+                {
+                  !isShowMap &&
+                  <View style={{marginTop: '100px'}}>
+                    <Copyright />
+                  </View>
                 }
 
               </View>

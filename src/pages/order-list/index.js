@@ -4,6 +4,7 @@ import {connect} from '@tarojs/redux'
 import classnames from 'classnames'
 
 import ConfirmModal from '../../components/confirm-modal'
+import Copyright from '../../components/copyright'
 import {getTouchData} from '../../utils/utils'
 import './index.less'
 
@@ -366,6 +367,9 @@ class OrderList extends Component {
                       </View>
                     ))
                   }
+                  <View style={{marginTop: '100px'}}>
+                    <Copyright />
+                  </View>
                 </View>
               </ScrollView>
             )

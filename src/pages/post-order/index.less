@@ -21,8 +21,7 @@
   .content{
     box-sizing: border-box;
     position: relative;
-    padding: 0 20px 200px;
-    margin-bottom: 100px;
+    padding: 0 20px 140px;
     .order-type{
       .tab{
         height: 96px;
@@ -320,33 +319,44 @@
             }
           }
         }
-        &.memo{
-          padding: 0;
-          height: 172px;
-          position: relative;
-          margin-bottom: 300px;
-          .textarea, .alias{
-            width: 100%;
-            height: 100%;
-            padding: 30px 24px;
-            box-sizing: border-box;
-            font-size: 28px;
-            color: @c-ccc;
-            line-height: 1.2;
-          }
-          .textarea{
-            padding: 10px 10px;
-          }
-          .textarea-placeholder{
-            color: @c-ccc;
-          }
-          &>text{
-            position: absolute;
-            bottom: 24px;
-            right: 25px;
-            font-size: 26px;
-            color: @c-ccc;
-          }
+      }
+      .memo{
+        //padding: 0;
+        //height: 172px;
+        //position: relative;
+        //margin-bottom: 300px;
+        margin-top: -20px;
+        input{
+          font-size: 28px;
+          color: @c-40;
+          border: 1px solid #e6e6e6;
+          background: #fff;
+          border-radius: 20px;
+          padding: 10px 0 10px 20px;
+        }
+        .textarea, .alias{
+          width: 100%;
+          height: 100%;
+          padding: 30px 24px;
+          box-sizing: border-box;
+          font-size: 28px;
+          color: @c-ccc;
+          line-height: 1.2;
+        }
+        //.textarea{
+        //  padding: 10px 10px;
+        //}
+        .textarea-placeholder{
+          color: @c-ccc;
+        }
+        .font-num{
+          //position: absolute;
+          //bottom: 24px;
+          //right: 25px;
+          font-size: 26px;
+          text-align: right;
+          color: @c-ccc;
+          margin-top: 20px;
         }
       }
     }

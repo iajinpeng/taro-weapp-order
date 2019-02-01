@@ -10,7 +10,7 @@
   bottom: 0;
   top: 0;
   opacity: 0;
-  .transition(opacity);
+  .transition(opacity, 600ms);
   visibility: hidden;
   z-index: 101;
   &.active {
@@ -31,7 +31,7 @@
     box-sizing: border-box;
     align-items: center;
     transform: scale(.5);
-    transition: transform linear 100ms;
+    //transition: transform linear 100ms;
     .curtain-body{
       position: relative;
       width: 100%;

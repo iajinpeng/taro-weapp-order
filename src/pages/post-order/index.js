@@ -79,10 +79,13 @@ class Order extends Component {
   }
 
   changeOrderType = async orderType => {
-    if (this.state.s_take.indexOf(orderType) === -1) return
+    const s_take = this.state.s_take
+
+    if (orderType === 1 && s_take.indexOf(1) === -1 && s_take.indexOf(2) === -1) return
+    if (orderType === 3 && s_take.indexOf(3) === -1) return
 
     Taro.showLoading()
-    this.initPage(orderType).then(() => {
+    this.initPage(orderType === 3 ? 3 : this.state.takeType).then(() => {
       this.setState({orderType})
       Taro.hideLoading()
     })
@@ -105,6 +108,8 @@ class Order extends Component {
   }
 
   changeTakeType = takeType => {
+    const s_take = this.state.store.s_take.map(v => +v)
+    if (s_take.indexOf(takeType) === -1) return
     this.setState({takeType})
   }
 
@@ -177,11 +182,21 @@ class Order extends Component {
         })
       }
       const {store, couponList, userAddress, amount, contact_mobile} = res
+      const s_take = store.s_take.map(v => +v)
       this.setState({
         store, couponList, userAddress, amount,
         userPhoneNum: contact_mobile,
         s_take: store.s_take.map(v => +v)
       }, this.calcTextareaRect)
+      console.log()
+      if (s_take.indexOf(1) > -1 || s_take.indexOf(2) > -1) {
+        this.setState({orderType: 1})
+        if (s_take.indexOf(1) === -1) {
+          this.setState({takeType: 2})
+        }
+      } else {
+        this.setState({orderType: 3})
+      }
       return {amount, couponList}
     })
   }
@@ -589,13 +604,13 @@ class Order extends Component {
               <View className='tab'>
                 <View
                   className={classnames('wrap', orderType !== 1 ? 'un-active' : 'theme-c-' + theme,
-                    s_take.indexOf(1) > -1 ? '' : 'disabled')}
+                    (s_take.indexOf(1) > -1 || s_take.indexOf(2) > -1) ? '' : 'disabled')}
                   onClick={this.changeOrderType.bind(this, 1)}>
                   <Image
                     src={orderType !== 1 ? require('../../images/icon-shop.png') : `${baseUrl}/static/addons/diancan/img/style/style_${theme}_1.png`}/>
                   <Text>
                     {
-                      s_take.indexOf(1) > -1 ? '到店取餐' : '暂不自取'
+                      (s_take.indexOf(1) > -1 || s_take.indexOf(2) > -1) ? '到店取餐' : '暂不自取'
                     }
                   </Text>
                 </View>
@@ -650,12 +665,12 @@ class Order extends Component {
                       堂食
                     </Button>
                     <Button
-                      className={takeType === 3 ? 'active theme-grad-bg-' + theme : ''}
-                      onClick={this.changeTakeType.bind(this, 3)}
+                      className={takeType === 2 ? 'active theme-grad-bg-' + theme : ''}
+                      onClick={this.changeTakeType.bind(this, 2)}
                     >
                       <Image
                         className='icon-drink icon-bag' mode='widthFix'
-                        src={takeType === 3 ? require('../../images/icon-bag-active.png') : require('../../images/icon-bag.png')}
+                        src={takeType === 2 ? require('../../images/icon-bag-active.png') : require('../../images/icon-bag.png')}
                       />
                       外带
                     </Button>
@@ -810,7 +825,7 @@ class Order extends Component {
                 }
 
                 {
-                  (orderType === 3 || takeType === 3) &&
+                  (orderType === 3 || takeType === 2) &&
                   <View className='pack-fee'>
                     <Text>打包费</Text>
                     <View className='price'>
@@ -862,8 +877,8 @@ class Order extends Component {
 
             <View className='block'>
               <View className='title'>备注</View>
-              <View className='block-content memo'>
-                {
+              <View className='memo'>
+               {/* {
                   isShowTextarea && !isShowPicker && !isShowAddress ?
                     <Textarea
                       id='textarea'
@@ -879,11 +894,22 @@ class Order extends Component {
                       }
                     </View>
                 }
+*/}
+                <View className='wrap'>
+                  <Input
+                    type='text'
+                    onInput={this.handleMemoChange}
+                    placeholderClass='textarea-placeholder'
+                    placeholder='若有其它要求,请备注说明。'
+                  />
+                </View>
 
-                <Text>{memo.length}/30个字</Text>
+                <View className='font-num'>{memo.length}/30个字</View>
               </View>
             </View>
-            <Copyright />
+            <View style={{marginTop: '100px'}}>
+              <Copyright />
+            </View>
           </View>
         </View>
         <View className={classnames('footer', isIphoneX ? 'iphonex' : '')}>

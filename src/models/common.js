@@ -68,10 +68,23 @@ export default {
             success(data) {
               let addressInfo = data[0].regeocodeData.addressComponent
               let locationCity = addressInfo.city.replace('市', '')
+              let district = addressInfo.district
               let location = addressInfo.streetNumber.location
-              let [longitude, latitude] = location.split(',')
 
-              resolve({location, longitude, latitude, locationCity})
+              let longitude = '', latitude = '';
+
+              if (location) {
+                [longitude, latitude] = location.split(',')
+                resolve({location, longitude, latitude, locationCity, district})
+              } else {
+                Taro.getLocation().then(res => {
+                  let {latitude, longitude} = res
+                  console.log(res)
+                  console.log(location, longitude)
+                  resolve({location, longitude, latitude, locationCity, district})
+                })
+              }
+
             },
             fail(err) {
               reject(err)

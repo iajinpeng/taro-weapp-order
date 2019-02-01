@@ -18,7 +18,7 @@ class Index extends Component {
 
   config = {
     navigationBarTitleText: '首页',
-    disableScroll: true
+    // disableScroll: true
   }
 
   state = {
@@ -58,6 +58,7 @@ class Index extends Component {
   }
 
   componentDidHide () { }
+
 
   getIndexInfo = () => {
     this.props.dispatch({
@@ -251,14 +252,15 @@ class Index extends Component {
           开始点餐</Button>
 
         <View className={classnames('icon-box clearfix', 'theme-c-' + theme, isIphoneX ? 'iphonex' : '')}>
-          <View>
-            <View onClick={this.toOrderListPage}>
+          <View onClick={this.toOrderListPage}>
+            <View>
               <Image src={baseUrl + home_button.order_image} />
               <Text>订单</Text>
             </View>
           </View>
-          <View>
-            <View onClick={this.toCouponPage}>
+          <View className='line'><View /></View>
+          <View onClick={this.toCouponPage}>
+            <View>
               <Image src={baseUrl + home_button.coupon_image} />
               <Text>优惠券</Text>
             </View>

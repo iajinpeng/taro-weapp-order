@@ -1,5 +1,5 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Image } from '@tarojs/components'
+import { View, Image, Text } from '@tarojs/components'
 import {connect} from '@tarojs/redux'
 import {baseUrl} from '../../config/index';
 import './index.less'
@@ -14,8 +14,12 @@ class Copyright extends Component {
       <View className='copyright'>
         <Image src={bottom_logo ? baseUrl + bottom_logo : ''} mode='widthFix' />
         {
-          b_bottom_status === 1 &&
-          <View>{b_bottom_content}</View>
+          // b_bottom_status === 1 &&
+          <View className='name'>
+            <Text className='line' />
+            <Text>{b_bottom_content}</Text>
+            <Text className='line' />
+          </View>
         }
       </View>
     )
