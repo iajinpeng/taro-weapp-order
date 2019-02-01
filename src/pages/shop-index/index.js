@@ -457,8 +457,8 @@ class ShopIndex extends Component {
                         classify.goods_list.map((good, i) => {
                           const cartGood = carts.find(item => item.g_id === good.g_id)
                           return (
-                            <View className='good' key={i} onClick={this.showDetail.bind(this, good)}>
-                              <View className='img-wrap'>
+                            <View className='good' key={i}>
+                              <View className='img-wrap' onClick={this.showDetail.bind(this, good)}>
                                 {
                                   good.tag_name &&
                                   <Text className={classnames('tag')} style={{background: good.tag_color}}>{good.tag_name}</Text>
@@ -466,7 +466,9 @@ class ShopIndex extends Component {
                                 <Image src={good.g_image_100 ? baseUrl + good.g_image_100 : ''}/>
                               </View>
                               <View className='info'>
-                                <View className='name'>{good.g_title}</View>
+                                <View className='name'>
+                                  <Text onClick={this.showDetail.bind(this, good)}>{good.g_title}</Text>
+                                </View>
                                 <View className='pre-price'>&yen;{good.g_original_price}</View>
                                 <View className='price'><Text>&yen;</Text>{good.g_price}</View>
                                 <View className='handle' onClick={this.stopPropagation}>
