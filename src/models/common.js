@@ -79,8 +79,6 @@ export default {
               } else {
                 Taro.getLocation().then(res => {
                   let {latitude, longitude} = res
-                  console.log(res)
-                  console.log(location, longitude)
                   resolve({location, longitude, latitude, locationCity, district})
                 })
               }

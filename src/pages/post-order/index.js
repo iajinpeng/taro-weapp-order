@@ -912,6 +912,7 @@ class Order extends Component {
                     onInput={this.handleMemoChange}
                     placeholderClass='textarea-placeholder'
                     placeholder='若有其它要求,请备注说明。'
+                    maxlength={30}
                   />
                 </View>
 

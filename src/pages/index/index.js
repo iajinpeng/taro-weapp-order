@@ -40,7 +40,7 @@ class Index extends Component {
   }
 
   componentDidMount () {
-
+    this.getIndexInfo()
     Taro.showShareMenu({
       withShareTicket: true
     })
@@ -54,11 +54,14 @@ class Index extends Component {
     } else {
       this.setState({isFirstShow: false})
     }
-    this.getIndexInfo()
   }
 
   componentDidHide () { }
 
+  onPullDownRefresh () {
+    Taro.stopPullDownRefresh()
+    this.getIndexInfo()
+  }
 
   getIndexInfo = () => {
     this.props.dispatch({

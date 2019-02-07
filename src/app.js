@@ -33,11 +33,12 @@ class App extends Component {
       }
     },
     window: {
-      backgroundTextStyle: 'light',
+      backgroundTextStyle: 'dark',
       navigationBarBackgroundColor: '#f5f5f5',
       navigationBarTitleText: '🐎',
       navigationBarTextStyle: 'black',
-      backgroundColor: '#f5f5f5'
+      backgroundColor: '#f5f5f5',
+      enablePullDownRefresh: true
     },
   }
 
