@@ -15,6 +15,7 @@ import CouponModal from '../../components/coupon-modal'
 class OrderDetail extends Component {
   config = {
     navigationBarTitleText: '订单详情',
+    enablePullDownRefresh: true
     // disableScroll: true
   }
 
@@ -52,6 +53,11 @@ class OrderDetail extends Component {
 
   componentWillUnmount () {
     clearTimeout(this.timeOut)
+  }
+
+  onPullDownRefresh () {
+    Taro.stopPullDownRefresh()
+    this.getOrderDetail()
   }
 
   getOrderDetail = () => {

@@ -38,6 +38,7 @@ class PickTime extends Component {
 
   handleClose = () => {
     this.props.onClose()
+    this.setState({dayIndex: this.props.dayIndex})
   }
 
   stopPro = e => {

@@ -38,7 +38,6 @@ class App extends Component {
       navigationBarTitleText: '🐎',
       navigationBarTextStyle: 'black',
       backgroundColor: '#f5f5f5',
-      enablePullDownRefresh: true
     },
   }
 

@@ -185,7 +185,7 @@ class Order extends Component {
       const s_take = store.s_take.map(v => +v)
       this.setState({
         store, couponList, userAddress, amount,
-        userPhoneNum: contact_mobile,
+        userPhoneNum: contact_mobile || this.state.userPhoneNum,
         s_take: store.s_take.map(v => +v)
       }, this.calcTextareaRect)
 
@@ -886,42 +886,26 @@ class Order extends Component {
               </View>
             </View>
 
-            <View className='block'>
+            <View className='block memo-block'>
               <View className='title'>备注</View>
               <View className='memo'>
-               {/* {
-                  isShowTextarea && !isShowPicker && !isShowAddress ?
-                    <Textarea
-                      id='textarea'
-                      className='textarea' maxlength={30} value={memo}
-                      onInput={this.handleMemoChange}
-                      placeholderClass='textarea-placeholder'
-                      placeholder='饮品中规格可参阅订单详情中的显示，若有其它要求,请说明。'
-                    />
-                    :
-                    <View className='alias'>
-                      {
-                        memo || '饮品中规格可参阅订单详情中的显示，若有其它要求,请说明。'
-                      }
-                    </View>
-                }
-*/}
                 <View className='wrap'>
                   <Input
-                    type='text'
+                    type='number'
                     onInput={this.handleMemoChange}
                     placeholderClass='textarea-placeholder'
                     placeholder='若有其它要求,请备注说明。'
                     maxlength={30}
+                    cursorSpacing={100}
                   />
                 </View>
 
                 <View className='font-num'>{memo.length}/30个字</View>
               </View>
             </View>
-            <View style={{marginTop: '100px'}}>
+            {/*<View style={{marginTop: '100px'}}>
               <Copyright />
-            </View>
+            </View>*/}
           </View>
         </View>
         <View className={classnames('footer', isIphoneX ? 'iphonex' : '')}>

@@ -167,6 +167,7 @@ class Coupon extends Component {
             </View>
           }
           {
+            lists1.length !== 0 &&
             <View className='coupon-list'>
               {
                 lists1.map((coupon, index) => (
@@ -230,6 +231,7 @@ class Coupon extends Component {
             </View>
           }
           {
+            lists2.length !== 0 &&
             <View className='coupon-list'>
               {
                 lists2.map((coupon, index) => (

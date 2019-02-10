@@ -55,10 +55,10 @@ class Choose extends Component {
 
   toggleShowCitys = () => {
     if (!this.state.isShowCitys) {
-      Taro.showLoading()
+      Taro.showNavigationBarLoading()
       this.setState({
         isShowCitys: true
-      }, Taro.hideLoading)
+      }, Taro.hideNavigationBarLoading)
     } else {
       this.setState({
         isShowCitys: false
@@ -270,9 +270,9 @@ class Choose extends Component {
               >{city || locationCity || '定位中...'}
                 <AtIcon value={isShowCitys ? 'chevron-up' : 'chevron-down'} size='18'/>
               </View>
-              <View className={classnames('search-box', isSearching ? 'full' : '')}>
+              <View className={classnames('search-box', isSearching ? 'full' : '')} onClick={this.toSearch}>
                 <AtIcon value='search' className='search-icon' size='18'/>
-                <View className='input-alias' onClick={this.toSearch}>搜索餐厅</View>
+                <View className='input-alias'>搜索餐厅</View>
                 <AtIcon value='close' className='search-cancel' size='16'/>
               </View>
             </Block>
@@ -296,7 +296,7 @@ class Choose extends Component {
         {
           isShowCitys &&
           <View className='select-city'>
-            <AtIndexes list={Citys} topKey='' onClick={this.chooseCity} animation>
+            <AtIndexes list={Citys} topKey='热门' onClick={this.chooseCity} animation>
               <View className='city-block' id='local' onClick={this.chooseCity.bind(this, {name: locationCity})}>
                 <View className='title'>当前定位城市</View>
                 <View className='item'>{locationCity}</View>
