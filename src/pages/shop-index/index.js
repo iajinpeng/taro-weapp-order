@@ -469,8 +469,14 @@ class ShopIndex extends Component {
                                 <View className='name'>
                                   <Text onClick={this.showDetail.bind(this, good)}>{good.g_title}</Text>
                                 </View>
-                                <View className='pre-price'>&yen;{good.g_original_price}</View>
-                                <View className='price'><Text>&yen;</Text>{good.g_price}</View>
+                                <View
+                                  className='pre-price' style={{visibility: +good.g_original_price !== 0 ? 'visible' : 'hidden'}}
+                                >
+                                  &yen;{good.g_original_price}
+                                </View>
+                                <View className='price'><Text>&yen;</Text>
+                                  <Text className='font-xin-normal'>{good.g_price}</Text>
+                                </View>
                                 <View className='handle' onClick={this.stopPropagation}>
                                   {
                                     good.g_combination === 1 &&
@@ -522,7 +528,7 @@ class ShopIndex extends Component {
           onTouchMove={this.stopPropagation}
           className={classnames('cart', isShowCart && carts.length > 0 ? 'active' : '')}>
           <View className='cart-head'>
-            <Image src={require('../../images/icon-trash.png')}/>
+            <Image src={require('../../assets/images/icon-trash.png')}/>
             <Text onClick={this.showOrHideCartWarn.bind(this, true)}>清空购物车</Text>
           </View>
           <ScrollView scrollY className='cart-list'>
@@ -654,7 +660,8 @@ class ShopIndex extends Component {
                 <View className='desc'>{curGood.g_description}</View>
                 <View className='price-wrap'>
                   <View className={classnames('price', 'theme-c-' + theme)}>
-                    <Text>&yen;</Text>{curGood.g_price}
+                    <Text>&yen;</Text>
+                    <Text className='font-xin-normal'>{curGood.g_price}</Text>
                   </View>
                   <View className='pre-price'><Text>&yen;</Text>{curGood.g_original_price}</View>
                   {
@@ -748,13 +755,15 @@ class ShopIndex extends Component {
               <View className='price-box'>
                 <View className={classnames('price', 'theme-c-' + theme)}>
                   <Text>&yen;</Text>
-                  {
-                    (+curGood.g_price + (stanInfo.norm &&
-                      stanInfo.norm.optional.reduce((total, item, index) => {
-                        total += +item.list[optionalTagIndex[index]].gn_price
-                        return total
-                      }, 0))).toFixed(2)
-                  }
+                  <Text className='font-xin-normal'>
+                    {
+                      (+curGood.g_price + (stanInfo.norm &&
+                        stanInfo.norm.optional.reduce((total, item, index) => {
+                          total += +item.list[optionalTagIndex[index]].gn_price
+                          return total
+                        }, 0))).toFixed(2)
+                    }
+                  </Text>
                 </View>
                 <View className='pre-price'>
                   <Text>&yen;</Text>

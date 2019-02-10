@@ -75,22 +75,24 @@ class PayBox extends Component {
           }
           <View className='price'>
             <Text>&yen;</Text>
-            {
-              totalPrice ||
-              (carts.reduce((total, good) => {
-                if (!good.optionalnumstr) {
-                  let price = good.g_price * good.num
-                  good.optional && (price +=
-                    good.optional.reduce((t, item, i) => {
-                      return t += +item.list[good.optionalTagIndex[i]].gn_price * good.num
-                    }, 0))
-                  good.num && (total += +price)
-                } else {
-                  total += good.total_price
-                }
-                return total
-              }, 0)).toFixed(2)
-            }
+            <Text className='font-xin-normal'>
+              {
+                totalPrice ||
+                (carts.reduce((total, good) => {
+                  if (!good.optionalnumstr) {
+                    let price = good.g_price * good.num
+                    good.optional && (price +=
+                      good.optional.reduce((t, item, i) => {
+                        return t += +item.list[good.optionalTagIndex[i]].gn_price * good.num
+                      }, 0))
+                    good.num && (total += +price)
+                  } else {
+                    total += good.total_price
+                  }
+                  return total
+                }, 0)).toFixed(2)
+              }
+            </Text>
           </View>
         </View>
         <IdButton className={'theme-grad-bg-' + theme} onClick={this.handleClick}>{btnText}</IdButton>

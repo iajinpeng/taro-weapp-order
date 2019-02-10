@@ -19,7 +19,7 @@ class Numbox extends Component {
           showNum &&
           <Block>
             <Image
-              src={require('../../images/icon-reduce.png')}
+              src={require('../../assets/images/icon-reduce.png')}
               onClick={onReduce}
               className='icon-reduce'
             >-</Image>

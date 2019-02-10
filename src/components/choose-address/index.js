@@ -132,7 +132,7 @@ class ChooseAddress extends Component {
                       </View>
                     </View>
                     <View className='edit' onClick={this.edit.bind(this, item)}>
-                      <Image src={require('../../images/icon-edit.png')} />
+                      <Image src={require('../../assets/images/icon-edit.png')} />
                     </View>
                   </View>
                 ))
@@ -154,7 +154,7 @@ class ChooseAddress extends Component {
                       </View>
                     </View>
                     <View className='edit' onClick={this.edit.bind(this, item)}>
-                      <Image src={require('../../images/icon-edit.png')} />
+                      <Image src={require('../../assets/images/icon-edit.png')} />
                     </View>
                   </View>
                 ))

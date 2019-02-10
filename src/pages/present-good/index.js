@@ -292,7 +292,9 @@ class PresentGood extends Component {
                     <View className='info'>
                       <View className='name'>{good.g_title}</View>
                       <View className='pre-price'>&yen;{good.g_original_price}</View>
-                      <View className='price'><Text>&yen;</Text>{good.g_price}</View>
+                      <View className='price'><Text>&yen;</Text>
+                        <Text className='font-xin-normal'>{good.g_price}</Text>
+                      </View>
                       <View className='handle' onClick={this.stopPropagation}>
                         {
                           good.g_combination === 1 &&
@@ -377,13 +379,15 @@ class PresentGood extends Component {
                 <View className='price-box'>
                   <View className={classnames('price', 'theme-c-' + theme)}>
                     <Text>&yen;</Text>
-                    {
-                      (+curGood.g_price + (stanInfo.norm &&
-                        stanInfo.norm.optional.reduce((total, item, index) => {
-                          total += +item.list[optionalTagIndex[index]].gn_price
-                          return total
-                        }, 0))).toFixed(2)
-                    }
+                    <Text className='font-xin-normal'>
+                      {
+                        (+curGood.g_price + (stanInfo.norm &&
+                          stanInfo.norm.optional.reduce((total, item, index) => {
+                            total += +item.list[optionalTagIndex[index]].gn_price
+                            return total
+                          }, 0))).toFixed(2)
+                      }
+                    </Text>
                   </View>
                   <View className='pre-price'>
                     <Text>&yen;</Text>
@@ -427,7 +431,8 @@ class PresentGood extends Component {
                   <View className='desc'>{curGood.g_description}</View>
                   <View className='price-wrap'>
                     <View className={classnames('price', 'theme-c-' + theme)}>
-                      <Text>&yen;</Text>{curGood.g_price}
+                      <Text>&yen;</Text>
+                      <Text className='font-xin-normal'>{curGood.g_price}</Text>
                     </View>
                     <View className='pre-price'><Text>&yen;</Text>{curGood.g_original_price}</View>
                     {
@@ -484,7 +489,7 @@ class PresentGood extends Component {
             onTouchMove={this.stopPropagation}
             className={classnames('cart', isShowCart && carts.length > 0 ? 'active' : '')}>
             <View className='cart-head'>
-              <Image src={require('../../images/icon-trash.png')}/>
+              <Image src={require('../../assets/images/icon-trash.png')}/>
               <Text onClick={this.showOrHideCartWarn.bind(this, true)}>清空购物车</Text>
             </View>
             <ScrollView scrollY className='cart-list'>
@@ -525,16 +530,18 @@ class PresentGood extends Component {
                         </View>
                         <View class='item-center'>
                           <Text className={'theme-c-' + theme}>&yen;
-                            {
-                              (+good.g_price
-                                + (
-                                  good.optional ?
-                                    good.optional.reduce((total, item, i) => {
-                                      return total += +item.list[good.optionalTagIndex[i]].gn_price
-                                    }, 0)
-                                    : 0
-                                )).toFixed(2)
-                            }
+                            <Text className='font-xin-normal'>
+                              {
+                                (+good.g_price
+                                  + (
+                                    good.optional ?
+                                      good.optional.reduce((total, item, i) => {
+                                        return total += +item.list[good.optionalTagIndex[i]].gn_price
+                                      }, 0)
+                                      : 0
+                                  )).toFixed(2)
+                              }
+                            </Text>
                           </Text>
                           <Text className='pre-price'>&yen;{good.g_original_price}</Text>
                         </View>

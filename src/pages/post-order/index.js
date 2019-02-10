@@ -618,7 +618,7 @@ class Order extends Component {
                     (s_take.indexOf(1) > -1 || s_take.indexOf(2) > -1) ? '' : 'disabled')}
                   onClick={this.changeOrderType.bind(this, 1)}>
                   <Image
-                    src={orderType !== 1 ? require('../../images/icon-shop.png') : `${baseUrl}/static/addons/diancan/img/style/style_${theme}_1.png`}/>
+                    src={orderType !== 1 ? require('../../assets/images/icon-shop.png') : `${baseUrl}/static/addons/diancan/img/style/style_${theme}_1.png`}/>
                   <Text>
                     {
                       (s_take.indexOf(1) > -1 || s_take.indexOf(2) > -1) ? '到店取餐' : '暂不自取'
@@ -630,7 +630,7 @@ class Order extends Component {
                     s_take.indexOf(3) > -1 ? '' : 'disabled')}
                   onClick={this.changeOrderType.bind(this, 3)}>
                   <Image
-                    src={orderType !== 3 ? require('../../images/icon-bike.png') : `${baseUrl}/static/addons/diancan/img/style/style_${theme}_4.png`}/>
+                    src={orderType !== 3 ? require('../../assets/images/icon-bike.png') : `${baseUrl}/static/addons/diancan/img/style/style_${theme}_4.png`}/>
                   <Text>
                     {
                       s_take.indexOf(3) > -1 ? '外卖配送' : '暂不配送'
@@ -657,7 +657,7 @@ class Order extends Component {
                     </View>
                   </View>
                   <View className='mobile'>
-                    <Image src={require('../../images/icon-mobile.png')}/>
+                    <Image src={require('../../assets/images/icon-mobile.png')}/>
                     <Input value={userPhoneNum} onInput={this.phoneNumInput} placeholder='请输入手机号' maxlength='15'/>
                     <Button open-type='getPhoneNumber' onGetphonenumber={this.autoInputMobile}>
                       <Text className={'theme-c-' + theme}>自动填写</Text>
@@ -671,7 +671,7 @@ class Order extends Component {
                     >
                       <Image
                         className='icon-drink' mode='widthFix'
-                        src={takeType === 1 ? require('../../images/icon-drink-active.png') : require('../../images/icon-drink.png')}
+                        src={takeType === 1 ? require('../../assets/images/icon-drink-active.png') : require('../../assets/images/icon-drink.png')}
                       />
                       堂食
                     </Button>
@@ -681,7 +681,7 @@ class Order extends Component {
                     >
                       <Image
                         className='icon-drink icon-bag' mode='widthFix'
-                        src={takeType === 2 ? require('../../images/icon-bag-active.png') : require('../../images/icon-bag.png')}
+                        src={takeType === 2 ? require('../../assets/images/icon-bag-active.png') : require('../../assets/images/icon-bag.png')}
                       />
                       外带
                     </Button>
@@ -878,9 +878,7 @@ class Order extends Component {
                 <View className='subtotal'>
                   共<Text className={'theme-c-' + theme}>{goods.length}</Text> 个商品，小计
                   <Text className={classnames('price', 'theme-c-' + theme)}><Text>&yen;</Text>
-                    {
-                      finalAmount
-                    }
+                    <Text className='font-xin-normal'>{finalAmount}</Text>
                   </Text>
                 </View>
               </View>
@@ -922,7 +920,7 @@ class Order extends Component {
                 </View>
                 <View className='total'>
                   合计￥
-                  <Text>
+                  <Text className='font-xin-normal'>
                     {finalAmount}
                   </Text>
                 </View>

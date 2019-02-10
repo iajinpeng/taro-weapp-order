@@ -278,7 +278,7 @@ class Index extends Component {
               <View className='title'>满单即送</View>
               <View className='count-box'>
                 <View className={classnames('count', 'theme-c-' + theme)}>
-                  <Text>{user_full_num}/{full_num}</Text>单
+                  <Text className='font-xin-normal'>{user_full_num}/{full_num}</Text>单
                 </View>
 
                 <Button

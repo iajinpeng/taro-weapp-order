@@ -63,7 +63,7 @@ class BackToHome extends Component {
         style={{left: x + 'Px', top: y + 'Px'}}
         className='back-to-home'
       >
-        <Image id='back-image' className='image' src={require('../../images/icon-backtohome.png')} />
+        <Image id='back-image' className='image' src={require('../../assets/images/icon-backtohome.png')} />
       </View>
     )
   }

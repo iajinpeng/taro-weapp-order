@@ -7,7 +7,7 @@ import Copyright from '../../components/copyright'
 import BackToHome from '../../components/back-to-home'
 import {getTouchData} from '../../utils/utils'
 import './index.less'
-import nullImage from '../../images/icon-coupon-null.png'
+import nullImage from '../../assets/images/icon-coupon-null.png'
 
 @connect(({common}) => ({...common}))
 class Coupon extends Component {

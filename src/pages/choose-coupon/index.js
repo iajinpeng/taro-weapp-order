@@ -120,7 +120,7 @@ class ChooseCoupon extends Component {
           </View>
             :
             <View className='null'>
-              <Image src={require('../../images/icon-coupon-null.png')} />
+              <Image src={require('../../assets/images/icon-coupon-null.png')} />
               <View>还没有任何优惠券哦~</View>
             </View>
         }

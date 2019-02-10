@@ -164,7 +164,9 @@ class StandardDetail extends Component {
                       <View className='info'>
                         <View className='name'>{good.gn_name}</View>
                         <View className='standard'>{good.gn_append}</View>
-                        <View className='price'>加&yen;{good.gn_price}</View>
+                        <View className='price'>加&yen;
+                          <Text className='font-xin-normal'>{good.gn_price}</Text>
+                        </View>
                       </View>
 
                       <View className='num-wrap'>

@@ -11,7 +11,7 @@ import './index.less'
 
 import {orderTypes, baseUrl, outOrderTypes} from '../../config'
 
-import orderNull from '../../images/icon-order-null.png'
+import orderNull from '../../assets/images/icon-order-null.png'
 
 @connect(({common}) => ({...common}))
 class OrderList extends Component {

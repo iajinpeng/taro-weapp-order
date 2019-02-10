@@ -116,7 +116,7 @@ class OrderDetail extends Component {
 
         if (+data.take_id === 2) {
           mapAttrs.markers.push({
-            iconPath: require('../../images/icon-dada.png'),
+            iconPath: require('../../assets/images/icon-dada.png'),
             width: 36,
             height: 36,
             id: '_' + data.o_id,
@@ -302,7 +302,7 @@ class OrderDetail extends Component {
                 {
                   data.o_order_status === 42 && data.take_id === 1 &&
                   <CoverView className='map-tip'>
-                    <CoverImage src={require('../../images/icon-bike.png')} />
+                    <CoverImage src={require('../../assets/images/icon-bike.png')} />
                    <CoverView className='text'>
                      {
                        `当前由${data.take_id === 1 ? '商家' : '骑手'}配送，请留意骑手来电`
@@ -314,7 +314,7 @@ class OrderDetail extends Component {
                 {
                   data.o_order_status === 42 && data.take_id === 2 &&
                   <CoverView className='map-refresh' onClick={this.handleRefresh}>
-                    <CoverImage src={require('../../images/icon-refresh.png')} />
+                    <CoverImage src={require('../../assets/images/icon-refresh.png')} />
                   </CoverView>
                 }
                 <View className='out-status'>
@@ -361,7 +361,7 @@ class OrderDetail extends Component {
                     (data.o_order_status === 1 || data.o_order_status === 2) ? '' : 'long')}
                     onClick={this.contactVendor.bind(this, data.s_telephone)}
                   >
-                    <Image src={require('../../images/icon-contact.png')} mode='widthFix' />
+                    <Image src={require('../../assets/images/icon-contact.png')} mode='widthFix' />
                     <View>联系商家</View>
                   </View>
 

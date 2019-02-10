@@ -13,7 +13,7 @@ class Loading extends Component {
 
     return (
       <View className='loading'>
-        <Image src={require('../../images/icon-loading.gif')} />
+        <Image src={require('../../assets/images/icon-loading.gif')} />
       </View>
     )
   }
