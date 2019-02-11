@@ -8,7 +8,7 @@ import IdButton from '../../components/id-button'
 import PickTime from '../../components/pick-time'
 import ChooseAddress from '../../components/choose-address'
 // import Copyright from '../../components/copyright'
-import Loading from '../../components/Loading'
+// import Loading from '../../components/Loading'
 import {baseUrl} from '../../config'
 
 import './index.less'
@@ -46,6 +46,7 @@ class Order extends Component {
     goods: [],
     isFullPrice: true,
     fullPrice: null,
+    memoFocus: false
   }
 
   componentWillMount() {
@@ -533,6 +534,15 @@ class Order extends Component {
     })
   }
 
+
+  memoFocus = () => {
+    this.setState({memoFocus: true})
+  }
+
+  handleMemoBlur = () => {
+    this.setState({memoFocus: false})
+  }
+
   render() {
     const {theme, curCouponIndex} = this.props
     const {
@@ -540,7 +550,7 @@ class Order extends Component {
       couponList, userAddress, amount, reserveTime,
       isShowAddress, userPhoneNum, selectedAddress,
       alertPhone, alertPhoneText, goods, dayIndex, timeIndex, isFullPrice,
-      fullPrice
+      fullPrice, memoFocus
     } = this.state
 
     const isIphoneX = !!(this.props.systemInfo.model &&
@@ -832,7 +842,7 @@ class Order extends Component {
                 }
 
                 <View className='ticket' onClick={this.toChooseCouponPage}>
-                  <View>
+                  <View className='ticket-name'>
                     <Image src={`${baseUrl}/static/addons/diancan/img/style/style_${theme}_5.png`}/>
                     <Text>
                       {
@@ -859,17 +869,18 @@ class Order extends Component {
               </View>
             </View>
 
-            <View className='block memo-block'>
+            <View className='block memo-block' onClick={this.memoFocus}>
               <View className='title'>备注</View>
               <View className='memo'>
                 <View className='wrap'>
                   <Input
-                    type='text'
+                    type='text' focus={memoFocus}
                     onInput={this.handleMemoChange}
                     placeholderClass='textarea-placeholder'
                     placeholder='若有其它要求,请备注说明。'
                     maxlength={30}
                     cursorSpacing={100}
+                    onBlur={this.handleMemoBlur}
                   />
                 </View>
 

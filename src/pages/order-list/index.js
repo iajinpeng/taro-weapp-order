@@ -34,7 +34,9 @@ class OrderList extends Component {
     curOrder: {},
     requested: false,
     curCoupon: {},
-    isShowCoupon: false
+    isShowCoupon: false,
+    scrollTop1: 0,
+    scrollTop2: 0
   }
 
   canRequestMore = true
@@ -55,6 +57,8 @@ class OrderList extends Component {
     this.setState({
       page: 1,
       type: i,
+      scrollTop1: 0,
+      scrollTop2: 0
     }, () => {
       this.requestOrderList().then(({total, rows}) => {
         Taro.hideNavigationBarLoading()
@@ -97,12 +101,14 @@ class OrderList extends Component {
     this.canRequestMore = true
 
     this.setState({page: page + 1}, () => {
+      Taro.showLoading({mask: true})
       this.requestOrderList().then(({total: tot, rows}) => {
         this.setState({
           ['lists' + type]: [...this.state['lists' + type], ...rows],
           total: tot,
           // firstId: rows[0].o_id
         })
+        Taro.hideLoading()
         this.canRequestMore = true
       })
     })
@@ -210,10 +216,16 @@ class OrderList extends Component {
     }
   }
 
+  handleScroll = (type, e) => {
+    this.setState({
+      ['scrollTop' + type]: e.detail.scrollTop
+    })
+  }
+
   render() {
     const {theme} = this.props
     const {type, requested, isShowCancelWarn, isShowOrderAgainWarn,
-      lists1, lists2, curCoupon, isShowCoupon} = this.state
+      lists1, lists2, curCoupon, isShowCoupon, scrollTop1, scrollTop2} = this.state
 
     return (
       requested &&
@@ -230,6 +242,8 @@ class OrderList extends Component {
         <ScrollView
           scrollY className={classnames('content', 'content-1', type === 1 ? 'active' : '')}
           onScrollToLower={this.requestMore}
+          scrollTop={scrollTop1}
+          onScroll={this.handleScroll.bind(this, 1)}
         >
           {
             lists1.length === 0 &&
@@ -398,6 +412,8 @@ class OrderList extends Component {
         <ScrollView
           scrollY className={classnames('content', 'content-2', type === 2 ? 'active' : '')}
           onScrollToLower={this.requestMore}
+          scrollTop={scrollTop2}
+          onScroll={this.handleScroll.bind(this, 2)}
         >
           {
             lists2.length === 0 &&

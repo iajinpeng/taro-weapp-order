@@ -23,7 +23,9 @@ class Coupon extends Component {
     lists1: [],
     lists2: [],
     total: 0,
-    openIndex: null
+    openIndex: null,
+    scrollTop1: 0,
+    scrollTop2: 0
   }
 
   canRequestMore = true
@@ -47,7 +49,9 @@ class Coupon extends Component {
     if(this.state.type === i) return
 
     this.setState({
-      page: 1
+      page: 1,
+      scrollTop1: 0,
+      scrollTop2: 0
     }, () => {
       this.requestCouponList(i).then(({total, rows}) => {
         this.setState({
@@ -82,11 +86,13 @@ class Coupon extends Component {
     this.canRequestMore = true
 
     this.setState({page: page + 1}, () => {
+      Taro.showLoading({mask: true})
       this.requestCouponList().then(({total, rows}) => {
         this.setState({
           ['lists' + type]: [...this.state['lists' + type], ...rows],
           total
         })
+        Taro.hideLoading()
         this.canRequestMore = true
       })
     })
@@ -144,9 +150,15 @@ class Coupon extends Component {
     }
   }
 
+  handleScroll = (type, e) => {
+    this.setState({
+      ['scrollTop' + type]: e.detail.scrollTop
+    })
+  }
+
   render() {
     const {theme, userInfo} = this.props
-    const {type, openIndex, lists1, lists2} = this.state
+    const {type, openIndex, lists1, lists2, scrollTop1, scrollTop2} = this.state
 
     return (
       <View className='coupon' onTouchStart={this.handleTouchStart} onTouchEnd={this.handleTouchEnd}>
@@ -162,6 +174,8 @@ class Coupon extends Component {
         <ScrollView
           scrollY className={classnames('content', 'content-1', type === 1 ? 'active' : '')}
           onScrollToLower={this.requestMore}
+          scrollTop={scrollTop1}
+          onScroll={this.handleScroll.bind(this, 1)}
         >
           {
             lists1.length === 0 &&
@@ -180,7 +194,7 @@ class Coupon extends Component {
                       <View className={classnames('deno', type === 1 ? 'theme-grad-bg-' + theme : '')}>
                         <View className='price'>
                           <Text>&yen;</Text>
-                          {coupon.uc_price}
+                          <Text className='num font-xin-bold'>{coupon.uc_price}</Text>
                         </View>
                         <View>{coupon.uc_min_amount}</View>
                       </View>
@@ -226,6 +240,8 @@ class Coupon extends Component {
         <ScrollView
           scrollY className={classnames('content', 'content-2', type === 2 ? 'active' : '')}
           onScrollToLower={this.requestMore}
+          scrollTop={scrollTop2}
+          onScroll={this.handleScroll.bind(this, 2)}
         >
           {
             lists2.length === 0 &&
@@ -244,7 +260,7 @@ class Coupon extends Component {
                       <View className={classnames('deno')}>
                         <View className='price'>
                           <Text>&yen;</Text>
-                          {coupon.uc_price}
+                          <Text className='num font-xin-bold'>{coupon.uc_price}</Text>
                         </View>
                         <View>{coupon.uc_min_amount}</View>
                       </View>
