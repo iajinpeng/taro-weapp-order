@@ -104,7 +104,7 @@ class ChooseAddress extends Component {
         />
         <View className={classnames('choose-address', show ? 'active' : '')} onTouchMove={this.stopPro}>
           <View className='title'>选择收货地址
-            <Text className='cacel' onClick={this.handleClose.bind(this, false)}>取消{defaultIndex}</Text>
+            <Text className='cacel' onClick={this.handleClose.bind(this, false)}>取消</Text>
           </View>
           <ScrollView scrollY className='content'>
             {

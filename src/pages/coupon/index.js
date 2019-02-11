@@ -237,7 +237,7 @@ class Coupon extends Component {
                 lists2.map((coupon, index) => (
                   <View className='item' key={index}>
                     <View className='entity'>
-                      <View className={classnames('deno', type === 1 ? 'theme-grad-bg-' + theme : '')}>
+                      <View className={classnames('deno')}>
                         <View className='price'>
                           <Text>&yen;</Text>
                           {coupon.uc_price}
@@ -245,7 +245,7 @@ class Coupon extends Component {
                         <View>{coupon.uc_min_amount}</View>
                       </View>
                       <View className='desc'>
-                        <View className={classnames('name', type === 2 ? 'disabled' : '')}>{coupon.uc_name}</View>
+                        <View className={classnames('name', 'disabled')}>{coupon.uc_name}</View>
                         <View className='time'>{coupon.uc_start_time} 至 {coupon.uc_end_time}</View>
                         <View className='btn' onClick={this.openCondition.bind(this, index)}>使用条件
                           <AtIcon value={openIndex === index ? 'chevron-up': 'chevron-down'} size='13' />
@@ -257,7 +257,7 @@ class Coupon extends Component {
                         onGetUserInfo={this.getedUserInfo}
                         formType='submit'
                         onClick={this.toChoosePage}
-                        className={classnames('handle', type === 1 ? 'theme-grad-bg-' + theme : '')}
+                        className={classnames('handle')}
                       >去使用</Button>
                     </View>
                     {

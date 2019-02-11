@@ -569,16 +569,18 @@ class ShopIndex extends Component {
                     </View>
                     <View class='item-center'>
                       <Text className={'theme-c-' + theme}>&yen;
-                        {
-                          (+good.g_price
-                            + (
-                              good.optional ?
-                                good.optional.reduce((total, item, i) => {
-                                  return total += +item.list[good.optionalTagIndex[i]].gn_price
-                                }, 0)
-                                : 0
-                            )).toFixed(2)
-                        }
+                        <Text className='font-xin-normal'>
+                          {
+                            (+good.g_price
+                              + (
+                                good.optional ?
+                                  good.optional.reduce((total, item, i) => {
+                                    return total += +item.list[good.optionalTagIndex[i]].gn_price
+                                  }, 0)
+                                  : 0
+                              )).toFixed(2)
+                          }
+                        </Text>
                       </Text>
                       <Text className='pre-price'>&yen;{good.g_original_price}</Text>
                     </View>

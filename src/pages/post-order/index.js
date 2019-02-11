@@ -1,5 +1,5 @@
 import Taro, {Component} from '@tarojs/taro'
-import {View, Text, Button, Image, ScrollView, Input, Textarea, Block} from '@tarojs/components'
+import {View, Text, Button, Image, Input, Block} from '@tarojs/components'
 import {connect} from '@tarojs/redux'
 import {AtIcon, AtToast} from 'taro-ui'
 import classnames from 'classnames'
@@ -7,7 +7,8 @@ import classnames from 'classnames'
 import IdButton from '../../components/id-button'
 import PickTime from '../../components/pick-time'
 import ChooseAddress from '../../components/choose-address'
-import Copyright from '../../components/copyright'
+// import Copyright from '../../components/copyright'
+import Loading from '../../components/Loading'
 import {baseUrl} from '../../config'
 
 import './index.less'
@@ -44,7 +45,8 @@ class Order extends Component {
     alertPhoneText: '',
     goods: [],
     isFullPrice: true,
-    fullPrice: null
+    fullPrice: null,
+    isShowLoading: false
   }
 
   componentWillMount() {
@@ -84,10 +86,12 @@ class Order extends Component {
     if (orderType === 1 && s_take.indexOf(1) === -1 && s_take.indexOf(2) === -1) return
     if (orderType === 3 && s_take.indexOf(3) === -1) return
 
-    Taro.showLoading()
+    this.setState({isShowLoading: true})
     this.initPage(orderType === 3 ? 3 : this.state.takeType).then(() => {
-      this.setState({orderType})
-      Taro.hideLoading()
+      this.setState({
+        orderType,
+        isShowLoading: false
+      })
     })
   }
 
@@ -565,7 +569,7 @@ class Order extends Component {
       couponList, userAddress, amount, reserveTime,
       isShowAddress, userPhoneNum, selectedAddress,
       alertPhone, alertPhoneText, goods, dayIndex, timeIndex, isFullPrice,
-      fullPrice
+      fullPrice, isShowLoading
     } = this.state
 
     const isIphoneX = !!(this.props.systemInfo.model &&
@@ -658,7 +662,7 @@ class Order extends Component {
                   </View>
                   <View className='mobile'>
                     <Image src={require('../../assets/images/icon-mobile.png')}/>
-                    <Input value={userPhoneNum} onInput={this.phoneNumInput} placeholder='请输入手机号' maxlength='15'/>
+                    <Input type='number' value={userPhoneNum} onInput={this.phoneNumInput} placeholder='请输入手机号' maxlength='15'/>
                     <Button open-type='getPhoneNumber' onGetphonenumber={this.autoInputMobile}>
                       <Text className={'theme-c-' + theme}>自动填写</Text>
                     </Button>
@@ -889,7 +893,7 @@ class Order extends Component {
               <View className='memo'>
                 <View className='wrap'>
                   <Input
-                    type='number'
+                    type='text'
                     onInput={this.handleMemoChange}
                     placeholderClass='textarea-placeholder'
                     placeholder='若有其它要求,请备注说明。'
@@ -962,6 +966,10 @@ class Order extends Component {
           isOpened={alertPhone} text={alertPhoneText} iconSize={40} duration={2000}
           icon='iphone' hasMask onClose={this.alertPhoneClose}
         />
+
+        {
+          isShowLoading && <Loading />
+        }
 
       </View>
     )

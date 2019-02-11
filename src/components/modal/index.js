@@ -43,8 +43,8 @@ class Modal extends Component {
           <View className={classnames('modal', className)} onClick={this.stopPro}>
             <View className='title' style={{textAlign: titleAlign}}>
               <Text className={!blackTitle ? 'theme-c-' + theme : ''}>{title}</Text>
-              <View className='icon-close'>
-                <AtIcon value='close' size='20' onClick={this.props.onHide} />
+              <View className='icon-close' onClick={this.props.onHide}>
+                <AtIcon value='close' size='20' />
               </View>
             </View>
             {this.props.children}
