@@ -46,7 +46,6 @@ class Order extends Component {
     goods: [],
     isFullPrice: true,
     fullPrice: null,
-    isShowLoading: false
   }
 
   componentWillMount() {
@@ -86,12 +85,12 @@ class Order extends Component {
     if (orderType === 1 && s_take.indexOf(1) === -1 && s_take.indexOf(2) === -1) return
     if (orderType === 3 && s_take.indexOf(3) === -1) return
 
-    this.setState({isShowLoading: true})
+    Taro.showNavigationBarLoading()
     this.initPage(orderType === 3 ? 3 : this.state.takeType).then(() => {
       this.setState({
         orderType,
-        isShowLoading: false
       })
+      Taro.hideNavigationBarLoading()
     })
   }
 
@@ -225,34 +224,6 @@ class Order extends Component {
         this.footerHeight = rect.height
       })
       .exec()
-  }
-
-  handleScroll = () => {
-    // let Query = Taro.createSelectorQuery()
-    // Query
-    //   .select('.memo')
-    //   .boundingClientRect(rect => {
-    //     let {top, height} = rect
-    //
-    //     this.setState({
-    //       isShowTextarea: !(top + height - 30 > this.footerScreenTop) || (top + 50 < this.footerHeight)
-    //     })
-    //   })
-    //   .exec()
-  }
-
-  onPageScroll () {
-    // let Query = Taro.createSelectorQuery()
-    // Query
-    //   .select('.memo')
-    //   .boundingClientRect(rect => {
-    //     let {top, height} = rect
-    //
-    //     this.setState({
-    //       isShowTextarea: !(top + height - 30 > this.footerScreenTop) || (top + 50 < this.footerHeight)
-    //     })
-    //   })
-    //   .exec()
   }
 
   handleMemoChange = e => {
@@ -569,7 +540,7 @@ class Order extends Component {
       couponList, userAddress, amount, reserveTime,
       isShowAddress, userPhoneNum, selectedAddress,
       alertPhone, alertPhoneText, goods, dayIndex, timeIndex, isFullPrice,
-      fullPrice, isShowLoading
+      fullPrice
     } = this.state
 
     const isIphoneX = !!(this.props.systemInfo.model &&
@@ -882,7 +853,7 @@ class Order extends Component {
                 <View className='subtotal'>
                   共<Text className={'theme-c-' + theme}>{goods.length}</Text> 个商品，小计
                   <Text className={classnames('price', 'theme-c-' + theme)}><Text>&yen;</Text>
-                    <Text className='font-xin-normal'>{finalAmount}</Text>
+                    <Text className='font-xin-normal num'>{finalAmount}</Text>
                   </Text>
                 </View>
               </View>
@@ -966,10 +937,6 @@ class Order extends Component {
           isOpened={alertPhone} text={alertPhoneText} iconSize={40} duration={2000}
           icon='iphone' hasMask onClose={this.alertPhoneClose}
         />
-
-        {
-          isShowLoading && <Loading />
-        }
 
       </View>
     )

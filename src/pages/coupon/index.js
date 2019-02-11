@@ -46,12 +46,16 @@ class Coupon extends Component {
   changeTab = i => {
     if(this.state.type === i) return
 
-    this.requestCouponList(i).then(({total, rows}) => {
-      this.setState({
-        openIndex: null,
-        type: i,
-        ['lists' + i]: rows,
-        total
+    this.setState({
+      page: 1
+    }, () => {
+      this.requestCouponList(i).then(({total, rows}) => {
+        this.setState({
+          openIndex: null,
+          type: i,
+          ['lists' + i]: rows,
+          total
+        })
       })
     })
 

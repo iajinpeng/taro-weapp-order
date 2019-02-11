@@ -27,7 +27,7 @@ class OrderList extends Component {
     lists1: [],
     lists2: [],
     total: 0,
-    firstId: '',
+    // firstId: '',
     isShowCancelWarn: false,
     isShowOrderAgainWarn: false,
     addCartPayload: {},
@@ -61,7 +61,7 @@ class OrderList extends Component {
         this.setState({
           total,
           ['lists' + i]: rows,
-          firstId: rows && rows.length > 0 && rows[0].o_id,
+          // firstId: rows && rows.length > 0 && rows[0].o_id,
         })
       })
     })
@@ -101,7 +101,7 @@ class OrderList extends Component {
         this.setState({
           ['lists' + type]: [...this.state['lists' + type], ...rows],
           total: tot,
-          firstId: rows[0].o_id
+          // firstId: rows[0].o_id
         })
         this.canRequestMore = true
       })
