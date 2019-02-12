@@ -63,9 +63,10 @@ class Order extends Component {
     this.initPage()
   }
 
-  componentDidShow() {
+  async componentDidShow() {
     if (this.props.refreshAddress) {
-      this.getPreOrderInfo(this.state.orderType)
+      const {amount} = this.getPreOrderInfo(this.state.orderType)
+      this.getReserveTime(amount, this.state.orderType)
 
       this.props.dispatch({
         type: 'order/setKeyRefreshAddress',
@@ -241,6 +242,7 @@ class Order extends Component {
         title: '由于配送地址/时间变化，您的配送费也发生了变化',
         icon: 'none'
       })
+      this.getReserveTime(this.state.amount, 3)
     }
     this.setState({
       isShowAddress: false,
@@ -643,7 +645,7 @@ class Order extends Component {
                   </View>
                   <View className='mobile'>
                     <Image src={require('../../assets/images/icon-mobile.png')}/>
-                    <Input type='number' value={userPhoneNum} onInput={this.phoneNumInput} placeholder='请输入手机号' maxlength='15'/>
+                    <Input type='number' value={userPhoneNum} onInput={this.phoneNumInput} placeholder='请输入手机号' maxlength='11'/>
                     <Button open-type='getPhoneNumber' onGetphonenumber={this.autoInputMobile}>
                       <Text className={'theme-c-' + theme}>自动填写</Text>
                     </Button>
@@ -704,13 +706,16 @@ class Order extends Component {
                     <Text>外卖下单</Text>
                     <View>
                       {
-                        reserveTime.length > 0 ?
+                        isFullPrice && reserveTime.length > 0 ?
                           (
                             (dayIndex === 0 ? '' : reserveTime[dayIndex].title)
                             + reserveTime[dayIndex].time[timeIndex].time
                           ) : ''
                       }
-                      <Image src={`${baseUrl}/static/addons/diancan/img/style/style_${theme}_3.png`}/>
+                      {
+                        !isFullPrice && <Text>未满起送价</Text>
+                      }
+                      <Image className={isFullPrice ? '' : 'gray'} src={`${baseUrl}/static/addons/diancan/img/style/style_${theme}_3.png`}/>
                     </View>
                   </View>
                 </View>

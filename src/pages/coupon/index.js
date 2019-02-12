@@ -24,8 +24,7 @@ class Coupon extends Component {
     lists2: [],
     total: 0,
     openIndex: null,
-    scrollTop1: 0,
-    scrollTop2: 0
+    firstId: null
   }
 
   canRequestMore = true
@@ -50,15 +49,14 @@ class Coupon extends Component {
 
     this.setState({
       page: 1,
-      scrollTop1: 0,
-      scrollTop2: 0
     }, () => {
       this.requestCouponList(i).then(({total, rows}) => {
         this.setState({
           openIndex: null,
           type: i,
           ['lists' + i]: rows,
-          total
+          total,
+          firstId: rows && rows.length > 0 ? 'uc-' + rows[0].uc_id : null
         })
       })
     })
@@ -158,7 +156,7 @@ class Coupon extends Component {
 
   render() {
     const {theme, userInfo} = this.props
-    const {type, openIndex, lists1, lists2, scrollTop1, scrollTop2} = this.state
+    const {type, openIndex, lists1, lists2, firstId} = this.state
 
     return (
       <View className='coupon' onTouchStart={this.handleTouchStart} onTouchEnd={this.handleTouchEnd}>
@@ -174,8 +172,8 @@ class Coupon extends Component {
         <ScrollView
           scrollY className={classnames('content', 'content-1', type === 1 ? 'active' : '')}
           onScrollToLower={this.requestMore}
-          scrollTop={scrollTop1}
           onScroll={this.handleScroll.bind(this, 1)}
+          scrollIntoView={firstId}
         >
           {
             lists1.length === 0 &&
@@ -189,7 +187,7 @@ class Coupon extends Component {
             <View className='coupon-list'>
               {
                 lists1.map((coupon, index) => (
-                  <View className='item' key={index}>
+                  <View className='item' key={index} id={'uc-' + coupon.uc_id}>
                     <View className='entity'>
                       <View className={classnames('deno', type === 1 ? 'theme-grad-bg-' + theme : '')}>
                         <View className='price'>
@@ -240,8 +238,8 @@ class Coupon extends Component {
         <ScrollView
           scrollY className={classnames('content', 'content-2', type === 2 ? 'active' : '')}
           onScrollToLower={this.requestMore}
-          scrollTop={scrollTop2}
           onScroll={this.handleScroll.bind(this, 2)}
+          scrollIntoView={firstId}
         >
           {
             lists2.length === 0 &&
@@ -255,7 +253,7 @@ class Coupon extends Component {
             <View className='coupon-list'>
               {
                 lists2.map((coupon, index) => (
-                  <View className='item' key={index}>
+                  <View className='item' key={index} id={'uc-' + coupon.uc_id}>
                     <View className='entity'>
                       <View className={classnames('deno')}>
                         <View className='price'>

@@ -170,7 +170,7 @@ class AddAddress extends Component {
           <View className='item'>
             <View className='label'>手机号</View>
             <Input type='number'
-              className='input' placeholder='输入联系人手机号' placeholderClass='input-place' maxLength='15'
+              className='input' placeholder='输入联系人手机号' placeholderClass='input-place' maxLength='11'
               value={user_telephone} onInput={this.handleInput.bind(this, 'user_telephone')}
             />
           </View>

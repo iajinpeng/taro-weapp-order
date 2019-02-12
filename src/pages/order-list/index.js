@@ -27,7 +27,7 @@ class OrderList extends Component {
     lists1: [],
     lists2: [],
     total: 0,
-    // firstId: '',
+    firstId: '',
     isShowCancelWarn: false,
     isShowOrderAgainWarn: false,
     addCartPayload: {},
@@ -35,8 +35,6 @@ class OrderList extends Component {
     requested: false,
     curCoupon: {},
     isShowCoupon: false,
-    scrollTop1: 0,
-    scrollTop2: 0
   }
 
   canRequestMore = true
@@ -57,15 +55,13 @@ class OrderList extends Component {
     this.setState({
       page: 1,
       type: i,
-      scrollTop1: 0,
-      scrollTop2: 0
     }, () => {
       this.requestOrderList().then(({total, rows}) => {
         Taro.hideNavigationBarLoading()
         this.setState({
           total,
           ['lists' + i]: rows,
-          // firstId: rows && rows.length > 0 && rows[0].o_id,
+          firstId: rows && rows.length > 0 && ('o-' + rows[0].o_id),
         })
       })
     })
@@ -106,7 +102,7 @@ class OrderList extends Component {
         this.setState({
           ['lists' + type]: [...this.state['lists' + type], ...rows],
           total: tot,
-          // firstId: rows[0].o_id
+          firstId: rows && rows.length > 0 && ('o-' + rows[0].o_id),
         })
         Taro.hideLoading()
         this.canRequestMore = true
@@ -225,7 +221,7 @@ class OrderList extends Component {
   render() {
     const {theme} = this.props
     const {type, requested, isShowCancelWarn, isShowOrderAgainWarn,
-      lists1, lists2, curCoupon, isShowCoupon, scrollTop1, scrollTop2} = this.state
+      lists1, lists2, curCoupon, isShowCoupon, firstId} = this.state
 
     return (
       requested &&
@@ -242,8 +238,8 @@ class OrderList extends Component {
         <ScrollView
           scrollY className={classnames('content', 'content-1', type === 1 ? 'active' : '')}
           onScrollToLower={this.requestMore}
-          scrollTop={scrollTop1}
           onScroll={this.handleScroll.bind(this, 1)}
+          scrollIntoView={firstId}
         >
           {
             lists1.length === 0 &&
@@ -265,7 +261,7 @@ class OrderList extends Component {
               {
                 lists1.map((order, index) => (
                   <View
-                    className='order-item' key={index} id={'id' + order.o_id}
+                    className='order-item' key={index} id={'o-' + order.o_id}
                     onClick={this.toOrderDetail.bind(this, order.o_id, order.store_id)}
                   >
                     <View className='wrap'>
@@ -412,7 +408,7 @@ class OrderList extends Component {
         <ScrollView
           scrollY className={classnames('content', 'content-2', type === 2 ? 'active' : '')}
           onScrollToLower={this.requestMore}
-          scrollTop={scrollTop2}
+          scrollIntoView={firstId}
           onScroll={this.handleScroll.bind(this, 2)}
         >
           {
@@ -435,7 +431,7 @@ class OrderList extends Component {
               {
                 lists2.map((order, index) => (
                   <View
-                    className='order-item' key={index} id={'id' + order.o_id}
+                    className='order-item' key={index} id={'o-' + order.o_id}
                     onClick={this.toOrderDetail.bind(this, order.o_id, order.store_id)}
                   >
                     <View className='wrap'>

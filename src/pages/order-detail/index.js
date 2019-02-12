@@ -307,6 +307,7 @@ class OrderDetail extends Component {
                      {
                        `当前由${data.take_id === 1 ? '商家' : '骑手'}配送，请留意骑手来电`
                      }
+                     &nbsq;
                    </CoverView>
                   </CoverView>
                 }
@@ -552,7 +553,7 @@ class OrderDetail extends Component {
                   <Text>{data.o_order_no}</Text>
                 </View>
                 <View className='memo item'>
-                  <Text>备注：</Text>
+                  <Text style={{width: '66px'}}>备注：</Text>
                   {data.o_remark}
                 </View>
               </View>
