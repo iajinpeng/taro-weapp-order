@@ -266,15 +266,15 @@ class PresentGood extends Component {
 
 
   render() {
-    const {theme, menu_cart} = this.props
-    const {goods, image, curGood, isShowOptions, isShowDetail, stanInfo, curCart,
+    const {theme, menu_cart, full_logo_goods} = this.props
+    const {goods, curGood, isShowOptions, isShowDetail, stanInfo, curCart,
       propertyTagIndex, optionalTagIndex, isShowCart} = this.state
     const carts = (this.props.carts[(this.$router.params.id)] || []).filter(item => item.fs_id)
 
     return (
       goods.length > 0 ?
         <View className='present-good'>
-          <Image className='banner' src={image ? baseUrl + image : ''}/>
+          <Image className='banner' src={full_logo_goods ? baseUrl + full_logo_goods : ''}/>
 
           <View className='good-list'>
             {

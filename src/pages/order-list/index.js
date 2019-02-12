@@ -390,7 +390,8 @@ class OrderList extends Component {
                         }
 
                         <View className={classnames('order-price', 'theme-c-' + theme)}>
-                          <Text className='yen'>&yen;</Text>{order.o_pay_amount}
+                          <Text className='yen'>&yen;</Text>
+                          <Text className='font-xin-bold'>{order.o_pay_amount}</Text>
                         </View>
                       </View>
 
@@ -561,7 +562,8 @@ class OrderList extends Component {
                         }
 
                         <View className={classnames('order-price', 'theme-c-' + theme)}>
-                          <Text className='yen'>&yen;</Text>{order.o_pay_amount}
+                          <Text className='yen'>&yen;</Text>
+                          <Text className='font-xin-bold'>{order.o_pay_amount}</Text>
                         </View>
                       </View>
 

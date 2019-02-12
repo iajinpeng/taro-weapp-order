@@ -21,6 +21,7 @@
     font-size: 24px;
     font-weight: bold;
     color: @c-40;
+    width: 420px;
     cover-image{
       width: 32px;
       height: 26px;
@@ -46,7 +47,7 @@
       margin-top: 18px;
       display: inline-block;
       &.rotate{
-        transform: rotate(360deg);
+        transform: rotateZ(360deg);
         transition: transform linear 1s;
       }
     }
@@ -138,6 +139,9 @@
         &>text{
           margin-left: 20px;
         }
+      }
+      .refund_remark{
+        max-width: 50%;
       }
     }
     &>button{
@@ -306,6 +310,7 @@
           }
           .address{
             .lines-clamp(1);
+            text-align: left;
           }
         }
         &.memo{
@@ -326,7 +331,7 @@
       color: @c-999;
       .price{
         font-size: 48px;
-        &>text{
+        .yen{
           font-size: 28px;
           position: relative;
           top: -10px;

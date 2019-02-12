@@ -88,6 +88,9 @@ class Order extends Component {
 
   changeOrderType = async orderType => {
     const s_take = this.state.s_take
+    const o_type = this.state.orderType
+
+    if (o_type === orderType) return
 
     if (orderType === 1 && s_take.indexOf(1) === -1 && s_take.indexOf(2) === -1) return
     if (orderType === 3 && s_take.indexOf(3) === -1) return
@@ -703,7 +706,7 @@ class Order extends Component {
                     <Text>外卖下单</Text>
                     <View>
                       {
-                        isFullPrice && reserveTime.length > 0 ?
+                        selectedAddress.address && isFullPrice && reserveTime.length > 0 ?
                           (
                             (dayIndex === 0 ? '' : reserveTime[dayIndex].title)
                             + reserveTime[dayIndex].time[timeIndex].time
@@ -712,7 +715,10 @@ class Order extends Component {
                       {
                         !isFullPrice && <Text>未满起送价</Text>
                       }
-                      <Image className={isFullPrice ? '' : 'gray'} src={`${baseUrl}/static/addons/diancan/img/style/style_${theme}_3.png`}/>
+                      {
+                        !selectedAddress.address && <Text>请先选择地址</Text>
+                      }
+                      <Image className={isFullPrice && selectedAddress.address ? '' : 'gray'} src={`${baseUrl}/static/addons/diancan/img/style/style_${theme}_3.png`}/>
                     </View>
                   </View>
                 </View>

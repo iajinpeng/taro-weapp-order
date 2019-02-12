@@ -147,7 +147,7 @@ class ChooseAddress extends Component {
 
                 {
                   uselessAddress.map((item, index) => (
-                    <View className='address-item useless' key={index} onClick={this.choose.bind(this, index)}>
+                    <View className='address-item useless' key={index}>
                       <View className='alias' />
                       <View className='info'>
                         <View className='addr'>{item.address}</View>

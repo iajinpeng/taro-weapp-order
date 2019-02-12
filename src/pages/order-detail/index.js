@@ -99,21 +99,24 @@ class OrderDetail extends Component {
           latitude: data.o_address_lat,
         })
         mapAttrs.includePoints = mapAttrs.markers
-        mapAttrs.polyline = [{
-          points: [
-            {
-              longitude: data.s_address_lng,
-              latitude: data.s_address_lat,
-            },
-            {
-              longitude: data.o_address_lng,
-              latitude: data.o_address_lat,
-            }
-          ],
-          color: '#FF0000DD',
-          width: 2,
-          dottedLine: true,
-        }]
+
+        if (+data.take_id === 1) {
+          mapAttrs.polyline = [{
+            points: [
+              {
+                longitude: data.s_address_lng,
+                latitude: data.s_address_lat,
+              },
+              {
+                longitude: data.o_address_lng,
+                latitude: data.o_address_lat,
+              }
+            ],
+            color: '#FF0000DD',
+            width: 2,
+            dottedLine: true,
+          }]
+        }
 
         if (+data.take_id === 2) {
           mapAttrs.markers.push({
@@ -416,12 +419,12 @@ class OrderDetail extends Component {
 
                   {
                     (data.o_order_status === 6 || data.o_order_status === 7) &&
-                    <Text>
-                      {data.o_refund_remark}
+                    <View>
+                      <View className='refund_remark'>{data.o_refund_remark}</View>
                       {
                         data.o_order_status === 6 ? '\n ' + '退款成功：预计1-7工作日到账' : ''
                       }
-                    </Text>
+                    </View>
                   }
                 </View>
                 {
@@ -525,7 +528,7 @@ class OrderDetail extends Component {
                   <View className='item address-info'>
                     <Text>收货信息</Text>
                     <View>
-                      <View style={{display: 'flex'}}>
+                      <View style={{display: 'flex', justifyContent: 'space-between'}}>
                         <Text className='user'>{data.o_contact_name}</Text>
                         {data.o_contact_mobile}
                       </View>
@@ -572,8 +575,8 @@ class OrderDetail extends Component {
               <View className='footer'>
                 <Text>总计</Text>
                 <View className={classnames('price', 'theme-c-' + theme)}>
-                  <Text>&yen;</Text>
-                  {data.o_pay_amount}
+                  <Text className='yen'>&yen;</Text>
+                  <Text className='font-xin-bold'>{data.o_pay_amount}</Text>
                 </View>
               </View>
 

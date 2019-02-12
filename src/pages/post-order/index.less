@@ -219,17 +219,21 @@
             width: 280px;
             display: flex;
             flex-wrap: wrap;
-            align-items: stretch;
+            //align-items: stretch;
             .name{
               font-size: 32px;
               font-weight: bold;
               color: @c-40;
               width: 100%;
-              .lines-clamp(2);
+              white-space: nowrap;
+              text-overflow: ellipsis;
+              overflow: hidden;
             }
             .standard{
               width: 100%;
-              .lines-clamp(2);
+              text-overflow: ellipsis;
+              overflow: hidden;
+              white-space: nowrap;
               font-size: 24px;
               color: @c-999;
               max-height: 72px;

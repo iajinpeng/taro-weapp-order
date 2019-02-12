@@ -112,11 +112,11 @@ export default {
 
       const data = yield call(requestHomeInfo)
 
-      const {menu_banner, menu_cart, bottom_logo, b_logo, b_bottom_content, b_bottom_status, ...indexState} = data
+      const {menu_banner, menu_cart, bottom_logo, b_logo, b_bottom_content, b_bottom_status, full_logo_goods, ...indexState} = data
 
       yield put({
         type: 'setThemeInfo',
-        payload: {menu_banner, menu_cart, theme: data.style_color, bottom_logo, b_logo, b_bottom_content, b_bottom_status}
+        payload: {menu_banner, menu_cart, theme: data.style_color, bottom_logo, b_logo, b_bottom_content, b_bottom_status, full_logo_goods}
       })
 
       return indexState
