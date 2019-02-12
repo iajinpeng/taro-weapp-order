@@ -19,6 +19,7 @@ class Order extends Component {
 
   config = {
     navigationBarTitleText: '提交订单',
+    enablePullDownRefresh: true
     // disableScroll: true,
   }
 
@@ -63,10 +64,14 @@ class Order extends Component {
     this.initPage()
   }
 
+  onPullDownRefresh () {
+    Taro.stopPullDownRefresh()
+    this.initPage(this.state.orderType)
+  }
+
   async componentDidShow() {
     if (this.props.refreshAddress) {
-      const {amount} = this.getPreOrderInfo(this.state.orderType)
-      this.getReserveTime(amount, this.state.orderType)
+      this.initPage(this.state.orderType)
 
       this.props.dispatch({
         type: 'order/setKeyRefreshAddress',
@@ -97,9 +102,9 @@ class Order extends Component {
   }
 
   initPage = async (orderType) => {
-    const {amount, couponList} = await this.getPreOrderInfo(orderType)
+    const {amount, couponList, address} = await this.getPreOrderInfo(orderType)
 
-    this.getReserveTime(amount, orderType)
+    this.getReserveTime(amount, orderType, address)
 
     const index = couponList.findIndex(item => item.available) > -1 ?
       couponList.findIndex(item => item.available) : -1
@@ -192,7 +197,7 @@ class Order extends Component {
         store, couponList, userAddress, amount,
         userPhoneNum: contact_mobile || this.state.userPhoneNum,
         s_take: store.s_take.map(v => +v)
-      }, this.calcTextareaRect)
+      })
 
       if (take_type) {
         this.setState({orderType: take_type})
@@ -207,25 +212,16 @@ class Order extends Component {
         }
       }
 
+      let address = {}
       if (userAddress.length === 0) {
-        this.setState({selectedAddress: {}})
       } else {
         const useAddress = userAddress.find(item => item.optional) || []
-        this.setState({selectedAddress: useAddress || {}})
+        address = useAddress || {}
       }
-      return {amount, couponList}
-    })
-  }
 
-  calcTextareaRect = () => {
-    const Query = Taro.createSelectorQuery()
-    Query
-      .select('.footer')
-      .boundingClientRect(rect => {
-        this.footerScreenTop = rect.top
-        this.footerHeight = rect.height
-      })
-      .exec()
+      this.setState({selectedAddress: address})
+      return {amount, couponList, address}
+    })
   }
 
   handleMemoChange = e => {
@@ -242,7 +238,7 @@ class Order extends Component {
         title: '由于配送地址/时间变化，您的配送费也发生了变化',
         icon: 'none'
       })
-      this.getReserveTime(this.state.amount, 3)
+      this.getReserveTime(this.state.amount, 3, address)
     }
     this.setState({
       isShowAddress: false,
@@ -281,14 +277,15 @@ class Order extends Component {
     this.setState({isShowPicker: true})
   }
 
-  getReserveTime = (amount, orderType) => {
-    const {localInfo} = this.props
+  getReserveTime = (amount, orderType, address) => {
+    // const {localInfo} = this.props
+    // const {selectedAddress} = this.state
     return this.props.dispatch({
       type: 'order/getReserveTime',
       payload: {
         store_id: this.$router.params.store_id,
-        lat: localInfo.latitude,
-        lng: localInfo.longitude,
+        lat: address.address_lat,
+        lng: address.address_lng,
         take_type: orderType,
         amount
       }

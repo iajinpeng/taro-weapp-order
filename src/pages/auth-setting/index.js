@@ -8,6 +8,10 @@ import './index.less'
 @connect(({common}) => ({...common}))
 class AuthSetting extends Component {
 
+  config = {
+    navigationBarTitleText: '定位设置',
+  }
+
   toSetting = async () => {
     const res = await Taro.openSetting({scope: 'scope.userLocation'})
     if (res.authSetting['scope.userLocation']) {

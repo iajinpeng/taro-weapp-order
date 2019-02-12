@@ -89,8 +89,7 @@ class Coupon extends Component {
         this.setState({
           ['lists' + type]: [...this.state['lists' + type], ...rows],
           total
-        })
-        Taro.hideLoading()
+        }, Taro.hideLoading)
         this.canRequestMore = true
       })
     })
@@ -174,6 +173,7 @@ class Coupon extends Component {
           onScrollToLower={this.requestMore}
           onScroll={this.handleScroll.bind(this, 1)}
           scrollIntoView={firstId}
+          lowerThreshold={10}
         >
           {
             lists1.length === 0 &&
@@ -240,6 +240,7 @@ class Coupon extends Component {
           onScrollToLower={this.requestMore}
           onScroll={this.handleScroll.bind(this, 2)}
           scrollIntoView={firstId}
+          lowerThreshold={10}
         >
           {
             lists2.length === 0 &&

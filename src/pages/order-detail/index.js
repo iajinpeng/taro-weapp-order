@@ -30,7 +30,8 @@ class OrderDetail extends Component {
     polyline: [],
     addCartPayload: {},
     curCoupon: {},
-    isShowCoupon: false
+    isShowCoupon: false,
+    mapRefresh: false
   }
 
   componentWillMount() {
@@ -150,7 +151,12 @@ class OrderDetail extends Component {
 
   handleRefresh = async () => {
     Taro.showLoading()
+    this.setState({mapRefresh: true})
+    this.state.mapRefresh && setTimeout(() => {
+      this.setState({mapRefresh: false})
+    }, 1000)
     await this.getOrderDetail()
+
     Taro.hideLoading()
   }
 
@@ -277,7 +283,7 @@ class OrderDetail extends Component {
     const isIphoneX = !!(systemInfo.model && systemInfo.model.replace(' ', '').toLowerCase().indexOf('iphonex') > -1)
 
     const {data, isShowCancelWarn, markers, isShowOrderAgainWarn, includePoints,
-      polyline, curCoupon, isShowCoupon} = this.state
+      polyline, curCoupon, isShowCoupon, mapRefresh} = this.state
 
     return (
       <Block>
@@ -297,6 +303,7 @@ class OrderDetail extends Component {
                   markers={markers}
                   includePoints={includePoints}
                   polyline={polyline}
+                  showLocation={false}
                 />
 
                 {
@@ -307,7 +314,7 @@ class OrderDetail extends Component {
                      {
                        `当前由${data.take_id === 1 ? '商家' : '骑手'}配送，请留意骑手来电`
                      }
-                     &nbsq;
+                     &ensp;
                    </CoverView>
                   </CoverView>
                 }
@@ -315,7 +322,7 @@ class OrderDetail extends Component {
                 {
                   data.o_order_status === 42 && data.take_id === 2 &&
                   <CoverView className='map-refresh' onClick={this.handleRefresh}>
-                    <CoverImage src={require('../../assets/images/icon-refresh.png')} />
+                    <CoverImage className={mapRefresh ? 'rotate' : ''} src={require('../../assets/images/icon-refresh.png')} />
                   </CoverView>
                 }
                 <View className='out-status'>
@@ -519,7 +526,7 @@ class OrderDetail extends Component {
                     <Text>收货信息</Text>
                     <View>
                       <View style={{display: 'flex'}}>
-                        <Text className='user'>{data.o_contact_name}姐夫的 v 白癜风1</Text>
+                        <Text className='user'>{data.o_contact_name}</Text>
                         {data.o_contact_mobile}
                       </View>
                       <View className='address'>{data.o_address}</View>

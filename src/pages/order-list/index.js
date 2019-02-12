@@ -240,6 +240,7 @@ class OrderList extends Component {
           onScrollToLower={this.requestMore}
           onScroll={this.handleScroll.bind(this, 1)}
           scrollIntoView={firstId}
+          lowerThreshold={10}
         >
           {
             lists1.length === 0 &&
@@ -410,6 +411,7 @@ class OrderList extends Component {
           onScrollToLower={this.requestMore}
           scrollIntoView={firstId}
           onScroll={this.handleScroll.bind(this, 2)}
+          lowerThreshold={10}
         >
           {
             lists2.length === 0 &&
