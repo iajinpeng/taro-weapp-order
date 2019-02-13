@@ -19,7 +19,10 @@ export default {
 
       !curCart && (curCart = [])
 
-      if (num === 1 && good.order_id && curCart.some(item => item.order_id === good.order_id)) {
+      if (num === 1 && good.order_id &&
+        curCart.some(item => item.order_id === good.order_id) &&
+        curCart.some(item => item.g_id === good.g_id)
+      ) {
         return {...state}
       }
 

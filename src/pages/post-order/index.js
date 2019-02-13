@@ -571,19 +571,24 @@ class Order extends Component {
         totalAmout += +reserveTime[dayIndex].time[timeIndex].price
       }
     }
+
+    if (takeType === 2) {
+      totalAmout += +store.s_take_money
+    }
     if (couponList[curCouponIndex] && couponList[curCouponIndex].uc_price) {
       totalAmout -= +couponList[curCouponIndex].uc_price
 
       totalAmout < 0 && (totalAmout = 0)
     }
 
-    const noConponAmount = (+amount + +store.s_take_money
+    let noConponAmount = (+amount + +store.s_take_money
       + (orderType === 3 && reserveTime.length > 0 ?
         (
           +reserveTime[dayIndex].time[timeIndex].price
         ) : 0)).toFixed(2)
 
-    const finalAmount =  (totalAmout + +store.s_take_money).toFixed(2)
+    let finalAmount = totalAmout.toFixed(2)
+
 
     const availableCoupons = couponList.filter(item => item.available)
     return (
