@@ -66,7 +66,7 @@ export default {
     * repeatOrderAddCart({payload}, {put}) {
       const {store_id, order_id, goods} = payload
 
-      const cartGoods = goods.map(good => {
+      const cartGoods = goods.map((good, index) => {
 
         let {propertyTagIndex, optionalTagIndex, optionalnumstr} = good
 
@@ -98,6 +98,8 @@ export default {
 
           good.total_price = +good.g_price + optPrice
         }
+
+        good.again_id = order_id + '-' + index
 
         const {od_optional_array, od_property_array, ...useGood} = good;
 

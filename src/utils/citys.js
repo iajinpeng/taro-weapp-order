@@ -9,7 +9,7 @@ export default [{
 }, {
   "title": "B",
   "key": "B",
-  "items": [{"name": "北京"}, {"name": "蚌埠"}, {"name": "本溪"}]
+  "items": [{"name": "北京"}]
 }, {
   "title": "C",
   "key": "C",
@@ -21,7 +21,7 @@ export default [{
 }, {"title": "E", "key": "E", "items": [{"name": "鄂尔多斯"}]}, {
   "title": "F",
   "key": "F",
-  "items": [{"name": "福州"}, {"name": "佛山"}, {"name": "抚州"}, {"name": "阜阳"}]
+  "items": [{"name": "福州"}, {"name": "佛山"}, {"name": "抚州"}]
 }, {
   "title": "G",
   "key": "G",
@@ -49,33 +49,33 @@ export default [{
 }, {
   "title": "P",
   "key": "P",
-  "items": [{"name": "攀枝花"}, {"name": "萍乡"}, {"name": "濮阳"}]
+  "items": [{"name": "萍乡"}]
 }, {
   "title": "Q",
   "key": "Q",
-  "items": [{"name": "青岛"}, {"name": "清远"}, {"name": "秦皇岛"}, {"name": "泉州"}, {"name": "衢州"}]
+  "items": [{"name": "青岛"}, {"name": "清远"}, {"name": "泉州"}, {"name": "衢州"}]
 }, {"title": "R", "key": "R", "items": [{"name": "日照"}]}, {
   "title": "S",
   "key": "S",
-  "items": [{"name": "上海"}, {"name": "深圳"}, {"name": "苏州"}, {"name": "沈阳"}, {"name": "石家庄"}, {"name": "上饶"}, {"name": "韶关"}, {"name": "绍兴"}]
+  "items": [{"name": "上海"}, {"name": "深圳"}, {"name": "苏州"}, {"name": "沈阳"}, {"name": "石家庄"}, {"name": "上饶"}, {"name": "绍兴"}]
 }, {
   "title": "T",
   "key": "T",
-  "items": [{"name": "天津"}, {"name": "太原"}, {"name": "唐山"}, {"name": "天水"}, {"name": "铁岭"}]
+  "items": [{"name": "天津"}, {"name": "太原"}, {"name": "唐山"}, {"name": "天水"}]
 }, {
   "title": "W",
   "key": "W",
-  "items": [{"name": "武汉"}, {"name": "乌鲁木齐"}, {"name": "芜湖"}]
+  "items": [{"name": "武汉"}, {"name": "芜湖"}]
 }, {
   "title": "X",
   "key": "X",
-  "items": [{"name": "厦门"}, {"name": "西安"}, {"name": "西宁"}, {"name": "咸阳"}, {"name": "新余"}]
+  "items": [{"name": "厦门"}, {"name": "西安"}, {"name": "咸阳"}, {"name": "新余"}]
 }, {
   "title": "Y",
   "key": "Y",
-  "items": [{"name": "扬州"}, {"name": "宜昌"}, {"name": "宜春"}, {"name": "岳阳"}, {"name": "玉林"}]
+  "items": [{"name": "扬州"}, {"name": "宜春"}, {"name": "岳阳"}, {"name": "玉林"}]
 }, {
   "title": "Z",
   "key": "Z",
-  "items": [{"name": "张家口"}, {"name": "樟树"}, {"name": "漳州"}]
+  "items": [{"name": "张家口"}, {"name": "樟树"}]
 }]

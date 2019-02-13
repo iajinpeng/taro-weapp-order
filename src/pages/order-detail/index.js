@@ -502,8 +502,15 @@ class OrderDetail extends Component {
                   <Text className='price'><Text>&yen; </Text>{data.o_take_money}</Text>
                 </View>
                 {
-                  data.o_coupon_name &&
+                  data.o_take_type === 3 &&
                   <View className='other'>
+                    <Text>配送费</Text>
+                    <Text className='price'><Text>&yen; </Text>{data.o_takeaway_money}</Text>
+                  </View>
+                }
+                {
+                  data.o_coupon_name &&
+                  <View className='other coupon'>
                     <Text>{data.o_coupon_name}</Text>
                     <Text className={classnames('price', 'theme-c-' + theme)}><Text>-&yen; </Text>{data.o_coupon_amount}</Text>
                   </View>

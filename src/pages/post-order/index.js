@@ -25,7 +25,7 @@ class Order extends Component {
 
   state = {
     orderType: 1,  // 1: 自取   3：外卖
-    takeType: 1,
+    takeType: 1,   // 1: 堂食   2：外带
     s_take: [1, 2, 3],
 
     isShowPicker: false,
@@ -326,11 +326,12 @@ class Order extends Component {
 
       if (cart.propertyTagIndex) {
         cart.property.forEach((item, i) => {
-          g_property.push(item.list_name[cart.propertyTagIndex[i]])
+          const prop_name = item.list_name[cart.propertyTagIndex[i]]
+          g_property.push(prop_name)
 
           g_property_array.push({
             name: item.name,
-            list_name: item.list_name[cart.optionalTagIndex[i]]
+            list_name: prop_name
           })
         })
       }
@@ -572,7 +573,7 @@ class Order extends Component {
       }
     }
 
-    if (takeType === 2) {
+    if (orderType === 1 && takeType === 2) {
       totalAmout += +store.s_take_money
     }
     if (couponList[curCouponIndex] && couponList[curCouponIndex].uc_price) {
@@ -581,7 +582,8 @@ class Order extends Component {
       totalAmout < 0 && (totalAmout = 0)
     }
 
-    let noConponAmount = (+amount + +store.s_take_money
+    let noConponAmount = (+amount +
+      (orderType === 1 && takeType === 1 ? 0 : +store.s_take_money)
       + (orderType === 3 && reserveTime.length > 0 ?
         (
           +reserveTime[dayIndex].time[timeIndex].price

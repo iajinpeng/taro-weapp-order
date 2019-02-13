@@ -14,20 +14,20 @@
     position: absolute;
     left: 36px;
     top: 325px;
-    padding: 20px 28px;
+    padding: 20px 0 20px 28px;
     border-radius: 20px;
     display: flex;
     background: #fff;
     font-size: 24px;
     font-weight: bold;
     color: @c-40;
-    width: 420px;
     cover-image{
       width: 32px;
       height: 26px;
     }
     .text{
       margin-left: 20px;
+      width: 400px;
     }
   }
 
@@ -270,10 +270,16 @@
         font-size: 28px;
         display: flex;
         justify-content: space-between;
-        height: 118px;
-        line-height: 130px;
-        border-bottom: 1px dashed rgba(230,230,230,1);
+        padding: 24px 0;
         color: @c-666;
+        &:last-child{
+          padding-bottom: 40px;
+          border-bottom: 1px dashed rgba(230,230,230,1);
+        }
+        &.coupon{
+          padding-top: 40px;
+          border-top: 1px dashed rgba(230,230,230,1);
+        }
         .price{
           font-size: 24px;
           font-weight: bold;
@@ -285,6 +291,7 @@
     }
 
     .info{
+      padding-top: 20px;
       .item{
         height: 80px;
         display: flex;
