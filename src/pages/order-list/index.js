@@ -134,7 +134,7 @@ class OrderList extends Component {
   }
 
   cancelOrder = () => {
-    const {lists, page_size, curOrder: {store_id, o_id}} = this.state
+    const {type, page_size, curOrder: {store_id, o_id}} = this.state
 
     this.props.dispatch({
       type: 'order/requestCancelOrder',
@@ -149,13 +149,18 @@ class OrderList extends Component {
       Taro.showToast({
         title: '取消成功'
       })
+      let lists = this.state['lists' + type]
       const index = lists.findIndex(item => item.o_id === o_id)
       const targetPage = Math.floor(index / page_size)
 
       this.requestOrderList(targetPage).then(({rows}) => {
         let i = rows.findIndex(item => item.o_id === o_id)
         lists[index] = rows[i]
-        this.setState({lists})
+        this.setState({['lists' + type]: lists})
+      })
+
+      Taro.navigateTo({
+        url: '/pages/order-detail/index?id=' + o_id + '&store_id=' + store_id
       })
 
     })
@@ -267,6 +272,7 @@ class OrderList extends Component {
           scrollIntoView={firstId}
           lowerThreshold={10}
           onScrollToUpper={this.pullDownRefresh}
+          enableBackToTop
         >
           {
             lists1.length === 0 &&
@@ -441,6 +447,7 @@ class OrderList extends Component {
           onScroll={this.handleScroll.bind(this, 2)}
           lowerThreshold={10}
           onScrollToUpper={this.pullDownRefresh}
+          enableBackToTop
         >
           {
             lists2.length === 0 &&

@@ -61,6 +61,9 @@ class Index extends Component {
 
   onPullDownRefresh () {
     Taro.stopPullDownRefresh()
+    this.props.dispatch({
+      type: 'common/initRequest'
+    })
     this.getIndexInfo()
   }
 

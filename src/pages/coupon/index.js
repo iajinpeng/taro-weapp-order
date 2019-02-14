@@ -174,6 +174,7 @@ class Coupon extends Component {
           onScroll={this.handleScroll.bind(this, 1)}
           scrollIntoView={firstId}
           lowerThreshold={10}
+          enableBackToTop
         >
           {
             lists1.length === 0 &&
@@ -241,6 +242,7 @@ class Coupon extends Component {
           onScroll={this.handleScroll.bind(this, 2)}
           scrollIntoView={firstId}
           lowerThreshold={10}
+          enableBackToTop
         >
           {
             lists2.length === 0 &&
