@@ -19,7 +19,7 @@ import './index.less'
 class Choose extends Component {
 
   config = {
-    navigationBarTitleText: '选择餐厅',
+    navigationBarTitleText: '选择门店',
     disableScroll: true
   }
 
@@ -272,7 +272,7 @@ class Choose extends Component {
               </View>
               <View className={classnames('search-box', isSearching ? 'full' : '')} onClick={this.toSearch}>
                 <AtIcon value='search' className='search-icon' size='18'/>
-                <View className='input-alias'>搜索餐厅</View>
+                <View className='input-alias'>搜索门店</View>
                 <AtIcon value='close' className='search-cancel' size='16'/>
               </View>
             </Block>
@@ -283,7 +283,7 @@ class Choose extends Component {
               <AtIcon value='search' className='search-icon' size='18'/>
               <Input
                 focus placeholderClass='placeholder'
-                placeholder='搜索餐厅' value={keyword}
+                placeholder='搜索门店' value={keyword}
                 onInput={this.inputChange}
               />
               <AtIcon

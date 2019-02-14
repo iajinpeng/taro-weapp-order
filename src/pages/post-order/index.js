@@ -955,6 +955,7 @@ class Order extends Component {
           dayIndex={dayIndex} timeIndex={timeIndex}
           showPrice={orderType === 3}
           onChangeTime={this.changeTime}
+          isIphoneX={isIphoneX}
         />
 
         <ChooseAddress show={isShowAddress} address={userAddress} theme={theme} onClose={this.hideAddress}/>

@@ -85,7 +85,7 @@ class App extends Component {
     }
     store.dispatch({
       type: 'common/setUserInfo',
-      payload: Taro.getStorageSync('userInfo') || {}
+      payload: Taro.getStorageSync('userInfo') || {userInfo: null}
     })
     store.dispatch({
       type: 'common/initRequest'

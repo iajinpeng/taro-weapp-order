@@ -497,10 +497,13 @@ class OrderDetail extends Component {
                   ))
                 }
 
-                <View className='other'>
-                  <Text>打包费</Text>
-                  <Text className='price'><Text>&yen; </Text>{data.o_take_money}</Text>
-                </View>
+                {
+                  (data.o_take_type !== 1) &&
+                  <View className='other'>
+                    <Text>打包费</Text>
+                    <Text className='price'><Text>&yen; </Text>{data.o_take_money}</Text>
+                  </View>
+                }
                 {
                   data.o_take_type === 3 &&
                   <View className='other'>

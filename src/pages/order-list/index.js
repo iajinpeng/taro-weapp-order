@@ -39,7 +39,7 @@ class OrderList extends Component {
 
   canRequestMore = true
 
-  componentDidShow() {
+  componentDidMount() {
     this.requestOrderList().then(({total, rows}) => {
       this.setState({total, lists1: rows, requested: true})
     })
@@ -66,6 +66,23 @@ class OrderList extends Component {
       })
     })
 
+  }
+
+  pullDownRefresh = () => {
+    Taro.showNavigationBarLoading()
+    const {type} = this.state
+    this.setState({
+      page: 1,
+    }, () => {
+      this.requestOrderList().then(({total, rows}) => {
+        Taro.hideNavigationBarLoading()
+        this.setState({
+          total,
+          ['lists' + type]: rows,
+          firstId: rows && rows.length > 0 && ('o-' + rows[0].o_id),
+        })
+      })
+    })
   }
 
   requestOrderList = (targetPage, _type) => {
@@ -144,18 +161,22 @@ class OrderList extends Component {
     })
   }
 
-  requestOrderRepeat = (order_id, store_id, e) => {
+  requestOrderRepeat = (order, e) => {
     e.stopPropagation()
+    const {o_id, store_id} = order
     this.props.dispatch({
       type: 'order/requestOrderRepeat',
       payload: {
         store_id,
-        order_id
+        order_id: o_id
       }
     }).then(({change, payload}) => {
       if (change) {
         this.showOrHideAgainWarn(true)
-        this.setState({addCartPayload: payload})
+        this.setState({
+          addCartPayload: payload,
+          curOrder: order
+        })
       }
     })
 
@@ -167,7 +188,7 @@ class OrderList extends Component {
       payload: this.state.addCartPayload
     })
     Taro.navigateTo({
-      url: '/pages/shop-index/index?id=' + this.state.data.store_id
+      url: '/pages/shop-index/index?id=' + this.state.curOrder.store_id
     })
     this.showOrHideAgainWarn(false)
   }
@@ -218,6 +239,10 @@ class OrderList extends Component {
     })
   }
 
+  showOrHideAgainWarn = bool => {
+    this.setState({isShowOrderAgainWarn: bool})
+  }
+
   render() {
     const {theme} = this.props
     const {type, requested, isShowCancelWarn, isShowOrderAgainWarn,
@@ -241,6 +266,7 @@ class OrderList extends Component {
           onScroll={this.handleScroll.bind(this, 1)}
           scrollIntoView={firstId}
           lowerThreshold={10}
+          onScrollToUpper={this.pullDownRefresh}
         >
           {
             lists1.length === 0 &&
@@ -322,6 +348,7 @@ class OrderList extends Component {
                         }
 
                         {
+                          +order.o_take_type !== 3 &&
                           (order.o_order_status.toString()[0] === '3') &&
                           <View className='good-info'>
                             <View>取餐号: <Text
@@ -413,6 +440,7 @@ class OrderList extends Component {
           scrollIntoView={firstId}
           onScroll={this.handleScroll.bind(this, 2)}
           lowerThreshold={10}
+          onScrollToUpper={this.pullDownRefresh}
         >
           {
             lists2.length === 0 &&
@@ -542,7 +570,7 @@ class OrderList extends Component {
                           <View className='good-info'>
                             <Button
                               className={'theme-grad-bg-' + theme}
-                              onClick={this.requestOrderRepeat.bind(this, order.o_id, order.store_id)}
+                              onClick={this.requestOrderRepeat.bind(this, order)}
                             >再来一单</Button>
                           </View>
                         }

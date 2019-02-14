@@ -70,33 +70,35 @@ export default {
 
         let {propertyTagIndex, optionalTagIndex, optionalnumstr} = good
 
-        if (optionalnumstr.length === 0) {
-          delete  good.optionalnumstr
-          if (optionalTagIndex && optionalTagIndex.length > 0) {
-            good.optionalTagIndex = optionalTagIndex.map(item => +item)
-          }
+        if (optionalnumstr) {
+          if (optionalnumstr.length === 0) {
+            delete good.optionalnumstr
+            if (optionalTagIndex && optionalTagIndex.length > 0) {
+              good.optionalTagIndex = optionalTagIndex.map(item => +item)
+            }
 
-          if (optionalTagIndex && optionalTagIndex.length > 0 || propertyTagIndex && propertyTagIndex.length > 0) {
-            good.optionalstr = propertyTagIndex.join('') + optionalTagIndex.join('')
-          }
-        } else {
-          delete good.optionalTagIndex
-          good.optionalnumstr = optionalnumstr[0]
+            if (optionalTagIndex && optionalTagIndex.length > 0 || propertyTagIndex && propertyTagIndex.length > 0) {
+              good.optionalstr = propertyTagIndex.join('') + optionalTagIndex.join('')
+            }
+          } else {
+            delete good.optionalTagIndex
+            good.optionalnumstr = optionalnumstr[0]
 
-          good.optional.map((opt, index) => {
-            opt.list.map((g, i) => {
-              return g.num = good.optionalnumstr.split(',')[index].split('|')[i]
+            good.optional.map((opt, _i) => {
+              opt.list.map((g, i) => {
+                return g.num = good.optionalnumstr.split(',')[_i].split('|')[i]
+              })
             })
-          })
 
-          let optPrice = good.optional.reduce((total, opt) => {
-            let price = opt.list.reduce((t, g) => {
-              return t += +g.gn_price * (g.num || 0)
-            }, 0)
-            return total += price
-          }, 0) || 0
+            let optPrice = good.optional.reduce((total, opt) => {
+              let price = opt.list.reduce((t, g) => {
+                return t += +g.gn_price * (g.num || 0)
+              }, 0)
+              return total += price
+            }, 0) || 0
 
-          good.total_price = +good.g_price + optPrice
+            good.total_price = +good.g_price + optPrice
+          }
         }
 
         good.again_id = order_id + '-' + index

@@ -128,7 +128,7 @@ export default {
     setUserInfo(state, {payload}) {
       Taro.setStorageSync('userInfo', payload)
       let userInfo = {}
-      if (payload.userInfo) {
+      if (payload.userInfo !== undefined) {
         userInfo = payload
       } else {
         userInfo = {userInfo: {}}
