@@ -162,7 +162,7 @@ class OrderList extends Component {
   }
 
   requestOrderRepeat = (order, e) => {
-    e.stopPropagation()
+    e && e.stopPropagation()
     const {o_id, store_id} = order
     this.props.dispatch({
       type: 'order/requestOrderRepeat',
@@ -397,7 +397,7 @@ class OrderList extends Component {
                           <View className='good-info'>
                             <Button
                               className={'theme-grad-bg-' + theme}
-                              onClick={this.requestOrderRepeat.bind(this, order.o_id, order.store_id)}
+                              onClick={this.requestOrderRepeat.bind(this, order)}
                             >再来一单</Button>
                           </View>
                         }

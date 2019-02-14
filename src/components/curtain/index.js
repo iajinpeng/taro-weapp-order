@@ -9,7 +9,8 @@ class Curtain extends Component {
 
   static defaultProps = {
     show: false,
-    onCLose: null
+    onCLose: null,
+    contentWidth: '80%'
   }
 
   stopPro = e => {
@@ -17,14 +18,14 @@ class Curtain extends Component {
   }
 
   render () {
-    const {show} = this.props
+    const {show, contentWidth} = this.props
     return (
       <View
         className={classnames('curtain', show ? 'active' : '')}
         onClick={this.props.onClose}
         onTouchMove={this.stopPro}
       >
-        <View className='content'>
+        <View className='content' style={{width: contentWidth}}>
           <View className='curtain-body' onClick={this.stopPro}>
             {this.props.children}
 

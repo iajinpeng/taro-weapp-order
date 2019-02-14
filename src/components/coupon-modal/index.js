@@ -1,7 +1,7 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Image, Text, Button } from '@tarojs/components'
-import {AtCurtain} from 'taro-ui'
 import { connect } from '@tarojs/redux'
+import Curtain from '../../components/curtain'
 import PropTypes from 'prop-types'
 import classnames from 'classnames'
 import {baseUrl} from '../../config/index';
@@ -49,7 +49,7 @@ class CouponModal extends Component {
     const {background_color, butto_color, font_color, image, list} = coupon
 
     return (
-      <AtCurtain isOpened={show} className='coupon-modal' onClose={onClose}>
+      <Curtain show={show} className='coupon-modal' onClose={onClose} contentWidth='90%'>
         <View className='coupon-modal-content'>
           <Image src={image ? baseUrl + image : ''} />
           <View className='list' style={{backgroundColor: background_color}}>
@@ -90,7 +90,7 @@ class CouponModal extends Component {
             }
           </View>
         </View>
-      </AtCurtain>
+      </Curtain>
     )
   }
 }
