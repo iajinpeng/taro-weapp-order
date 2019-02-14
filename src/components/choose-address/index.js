@@ -4,12 +4,10 @@ import PropTypes from 'prop-types'
 import classnames from 'classnames'
 import {connect} from '@tarojs/redux'
 
-import {baseUrl} from '../../config/index';
-
 import './index.less'
 import '../../app.less'
 
-@connect(() => ({}))
+@connect(({common}) => ({...common}))
 class ChooseAddress extends Component {
 
   static propTypes = {
@@ -89,6 +87,8 @@ class ChooseAddress extends Component {
 
   render() {
     const {show, theme, address} = this.props
+
+    const baseUrl = this.props.ext.domain
 
     const {defaultIndex} = this.state
 

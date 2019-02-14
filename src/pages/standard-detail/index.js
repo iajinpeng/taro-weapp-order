@@ -7,8 +7,6 @@ import Numbox from '../../components/num-box'
 
 import './index.less'
 
-import {baseUrl} from '../../config'
-
 
 @connect(({common}) => ({...common}))
 class StandardDetail extends Component {
@@ -120,6 +118,8 @@ class StandardDetail extends Component {
   render() {
     const {theme, menu_cart} = this.props
     const {g_description, g_image, fixed, optional} = this.state
+
+    const baseUrl = this.props.ext.domain
 
     const g_price = +this.$router.params.g_price || 0
 

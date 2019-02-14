@@ -9,7 +9,6 @@ import PickTime from '../../components/pick-time'
 import ChooseAddress from '../../components/choose-address'
 // import Copyright from '../../components/copyright'
 // import Loading from '../../components/Loading'
-import {baseUrl} from '../../config'
 
 import './index.less'
 
@@ -558,6 +557,8 @@ class Order extends Component {
 
     const isIphoneX = !!(this.props.systemInfo.model &&
       this.props.systemInfo.model.replace(' ', '').toLowerCase().indexOf('iphonex') > -1)
+
+    const baseUrl = this.props.ext.domain
 
     // const useAddress = selectedAddress || (userAddress.length > 0 ? userAddress.find(item => item.optional) : [])
     //

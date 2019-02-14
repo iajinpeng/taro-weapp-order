@@ -2,7 +2,6 @@ import Taro, {Component} from '@tarojs/taro'
 import {View, Text, Button, Image, ScrollView, Block} from '@tarojs/components'
 import {connect} from '@tarojs/redux'
 import classnames from 'classnames'
-import {baseUrl} from '../../config/index'
 import Modal from '../../components/modal'
 import PayBox from '../../components/pay-box'
 import Numbox from '../../components/num-box'
@@ -267,6 +266,7 @@ class PresentGood extends Component {
 
   render() {
     const {theme, menu_cart, full_logo_goods} = this.props
+    const baseUrl = this.props.ext.domain
     const {goods, curGood, isShowOptions, isShowDetail, stanInfo, curCart,
       propertyTagIndex, optionalTagIndex, isShowCart} = this.state
     const carts = (this.props.carts[(this.$router.params.id)] || []).filter(item => item.fs_id)

@@ -9,7 +9,7 @@ import CouponModal from '../../components/coupon-modal'
 import {getTouchData} from '../../utils/utils'
 import './index.less'
 
-import {orderTypes, baseUrl, outOrderTypes} from '../../config'
+import {orderTypes, outOrderTypes} from '../../config'
 
 import orderNull from '../../assets/images/icon-order-null.png'
 
@@ -250,6 +250,7 @@ class OrderList extends Component {
 
   render() {
     const {theme} = this.props
+    const baseUrl = this.props.ext.domain
     const {type, requested, isShowCancelWarn, isShowOrderAgainWarn,
       lists1, lists2, curCoupon, isShowCoupon, firstId} = this.state
 
@@ -305,8 +306,8 @@ class OrderList extends Component {
                         (order.o_order_status === 6 || order.o_order_status === 7) ? '+' : '-'
                       }
                     </Text>*/}
-                          <Image
-                            src={`${baseUrl}/static/addons/diancan/img/style/style_${theme}_${(order.o_order_status === 6 || order.o_order_status === 7) ? 7 : 6}.png`}/>
+                          <Image className={(order.o_order_status === 6 || order.o_order_status === 7) ? 'big' : ''}
+                                 src={`${baseUrl}/static/addons/diancan/img/style/style_${theme}_${(order.o_order_status === 6 || order.o_order_status === 7) ? 7 : 6}.png`}/>
                           {
                             order.o_take_type !== 3 ?
                               <Text>{orderTypes[order.o_order_status.toString()[0]]}</Text>
@@ -354,12 +355,14 @@ class OrderList extends Component {
                         }
 
                         {
-                          +order.o_take_type !== 3 &&
                           (order.o_order_status.toString()[0] === '3') &&
                           <View className='good-info'>
-                            <View>取餐号: <Text
+                            <View style={{display: +order.o_take_type !== 3 ? 'block' : 'none'}}>取餐号: <Text
                               className={classnames('theme-c-' + theme)}>{order.o_take_no}</Text></View>
-                            <View>{order.status_remark}</View>
+                            <View
+                              className={classnames(+order.o_take_type === 3 ? 'theme-c-' + theme : '')}
+                              style={{fontWeight: +order.o_take_type === 3 ? 'bold' : 'normal'}}
+                            >{order.status_remark}</View>
                           </View>
                         }
 
@@ -480,7 +483,7 @@ class OrderList extends Component {
                         (order.o_order_status === 6 || order.o_order_status === 7) ? '+' : '-'
                       }
                     </Text>*/}
-                          <Image
+                          <Image className={(order.o_order_status === 6 || order.o_order_status === 7) ? 'big' : ''}
                             src={`${baseUrl}/static/addons/diancan/img/style/style_${theme}_${(order.o_order_status === 6 || order.o_order_status === 7) ? 7 : 6}.png`}/>
                           {
                             order.o_take_type !== 3 ?
@@ -531,9 +534,12 @@ class OrderList extends Component {
                         {
                           (order.o_order_status.toString()[0] === '3') &&
                           <View className='good-info'>
-                            <View>取餐号: <Text
+                            <View style={{display: +order.o_take_type !== 3 ? 'block' : 'none'}}>取餐号: <Text
                               className={classnames('theme-c-' + theme)}>{order.o_take_no}</Text></View>
-                            <View>{order.status_remark}</View>
+                            <View
+                              className={classnames(+order.o_take_type === 3 ? 'theme-c-' + theme : '')}
+                              style={{fontWeight: +order.o_take_type === 3 ? 'bold' : 'normal'}}
+                            >{order.status_remark}</View>
                           </View>
                         }
 

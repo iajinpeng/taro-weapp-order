@@ -3,7 +3,6 @@ import {View, Text, Block, Image} from '@tarojs/components'
 import {connect} from '@tarojs/redux'
 import classnames from 'classnames'
 
-import {baseUrl} from "../../config/index";
 
 import './index.less'
 import '../../app.less'
@@ -13,6 +12,7 @@ class Numbox extends Component {
 
   render () {
     const {theme, showNum, num, onAdd, onReduce} = this.props
+    const baseUrl = this.props.ext.domain
     return (
       <View className='num-box'>
         {

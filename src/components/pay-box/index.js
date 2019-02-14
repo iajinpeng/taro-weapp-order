@@ -1,13 +1,14 @@
 import Taro, {Component} from '@tarojs/taro'
 import {View, Text, Image} from '@tarojs/components'
+import {connect} from '@tarojs/redux'
 import classnames from 'classnames'
 import {AtToast} from 'taro-ui'
 import IdButton from '../../components/id-button'
-import {baseUrl} from '../../config'
 import '../../app.less'
 
 import './index.less'
 
+@connect(({common}) => ({...common}))
 class PayBox extends Component {
 
   static defaultProps = {
@@ -55,6 +56,7 @@ class PayBox extends Component {
 
   render () {
     const {theme, carts, onOpenCart, themeInfo, simple, totalPrice, btnText, active} = this.props
+    const baseUrl = this.props.ext.domain
     const {isAlert} = this.state
 
     return (

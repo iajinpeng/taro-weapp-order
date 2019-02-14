@@ -4,7 +4,6 @@ import { connect } from '@tarojs/redux'
 import Curtain from '../../components/curtain'
 import PropTypes from 'prop-types'
 import classnames from 'classnames'
-import {baseUrl} from '../../config/index';
 
 import './index.less'
 import '../../app.less'
@@ -45,6 +44,7 @@ class CouponModal extends Component {
 
   render () {
     const {show, coupon, onClose, userInfo} = this.props
+    const baseUrl = this.props.ext.domain
 
     const {background_color, butto_color, font_color, image, list} = coupon
 

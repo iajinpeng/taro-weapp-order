@@ -3,8 +3,7 @@ import {View, Text, Image} from '@tarojs/components'
 import {connect} from '@tarojs/redux'
 import {AtIcon} from 'taro-ui'
 import classnames from 'classnames'
-import {baseUrl} from '../../config/index';
-import Copyright from '../../components/copyright'
+// import Copyright from '../../components/copyright'
 
 import '../coupon/index.less'
 import './index.less'
@@ -50,6 +49,7 @@ class ChooseCoupon extends Component {
 
   render () {
     const {theme, curCouponIndex, couponOptions} = this.props
+    const baseUrl = this.props.ext.domain
     const {openStatus} = this.state
 
     return (

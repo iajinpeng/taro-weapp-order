@@ -4,7 +4,7 @@ import {connect} from '@tarojs/redux'
 import {AtIcon} from 'taro-ui'
 import classnames from 'classnames'
 import './index.less'
-import {orderTypes, outOrderTypes, baseUrl} from '../../config'
+import {orderTypes, outOrderTypes} from '../../config'
 import ConfirmModal from '../../components/confirm-modal'
 import BackToHome from '../../components/back-to-home'
 import CouponModal from '../../components/coupon-modal'
@@ -31,7 +31,8 @@ class OrderDetail extends Component {
     addCartPayload: {},
     curCoupon: {},
     isShowCoupon: false,
-    mapRefresh: false
+    mapRefresh: false,
+    isShowMap: true
   }
 
   componentWillMount() {
@@ -41,6 +42,7 @@ class OrderDetail extends Component {
       this.curCouponIndex = 0
 
       if (res.coupon.length > 0) {
+        this.setState({isShowMap: false})
         setTimeout(() => {
           this.setState({
             isShowCoupon: true,
@@ -63,6 +65,7 @@ class OrderDetail extends Component {
 
   getOrderDetail = () => {
     const {b_logo} = this.props
+    const baseUrl = this.props.ext.domain
     return this.props.dispatch({
       type: 'order/getOrderDetail',
       payload: {
@@ -267,11 +270,13 @@ class OrderDetail extends Component {
     const {curCouponIndex, coupon} = this
 
     this.setState({
-      isShowCoupon: false
+      isShowCoupon: false,
+      isShowMap: true
     })
 
     if (curCouponIndex + 2 <= coupon.length) {
       this.curCouponIndex  ++
+      this.setState({isShowMap: false})
       setTimeout(() => {
         this.setState({
           isShowCoupon: true,
@@ -286,7 +291,7 @@ class OrderDetail extends Component {
     const isIphoneX = !!(systemInfo.model && systemInfo.model.replace(' ', '').toLowerCase().indexOf('iphonex') > -1)
 
     const {data, isShowCancelWarn, markers, isShowOrderAgainWarn, includePoints,
-      polyline, curCoupon, isShowCoupon, mapRefresh} = this.state
+      polyline, curCoupon, isShowCoupon, mapRefresh, isShowMap} = this.state
 
     return (
       <Block>
@@ -299,15 +304,20 @@ class OrderDetail extends Component {
               && data.o_order_status !== 6 && data.o_order_status !== 7
               &&
               <Block>
-                <Map
-                  className='map'
-                  latitude={data.s_address_lat}
-                  longitude={data.s_address_lng}
-                  markers={markers}
-                  includePoints={includePoints}
-                  polyline={polyline}
-                  showLocation={false}
-                />
+                {
+                  isShowMap ?
+                    <Map
+                      className='map'
+                      latitude={data.s_address_lat}
+                      longitude={data.s_address_lng}
+                      markers={markers}
+                      includePoints={includePoints}
+                      polyline={polyline}
+                      showLocation={false}
+                    />
+                    :
+                  <View className='map-alias' />
+                }
 
                 {
                   data.o_order_status === 42 && data.take_id === 1 &&

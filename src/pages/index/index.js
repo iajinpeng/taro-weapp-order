@@ -4,7 +4,7 @@ import { connect } from '@tarojs/redux'
 import { AtIcon } from 'taro-ui'
 import classnames from 'classnames'
 
-import { baseUrl, themeBtnShadowColors } from '../../config'
+import { themeBtnShadowColors } from '../../config'
 import Modal from '../../components/modal'
 import CouponModal from '../../components/coupon-modal'
 import Loading from '../../components/Loading'
@@ -205,6 +205,8 @@ class Index extends Component {
 
   render () {
     const {theme, userInfo} = this.props
+
+    const baseUrl = this.props.ext.domain
 
     const { user_full_num, full_num, isShowModal, activeBannerIndex,
       home_banner, full_image, full_logo, full_logo_no, home_button,

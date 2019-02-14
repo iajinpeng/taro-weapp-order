@@ -8,7 +8,7 @@ import IdButton from '../../components/id-button'
 import Copyright from '../../components/copyright'
 import Loading from '../../components/Loading'
 
-import {warningDistance, baseUrl} from '../../config'
+import {warningDistance} from '../../config'
 import Citys from '../../utils/citys'
 
 import './index.less'
@@ -140,6 +140,8 @@ class Choose extends Component {
 
   showShopMakers = ({brand, store}) => {
     if (store.length === 0) return
+
+    const baseUrl = this.props.ext.domain
 
     let markers = []
 

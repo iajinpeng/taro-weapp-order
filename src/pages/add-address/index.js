@@ -3,7 +3,7 @@ import {View, Button, Text, Image, Input} from '@tarojs/components'
 import {connect} from '@tarojs/redux'
 import {AtToast} from 'taro-ui'
 import classnames from 'classnames'
-import {baseUrl, themeBtnShadowColors} from '../../config/index';
+import {themeBtnShadowColors} from '../../config/index';
 import Copyright from '../../components/copyright'
 import './index.less'
 
@@ -133,6 +133,7 @@ class AddAddress extends Component {
 
   render () {
     const {theme, curAddress} = this.props
+    const baseUrl = this.props.ext.domain
     const {address_detail, user_name, user_telephone, alertPhone, alertPhoneText, da_id} = this.state
 
     const isCanPost = curAddress.name && address_detail && user_name && user_telephone

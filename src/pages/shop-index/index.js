@@ -10,7 +10,6 @@ import Loading from '../../components/Loading'
 import Numbox from '../../components/num-box'
 import Curtain from '../../components/curtain'
 import './index.less'
-import {baseUrl} from '../../config'
 
 
 @connect(({common, cart}) => ({...common, ...cart}))
@@ -364,6 +363,7 @@ class ShopIndex extends Component {
 
   render() {
     const {theme, menu_banner, menu_cart} = this.props
+    const baseUrl = this.props.ext.domain
     const {id, fs_id} = this.$router.params
     const carts = (this.props.carts[+id] || []).filter(item => !item.fs_id || item.fs_id === +fs_id)
 

@@ -2,7 +2,7 @@ import Taro, {Component} from '@tarojs/taro'
 import {View, Image, Button} from '@tarojs/components'
 import {connect} from '@tarojs/redux'
 import classnames from 'classnames'
-import {baseUrl, themeBtnShadowColors} from "../../config/index";
+import {themeBtnShadowColors} from "../../config/index";
 import './index.less'
 
 @connect(({common}) => ({...common}))
@@ -26,6 +26,7 @@ class AuthSetting extends Component {
 
   render () {
     const {theme} = this.props
+    const baseUrl = this.props.ext.domain
     return (
       <View className='auth-setting'>
         <View className='bg'>
