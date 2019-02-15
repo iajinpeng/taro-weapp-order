@@ -382,7 +382,7 @@ class OrderDetail extends Component {
                     (data.o_order_status === 1 || data.o_order_status === 2) ? '' : 'long')}
                     onClick={this.contactVendor.bind(this, data.s_telephone)}
                   >
-                    <Image src={require('../../assets/images/icon-contact.png')} mode='widthFix' />
+                    <Image src={require('../../assets/images/icon-contact.png')} />
                     <View>联系商家</View>
                   </View>
 
