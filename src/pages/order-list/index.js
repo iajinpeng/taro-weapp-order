@@ -453,7 +453,7 @@ class OrderList extends Component {
                             }
 
                             {
-                              order.o_order_status === 5 &&
+                              (order.o_order_status === 5 || order.o_order_status === 8) &&
                               <View className='good-info'>
                                 <Button
                                   className={'theme-grad-bg-' + theme}

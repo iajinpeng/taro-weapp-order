@@ -146,7 +146,8 @@ class OrderDetail extends Component {
       })
 
       if (data.o_order_status !== 1 && data.o_order_status !== 5 &&
-        data.o_order_status !== 6 && data.o_order_status !== 7) {
+        data.o_order_status !== 6 && data.o_order_status !== 7 &&
+        data.o_order_status === 8) {
         this.timeOut = setTimeout(() => {
           this.getOrderDetail()
         }, 10000)
@@ -302,7 +303,7 @@ class OrderDetail extends Component {
             {
               data.o_take_type === 3 && data.o_order_status !== 5
               && data.o_order_status !== 6 && data.o_order_status !== 7
-              &&
+              && data.o_order_status !== 8 &&
               <Block>
                 {
                   isShowMap ?
@@ -401,7 +402,7 @@ class OrderDetail extends Component {
 
             {
               (data.o_take_type !== 3
-              || (data.o_order_status === 5 || data.o_order_status ===6 || data.o_order_status === 7)) &&
+              || (data.o_order_status === 5 || data.o_order_status ===6 || data.o_order_status === 7 || data.o_order_status === 8)) &&
               <View className='status'>
                 <View className={classnames('status-text', 'theme-c-' + theme)}>{orderTypes[data.o_order_status.toString()[0]]}</View>
                 <View className='status-memo'>
@@ -414,7 +415,7 @@ class OrderDetail extends Component {
                   }
 
                   {
-                    data.o_order_status === 5 ? '感谢光临 祝您用餐愉快！' : ''
+                    (data.o_order_status === 5 || data.o_order_status === 8) ? '感谢光临 祝您用餐愉快！' : ''
                   }
 
                   {
@@ -438,7 +439,7 @@ class OrderDetail extends Component {
                   }
                 </View>
                 {
-                  (data.o_order_status === 5 || data.o_order_status === 6 || data.o_order_status === 7) &&
+                  (data.o_order_status === 5 || data.o_order_status === 6 || data.o_order_status === 7 || data.o_order_status === 8) &&
                   <Button
                     className={'theme-grad-bg-' + theme}
                     onClick={this.requestOrderRepeat}
