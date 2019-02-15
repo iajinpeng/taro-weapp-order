@@ -157,6 +157,8 @@ class Coupon extends Component {
     const {theme, userInfo} = this.props
     const {type, openIndex, lists1, lists2, firstId} = this.state
 
+    const listArr = [lists1, lists2]
+
     return (
       <View className='coupon' onTouchStart={this.handleTouchStart} onTouchEnd={this.handleTouchEnd}>
         <View className='title'>
@@ -168,141 +170,77 @@ class Coupon extends Component {
             onClick={this.changeTab.bind(this, 2)}>已过期</View>
         </View>
 
-        <ScrollView
-          scrollY className={classnames('content', 'content-1', type === 1 ? 'active' : '')}
-          onScrollToLower={this.requestMore}
-          onScroll={this.handleScroll.bind(this, 1)}
-          scrollIntoView={firstId}
-          lowerThreshold={10}
-          enableBackToTop
-        >
-          {
-            lists1.length === 0 &&
-            <View className='null'>
-              <Image src={nullImage} />
-              <View>还没有任何优惠券哦~</View>
-            </View>
-          }
-          {
-            lists1.length !== 0 &&
-            <View className='coupon-list'>
+        {
+          listArr.map((lists, _index) => (
+            <ScrollView key={_index}
+              scrollY className={classnames('content', 'content-' + (_index + 1), type === _index + 1 ? 'active' : '')}
+              onScrollToLower={this.requestMore}
+              onScroll={this.handleScroll.bind(this, _index + 1)}
+              scrollIntoView={firstId}
+              lowerThreshold={10}
+              enableBackToTop
+            >
               {
-                lists1.map((coupon, index) => (
-                  <View className='item' key={index} id={'uc-' + coupon.uc_id}>
-                    <View className='entity'>
-                      <View className={classnames('deno', type === 1 ? 'theme-grad-bg-' + theme : '')}>
-                        <View className='price'>
-                          <Text>&yen;</Text>
-                          <Text className='num font-xin-bold'>{coupon.uc_price}</Text>
+                lists.length === 0 &&
+                <View className='null'>
+                  <Image src={nullImage} />
+                  <View>还没有任何优惠券哦~</View>
+                </View>
+              }
+              {
+                lists.length !== 0 &&
+                <View className='coupon-list'>
+                  {
+                    lists.map((coupon, index) => (
+                      <View className='item' key={index} id={'uc-' + coupon.uc_id}>
+                        <View className='entity'>
+                          <View className={classnames('deno', _index + 1 === 1 ? 'theme-grad-bg-' + theme : '')}>
+                            <View className='price'>
+                              <Text>&yen;</Text>
+                              <Text className='num font-xin-bold'>{coupon.uc_price}</Text>
+                            </View>
+                            <View>{coupon.uc_min_amount}</View>
+                          </View>
+                          <View className='desc'>
+                            <View className={classnames('name', _index + 1 === 2 ? 'disabled' : '')}>{coupon.uc_name}</View>
+                            <View className='time'>{coupon.uc_start_time} 至 {coupon.uc_end_time}</View>
+                            <View className='btn' onClick={this.openCondition.bind(this, index)}>使用条件
+                              <AtIcon value={openIndex === index ? 'chevron-up': 'chevron-down'} size='13' />
+                            </View>
+                          </View>
+                          <Button
+                            disabled={_index + 1 === 2}
+                            openType={userInfo.userInfo ? '' : 'getUserInfo'}
+                            onGetUserInfo={this.getedUserInfo}
+                            formType='submit'
+                            onClick={this.toChoosePage}
+                            className={classnames('handle', _index + 1 === 1 ? 'theme-grad-bg-' + theme : '')}
+                          >去使用</Button>
                         </View>
-                        <View>{coupon.uc_min_amount}</View>
-                      </View>
-                      <View className='desc'>
-                        <View className={classnames('name', type === 2 ? 'disabled' : '')}>{coupon.uc_name}</View>
-                        <View className='time'>{coupon.uc_start_time} 至 {coupon.uc_end_time}</View>
-                        <View className='btn' onClick={this.openCondition.bind(this, index)}>使用条件
-                          <AtIcon value={openIndex === index ? 'chevron-up': 'chevron-down'} size='13' />
-                        </View>
-                      </View>
-                      <Button
-                        disabled={type === 2}
-                        openType={userInfo.userInfo ? '' : 'getUserInfo'}
-                        onGetUserInfo={this.getedUserInfo}
-                        formType='submit'
-                        onClick={this.toChoosePage}
-                        className={classnames('handle', type === 1 ? 'theme-grad-bg-' + theme : '')}
-                      >去使用</Button>
-                    </View>
-                    {
-                      openIndex === index &&
-                      <View className='condi'>
-                        <View>优惠券使用条件</View>
                         {
-                          coupon.norm.map((item, i) => (
-                            <View key={i}>{i + 1}. {item}</View>
-                          ))
+                          openIndex === index &&
+                          <View className='condi'>
+                            <View>优惠券使用条件</View>
+                            {
+                              coupon.norm.map((item, i) => (
+                                <View key={i}>{i + 1}. {item}</View>
+                              ))
+                            }
+                          </View>
                         }
                       </View>
-                    }
-                  </View>
-                ))
+                    ))
+                  }
+
+                </View>
               }
 
-            </View>
-          }
-
-          <View style={{marginTop: '100px'}}>
-            <Copyright />
-          </View>
-        </ScrollView>
-
-        <ScrollView
-          scrollY className={classnames('content', 'content-2', type === 2 ? 'active' : '')}
-          onScrollToLower={this.requestMore}
-          onScroll={this.handleScroll.bind(this, 2)}
-          scrollIntoView={firstId}
-          lowerThreshold={10}
-          enableBackToTop
-        >
-          {
-            lists2.length === 0 &&
-            <View className='null'>
-              <Image src={nullImage} />
-              <View>还没有任何优惠券哦~</View>
-            </View>
-          }
-          {
-            lists2.length !== 0 &&
-            <View className='coupon-list'>
-              {
-                lists2.map((coupon, index) => (
-                  <View className='item' key={index} id={'uc-' + coupon.uc_id}>
-                    <View className='entity'>
-                      <View className={classnames('deno')}>
-                        <View className='price'>
-                          <Text>&yen;</Text>
-                          <Text className='num font-xin-bold'>{coupon.uc_price}</Text>
-                        </View>
-                        <View>{coupon.uc_min_amount}</View>
-                      </View>
-                      <View className='desc'>
-                        <View className={classnames('name', 'disabled')}>{coupon.uc_name}</View>
-                        <View className='time'>{coupon.uc_start_time} 至 {coupon.uc_end_time}</View>
-                        <View className='btn' onClick={this.openCondition.bind(this, index)}>使用条件
-                          <AtIcon value={openIndex === index ? 'chevron-up': 'chevron-down'} size='13' />
-                        </View>
-                      </View>
-                      <Button
-                        disabled={type === 2}
-                        openType={userInfo.userInfo ? '' : 'getUserInfo'}
-                        onGetUserInfo={this.getedUserInfo}
-                        formType='submit'
-                        onClick={this.toChoosePage}
-                        className={classnames('handle')}
-                      >去使用</Button>
-                    </View>
-                    {
-                      openIndex === index &&
-                      <View className='condi'>
-                        <View>优惠券使用条件</View>
-                        {
-                          coupon.norm.map((item, i) => (
-                            <View key={i}>{i + 1}. {item}</View>
-                          ))
-                        }
-                      </View>
-                    }
-                  </View>
-                ))
-              }
-
-            </View>
-          }
-          <View style={{marginTop: '100px'}}>
-            <Copyright />
-          </View>
-
-        </ScrollView>
+              <View style={{marginTop: '100px'}}>
+                <Copyright />
+              </View>
+            </ScrollView>
+          ))
+        }
 
         {
           this.$router.params.from === '1' &&

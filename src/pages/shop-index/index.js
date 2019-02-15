@@ -232,17 +232,6 @@ class ShopIndex extends Component {
     this.openOptions(this.state.curGood)
   }
 
-  // readStorageCarts = () => {
-  //   let carts = Taro.getStorageSync('carts') || {}
-  //   Taro.getStorageSync('carts') &&
-  //   this.props.dispatch({
-  //     type: 'cart/setStorageCart',
-  //     payload: {
-  //       carts
-  //     }
-  //   })
-  // }
-
   setCart = (good, num, cartGood) => {
     if (num === -1 && (!cartGood.num || cartGood.num <= 0)) return
 
@@ -250,7 +239,10 @@ class ShopIndex extends Component {
       type: 'cart/setCart',
       payload: {
         id: +this.$router.params.id,
-        good,
+        good: {
+          ...good,
+          again_id: undefined,
+        },
         num
       }
     })

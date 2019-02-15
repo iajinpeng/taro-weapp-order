@@ -101,7 +101,7 @@ export default {
           }
         }
 
-        good.again_id = order_id + '-' + index
+        good.again_id = order_id + '-' + good.g_id + '-' + index
 
         const {od_optional_array, od_property_array, ...useGood} = good;
 

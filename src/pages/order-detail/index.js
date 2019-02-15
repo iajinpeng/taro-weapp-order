@@ -180,7 +180,7 @@ class OrderDetail extends Component {
       payload: this.state.addCartPayload
     })
     Taro.navigateTo({
-      url: '/pages/shop-index/index?id=' + this.state.data.store_id
+      url: '/pages/shop-index/index?id=' + this.state.data.store_id + '&showcart=1'
     })
     this.showOrHideAgainWarn(false)
   }
