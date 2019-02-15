@@ -10,6 +10,7 @@ import Loading from '../../components/Loading'
 import Numbox from '../../components/num-box'
 import Curtain from '../../components/curtain'
 import './index.less'
+import IdButton from "../../components/id-button/index";
 
 
 @connect(({common, cart}) => ({...common, ...cart}))
@@ -484,18 +485,18 @@ class ShopIndex extends Component {
                                       }
                                       {
                                         good.g_has_norm === 1 &&
-                                        <Button onClick={this.openOptions.bind(this, good)}
+                                        <IdButton onClick={this.openOptions.bind(this, good)}
                                                 className={'theme-bg-' + theme}
-                                        >选规格</Button>
+                                        >选规格</IdButton>
                                       }
                                     </Block>
                                   }
 
                                   {
                                     good.g_combination === 2 &&
-                                    <Button onClick={this.toStandardDetail.bind(this, good)}
+                                    <IdButton onClick={this.toStandardDetail.bind(this, good)}
                                             className={'theme-bg-' + theme}
-                                    >选规格</Button>
+                                    >选规格</IdButton>
                                   }
                                 </View>
                               </View>
@@ -661,11 +662,11 @@ class ShopIndex extends Component {
                   {
                     curGood.g_has_norm === 2 &&
                     (!curCart.num || curCart.num === 0) &&
-                    <Button
+                    <IdButton
                       className={'theme-grad-bg-' + theme} onClick={this.setLocalCart.bind(this, 1)}
                     >
                       加入购物车
-                    </Button>
+                    </IdButton>
                   }
                   {
                     curGood.g_has_norm === 2 && curCart.num &&
@@ -680,20 +681,20 @@ class ShopIndex extends Component {
 
                   {
                     curGood.g_combination === 1 && curGood.g_has_norm === 1 &&
-                    <Button
+                    <IdButton
                       className={'theme-grad-bg-' + theme} onClick={this.toChooseStan}
                     >
                       选规格
-                    </Button>
+                    </IdButton>
                   }
 
                   {
                     curGood.g_combination === 2 &&
-                    <Button
+                    <IdButton
                       className={'theme-grad-bg-' + theme} onClick={this.toStandardDetail.bind(this, curGood)}
                     >
                       选规格
-                    </Button>
+                    </IdButton>
                   }
 
                 </View>
@@ -767,11 +768,11 @@ class ShopIndex extends Component {
               {
                 (curCart.optionalstr !== (propertyTagIndex.join('') + optionalTagIndex.join('')) &&
                   !curCart.num || curCart.num === 0) ?
-                <Button
+                <IdButton
                   className={'theme-grad-bg-' + theme} onClick={this.setLocalCart.bind(this, 1)}
                 >
                   加入购物车
-                </Button>
+                </IdButton>
                   :
                   <Numbox
                     num={curCart.num} showNum

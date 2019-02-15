@@ -6,6 +6,7 @@ import classnames from 'classnames'
 import ConfirmModal from '../../components/confirm-modal'
 import Copyright from '../../components/copyright'
 import CouponModal from '../../components/coupon-modal'
+import IdButton from '../../components/id-button'
 import {getTouchData} from '../../utils/utils'
 import './index.less'
 
@@ -455,10 +456,10 @@ class OrderList extends Component {
                             {
                               (order.o_order_status === 5 || order.o_order_status === 8) &&
                               <View className='good-info'>
-                                <Button
+                                <IdButton
                                   className={'theme-grad-bg-' + theme}
                                   onClick={this.requestOrderRepeat.bind(this, order)}
-                                >再来一单</Button>
+                                >再来一单</IdButton>
                               </View>
                             }
 

@@ -654,9 +654,9 @@ class Order extends Component {
                   <View className='mobile'>
                     <Image src={require('../../assets/images/icon-mobile.png')}/>
                     <Input type='number' value={userPhoneNum} onInput={this.phoneNumInput} placeholder='请输入手机号' maxlength='11'/>
-                    <Button open-type='getPhoneNumber' onGetphonenumber={this.autoInputMobile}>
+                    <IdButton open-type='getPhoneNumber' onGetphonenumber={this.autoInputMobile}>
                       <Text className={'theme-c-' + theme}>自动填写</Text>
-                    </Button>
+                    </IdButton>
 
                   </View>
                   <View className='btn-box'>

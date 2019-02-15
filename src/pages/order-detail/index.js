@@ -6,6 +6,7 @@ import classnames from 'classnames'
 import './index.less'
 import {orderTypes, outOrderTypes} from '../../config'
 import ConfirmModal from '../../components/confirm-modal'
+import IdButton from '../../components/id-button'
 import BackToHome from '../../components/back-to-home'
 import CouponModal from '../../components/coupon-modal'
 
@@ -440,10 +441,10 @@ class OrderDetail extends Component {
                 </View>
                 {
                   (data.o_order_status === 5 || data.o_order_status === 6 || data.o_order_status === 7 || data.o_order_status === 8) &&
-                  <Button
+                  <IdButton
                     className={'theme-grad-bg-' + theme}
                     onClick={this.requestOrderRepeat}
-                  >再来一单</Button>
+                  >再来一单</IdButton>
                 }
 
                 {

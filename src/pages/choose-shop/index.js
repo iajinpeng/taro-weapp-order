@@ -189,14 +189,14 @@ class Choose extends Component {
 
   }
 
-  selectShop = (item, index) => {
+  selectShop = (item, index, isScroll) => {
     this.setState({
       selectedStoreIndex: index,
-      // scrollStoreId: 'id' + item.s_id,
       longitude: item.s_address_lng,
       latitude: item.s_address_lat,
       isSearching: false
     })
+    isScroll && this.setState({scrollStoreId: 'id' + item.s_id})
   }
 
   confirmOrder = () => {
@@ -315,7 +315,7 @@ class Choose extends Component {
           >
             {
               storeFilter.map((s, i) => (
-                <View className='item' key={s.s_id} onClick={this.selectShop.bind(this, s, i)}>
+                <View className='item' key={s.s_id} onClick={this.selectShop.bind(this, s, i, true)}>
                   <View className='name'>{s.s_title}</View>
                   <View className='address'>{s.s_address}</View>
                   <Text className='distance'>{(s.distance / 1000).toFixed(2)}KM</Text>
@@ -354,7 +354,7 @@ class Choose extends Component {
 
                     return (
                       <View id={'id' + item.s_id}
-                        className='shop-item' key={index} onClick={this.selectShop.bind(this, item, index)}>
+                        className='shop-item' key={index} onClick={this.selectShop.bind(this, item, index, false)}>
                         <View className='title'>
                           <View>
                             <Text className={classnames('name', theme_c)}>{item.s_title}</Text>
