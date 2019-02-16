@@ -382,7 +382,7 @@ class Order extends Component {
         o_reserve_time: reserveTime[dayIndex].date + ' ' + reserveTime[dayIndex].time[timeIndex].time,
         o_remark: memo,
         goods,
-        address_id: this.state.selectedAddress.da_id,
+        address_id: selectedAddress.da_id,
         coupon_id: curCouponIndex !== -1 && couponList.length > 0 && couponList[curCouponIndex].uc_id
       }
     })
@@ -400,7 +400,7 @@ class Order extends Component {
 
   stepPay = async () => {
 
-    const {userPhoneNum, orderType} = this.state
+    const {userPhoneNum, orderType, selectedAddress} = this.state
     const store_id = this.$router.params.store_id
 
     if (orderType !== 3) {
@@ -417,6 +417,16 @@ class Order extends Component {
           alertPhoneText: '手机号码格式不正确哦~'
         })
 
+        return
+      }
+    }
+
+    if (orderType === 3) {
+      if (!selectedAddress.da_id) {
+        Taro.showToast({
+          icon: 'none',
+          title: '你忘了告诉我收货信息哦～'
+        })
         return
       }
     }
@@ -654,9 +664,9 @@ class Order extends Component {
                   <View className='mobile'>
                     <Image src={require('../../assets/images/icon-mobile.png')}/>
                     <Input type='number' value={userPhoneNum} onInput={this.phoneNumInput} placeholder='请输入手机号' maxlength='11'/>
-                    <IdButton open-type='getPhoneNumber' onGetphonenumber={this.autoInputMobile}>
+                    <Button open-type='getPhoneNumber' onGetphonenumber={this.autoInputMobile}>
                       <Text className={'theme-c-' + theme}>自动填写</Text>
-                    </IdButton>
+                    </Button>
 
                   </View>
                   <View className='btn-box'>

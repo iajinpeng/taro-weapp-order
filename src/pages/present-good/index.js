@@ -340,23 +340,6 @@ class PresentGood extends Component {
             <View className='option-modal-content'>
               <ScrollView scrollY>
                 {
-                  stanInfo.property.map((item, index) => (
-                    <View className='block' key={index}>
-                      <View className='name'>{item.name}</View>
-                      <View className='options'>
-                        {
-                          item.list_name.map((option, i) => (
-                            <View
-                              onClick={this.selectTag.bind(this, 'propertyTagIndex', index, i)} key={i}
-                              className={propertyTagIndex[index] === i ? 'active theme-grad-bg-' + theme : ''}
-                            >{option}</View>
-                          ))
-                        }
-                      </View>
-                    </View>
-                  ))
-                }
-                {
                   stanInfo.norm.optional.map((item, index) => (
                     <View className='block' key={index}>
                       <View className='name'>{item.title}</View>
@@ -367,6 +350,23 @@ class PresentGood extends Component {
                               onClick={this.selectTag.bind(this, 'optionalTagIndex', index, i)} key={i}
                               className={optionalTagIndex[index] === i ? 'active theme-grad-bg-' + theme : ''}
                             >{option.gn_name}</View>
+                          ))
+                        }
+                      </View>
+                    </View>
+                  ))
+                }
+                {
+                  stanInfo.property.map((item, index) => (
+                    <View className='block' key={index}>
+                      <View className='name'>{item.name}</View>
+                      <View className='options'>
+                        {
+                          item.list_name.map((option, i) => (
+                            <View
+                              onClick={this.selectTag.bind(this, 'propertyTagIndex', index, i)} key={i}
+                              className={propertyTagIndex[index] === i ? 'active theme-grad-bg-' + theme : ''}
+                            >{option}</View>
                           ))
                         }
                       </View>

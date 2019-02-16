@@ -456,10 +456,10 @@ class OrderList extends Component {
                             {
                               (order.o_order_status === 5 || order.o_order_status === 8) &&
                               <View className='good-info'>
-                                <IdButton
+                                <Button
                                   className={'theme-grad-bg-' + theme}
                                   onClick={this.requestOrderRepeat.bind(this, order)}
-                                >再来一单</IdButton>
+                                >再来一单</Button>
                               </View>
                             }
 

@@ -32,7 +32,6 @@ class OrderDetail extends Component {
     addCartPayload: {},
     curCoupon: {},
     isShowCoupon: false,
-    mapRefresh: false,
     isShowMap: true
   }
 
@@ -123,8 +122,10 @@ class OrderDetail extends Component {
         }
 
         if (+data.take_id === 2) {
+          const driverImg = require('../../assets/images/icon-driver.png')
+
           mapAttrs.markers.push({
-            iconPath: require('../../assets/images/icon-dada.png'),
+            iconPath: driverImg,
             width: 36,
             height: 36,
             id: '_' + data.o_id,
@@ -159,10 +160,7 @@ class OrderDetail extends Component {
 
   handleRefresh = async () => {
     Taro.showLoading()
-    this.setState({mapRefresh: true})
-    this.state.mapRefresh && setTimeout(() => {
-      this.setState({mapRefresh: false})
-    }, 1000)
+
     await this.getOrderDetail()
 
     Taro.hideLoading()
@@ -293,7 +291,7 @@ class OrderDetail extends Component {
     const isIphoneX = !!(systemInfo.model && systemInfo.model.replace(' ', '').toLowerCase().indexOf('iphonex') > -1)
 
     const {data, isShowCancelWarn, markers, isShowOrderAgainWarn, includePoints,
-      polyline, curCoupon, isShowCoupon, mapRefresh, isShowMap} = this.state
+      polyline, curCoupon, isShowCoupon, isShowMap} = this.state
 
     return (
       <Block>
@@ -337,7 +335,7 @@ class OrderDetail extends Component {
                 {
                   data.o_order_status === 42 && data.take_id === 2 &&
                   <CoverView className='map-refresh' onClick={this.handleRefresh}>
-                    <CoverImage className={mapRefresh ? 'rotate' : ''} src={require('../../assets/images/icon-refresh.png')} />
+                    <CoverImage src={require('../../assets/images/icon-refresh.png')} />
                   </CoverView>
                 }
                 <View className='out-status'>
@@ -441,10 +439,10 @@ class OrderDetail extends Component {
                 </View>
                 {
                   (data.o_order_status === 5 || data.o_order_status === 6 || data.o_order_status === 7 || data.o_order_status === 8) &&
-                  <IdButton
+                  <Button
                     className={'theme-grad-bg-' + theme}
                     onClick={this.requestOrderRepeat}
-                  >再来一单</IdButton>
+                  >再来一单</Button>
                 }
 
                 {

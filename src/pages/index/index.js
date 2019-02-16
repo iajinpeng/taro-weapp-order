@@ -246,7 +246,7 @@ class Index extends Component {
         <View className='banner-dot'>
           {
             home_banner.banner.map((img, index) => (
-              <Text className={index === activeBannerIndex ? 'active theme-bg-' + theme : ''} key={index} />
+              <Text className={index == activeBannerIndex ? 'active theme-bg-' + theme : ''} key={index} />
             ))
           }
         </View>
