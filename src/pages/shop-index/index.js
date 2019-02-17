@@ -40,8 +40,17 @@ class ShopIndex extends Component {
   }
 
   componentWillMount() {
-    // this.readStorageCarts()
     this.setState({isShowCart: !!this.$router.params.showcart})
+    const id = +this.$router.params.id
+
+    !this.$router.params.fs_id &&
+    this.props.carts[id] &&
+    this.props.dispatch({
+      type: 'cart/clearPresentCart',
+      payload: {
+        id
+      }
+    })
   }
 
   componentDidShow() {
@@ -448,7 +457,7 @@ class ShopIndex extends Component {
                     <View className='good-list'>
                       {
                         classify.goods_list.map((good, i) => {
-                          const cartGood = carts.find(item => item.g_id === good.g_id)
+                          const cartGood = carts.find(item => !item.fs_id && (item.g_id === good.g_id))
                           return (
                             <View className='good' key={i}>
                               <View className='img-wrap' onClick={this.showDetail.bind(this, good)}>

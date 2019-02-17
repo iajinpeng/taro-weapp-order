@@ -136,5 +136,12 @@ export default {
 
       return {...state}
     },
+    // 清除满送商品
+    clearPresentCart(state, {payload}) {
+      const {id} = payload
+      state.carts[id] = state.carts[id].filter((item => !item.fs_id))
+
+      return {...state}
+    }
   }
 }

@@ -41,7 +41,6 @@ class Index extends Component {
   }
 
   componentDidMount () {
-    this.getIndexInfo()
     Taro.showShareMenu({
       withShareTicket: true
     })
@@ -50,6 +49,7 @@ class Index extends Component {
   componentWillUnmount () { }
 
   componentDidShow () {
+    this.getIndexInfo()
     if (this.state.isFirstShow === '') {
       this.setState({isFirstShow: true})
     } else {

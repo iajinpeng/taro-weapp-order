@@ -446,6 +446,7 @@ class OrderList extends Component {
 
                             {
                               order.o_order_status.toString()[0] === '4' &&
+                              +order.take_status !== 9 && +order.take_status !== 10 &&
                               <View className='good-info'>
                                 <View className={classnames('theme-c-' + theme)}>
                                   <Text>等待骑手前来取餐，请耐心等待</Text>

@@ -58,9 +58,8 @@ class Order extends Component {
 
     this.setState({
       goods
-    })
+    }, this.initPage)
 
-    this.initPage()
   }
 
   onPullDownRefresh () {
@@ -133,9 +132,9 @@ class Order extends Component {
   }
 
   getPreOrderInfo = (take_type) => {
-    const {carts, localInfo} = this.props
+    const {localInfo} = this.props
 
-    const goods = carts[this.$router.params.store_id].map(cart => {
+    const goods = this.state.goods.map(cart => {
       let {g_id, num, send_goods, fs_id} = cart
       let g_property = [], optional = []
 

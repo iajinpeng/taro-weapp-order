@@ -33,10 +33,11 @@ class PresentGood extends Component {
   }
 
   componentWillMount() {
-    this.getPresentGood()
+
   }
 
   componentDidShow () {
+    this.getPresentGood()
     this.readStorageCarts()
   }
 
@@ -245,24 +246,6 @@ class PresentGood extends Component {
       }
     })
   }
-
-  showOrHideCartWarn = (bool) => {
-    this.setState({isShowCartWarn: bool})
-  }
-
-  clearCart = () => {
-    this.props.dispatch({
-      type: 'cart/clearOneCart',
-      payload: {
-        id: +this.$router.params.id,
-      }
-    })
-    this.setState({
-      isShowCart: false,
-      isShowCartWarn: false
-    })
-  }
-
 
   render() {
     const {theme, menu_cart, full_logo_goods} = this.props
@@ -488,10 +471,6 @@ class PresentGood extends Component {
           <View
             onTouchMove={this.stopPropagation}
             className={classnames('cart', isShowCart && carts.length > 0 ? 'active' : '')}>
-            <View className='cart-head'>
-              <Image src={require('../../assets/images/icon-trash.png')}/>
-              <Text onClick={this.showOrHideCartWarn.bind(this, true)}>清空购物车</Text>
-            </View>
             <ScrollView scrollY className='cart-list'>
               {
                 carts.map((good, index) => (

@@ -149,7 +149,7 @@ class OrderDetail extends Component {
 
       if (data.o_order_status !== 1 && data.o_order_status !== 5 &&
         data.o_order_status !== 6 && data.o_order_status !== 7 &&
-        data.o_order_status === 8) {
+        data.o_order_status !== 8) {
         this.timeOut = setTimeout(() => {
           this.getOrderDetail()
         }, 10000)
