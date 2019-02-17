@@ -107,7 +107,7 @@ class Order extends Component {
 
     this.getReserveTime(amount, orderType, address)
 
-    const index = couponList.findIndex(item => item.available) > -1 ?
+    const index = amount > 0 && couponList.findIndex(item => item.available) > -1 ?
       couponList.findIndex(item => item.available) : -1
 
     return this.props.dispatch({
