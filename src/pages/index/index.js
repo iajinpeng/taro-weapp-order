@@ -232,7 +232,7 @@ class Index extends Component {
             interval={home_banner.auto_play * 1000}
           >
             {
-              home_banner.banner.filter(item => !!item.image).map((img, index) => (
+              home_banner.banner && home_banner.banner.filter(item => !!item.image).map((img, index) => (
                 <SwiperItem className='swiper-item' key={index}>
                   <View>
                     <Image className='swiper-img' src={baseUrl + img.image} />
@@ -245,7 +245,7 @@ class Index extends Component {
         </View>
         <View className='banner-dot'>
           {
-            home_banner.banner.filter(item => !!item.image).map((img, index) => (
+            home_banner.banner && home_banner.banner.filter(item => !!item.image).map((img, index) => (
               <Text className={index == activeBannerIndex ? 'active theme-bg-' + theme : ''} key={index} />
             ))
           }

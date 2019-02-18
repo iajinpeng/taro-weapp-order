@@ -26,7 +26,7 @@ class Numbox extends Component {
             <Text className='num'>{num}</Text>
           </Block>
         }
-        <Image src={`${baseUrl}/static/addons/diancan/img/style/style_${theme}_8.png`}
+        <Image src={theme ? `${baseUrl}/static/addons/diancan/img/style/style_${theme}_8.png` : ''}
           onClick={onAdd}
           className={classnames('add-circle')}>
           +

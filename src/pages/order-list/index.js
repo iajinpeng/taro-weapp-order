@@ -429,28 +429,10 @@ class OrderList extends Component {
                             }
 
                             {
-                              +order.take_status === 9 &&
+                              (+order.take_status === 9 || +order.take_status === 10) &&
                               order.o_order_status.toString()[0] === '4' &&
                               <View className='good-info'>
-                                <View className={classnames('out', 'red')}>物品配送异常，正在返回商家中</View>
-                              </View>
-                            }
-
-                            {
-                              +order.take_status === 10 &&
-                              order.o_order_status.toString()[0] === '4' &&
-                              <View className='good-info'>
-                                <View className={classnames('out', 'red')}>配送异常物品已返回商家</View>
-                              </View>
-                            }
-
-                            {
-                              order.o_order_status.toString()[0] === '4' &&
-                              +order.take_status !== 9 && +order.take_status !== 10 &&
-                              <View className='good-info'>
-                                <View className={classnames('theme-c-' + theme)}>
-                                  <Text>等待骑手前来取餐，请耐心等待</Text>
-                                </View>
+                                <View className={classnames('out', 'red')}>{order.status_remark}</View>
                               </View>
                             }
 

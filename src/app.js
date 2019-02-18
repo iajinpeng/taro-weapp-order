@@ -83,10 +83,17 @@ class App extends Component {
         type: 'common/requestLogin'
       })
     }
-    store.dispatch({
-      type: 'common/setUserInfo',
-      payload: Taro.getStorageSync('userInfo') || {userInfo: null}
-    })
+
+    const userInfoStorage = Taro.getStorageSync('userInfo')
+    if (new Date().getTime() - userInfoStorage.time < 7 * 24 * 60 * 60 * 1000) {
+      store.dispatch({
+        type: 'common/setUserInfo',
+        payload: userInfoStorage.real || {userInfo: null}
+      })
+    } else {
+      Taro.removeStorageSync('userInfo')
+    }
+
     store.dispatch({
       type: 'common/initRequest'
     })

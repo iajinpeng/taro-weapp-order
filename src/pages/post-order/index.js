@@ -274,7 +274,13 @@ class Order extends Component {
 
 
   chooseReserveTime = () => {
-    if (this.state.orderType === 3 && this.state.reserveTime.length === 0) return
+
+    if (this.state.orderType === 3 && this.state.reserveTime.length === 0) {
+      if (this.state.userAddress.length === 0) {
+        this.setState({isShowAddress: true})
+      }
+      return
+    }
     this.setState({isShowPicker: true})
   }
 
