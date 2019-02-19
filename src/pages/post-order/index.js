@@ -275,8 +275,9 @@ class Order extends Component {
 
   chooseReserveTime = () => {
 
-    if (this.state.orderType === 3 && this.state.reserveTime.length === 0) {
-      if (this.state.userAddress.length === 0) {
+    if (this.state.orderType === 3 || this.state.reserveTime.length === 0) {
+      console.log(this.state.reserveTime)
+      if (this.state.userAddress.length === 0 || !this.state.userAddress.some(item => item.optional)) {
         this.setState({isShowAddress: true})
       }
       return

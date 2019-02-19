@@ -108,7 +108,7 @@ class ChooseAddress extends Component {
           </View>
           <ScrollView scrollY className='content'>
             {
-              useAddress.length === 0 &&
+              address.length === 0 &&
               <View className='null' onClick={this.handleAdd}>
                 <Image className='icon' src={`${baseUrl}/static/addons/diancan/img/style/style_${theme}_8.png`} />
                 <View className={classnames('text', 'theme-c-' + theme)}>新增收货地址</View>
@@ -116,7 +116,7 @@ class ChooseAddress extends Component {
             }
 
             {
-              useAddress.length > 0 &&
+              address.length > 0 &&
               <View className='list'>
                 {
                   useAddress.map((item, index) => (
