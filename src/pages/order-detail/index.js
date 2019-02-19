@@ -43,11 +43,12 @@ class OrderDetail extends Component {
 
       if (res.coupon.length > 0) {
         this.setState({isShowMap: false})
-        setTimeout(() => {
+        let timer = setTimeout(() => {
           this.setState({
             isShowCoupon: true,
             curCoupon: res.coupon[0],
           })
+          clearTimeout(timer)
         }, 500)
       }
     })
@@ -152,6 +153,7 @@ class OrderDetail extends Component {
         data.o_order_status !== 8) {
         this.timeOut = setTimeout(() => {
           this.getOrderDetail()
+          clearTimeout(this.timeOut)
         }, 10000)
       }
       return data
@@ -344,14 +346,15 @@ class OrderDetail extends Component {
                       {outOrderTypes[data.o_order_status]}
                     </View>
                     {
+                      (data.o_order_status === 1 || data.o_order_status === 2 ||
+                        data.o_order_status.toString()[0] === '3') &&
+                      <View className='tip'>{data.status_remark}</View>
+                    }
+                    {
                       data.take_status !== 9 && data.take_status !== 10 &&
                       <View className='tip'>
                         {
                           {
-                            1: '当前尚未下单，请尽快支付',
-                            2: '商家确认中，请您耐心等待',
-                            31: '正在尽快制作，请您耐心等待',
-                            32: '正在尽快制作，请您耐心等待',
                             41: '等待骑手前来取餐，请耐心等待',
                             42: `骑手预计在${data.o_reserve_time && data.o_reserve_time.split(' ')[1]}送达`,
                           }[data.o_order_status]

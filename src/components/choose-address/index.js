@@ -128,7 +128,7 @@ class ChooseAddress extends Component {
                           <View className='alias' />
                       }
                       <View className='info'>
-                        <View className='addr'>{item.address}</View>
+                        <View className='addr'>{item.address + ' ' + (item.address_detail && item.address_detail.split('|')[1])}</View>
                         <View className='user'>
                           {item.user_name + ' ' + item.user_telephone}
                         </View>
