@@ -407,7 +407,8 @@ class OrderList extends Component {
                             }
 
                             {
-                              (order.o_order_status.toString()[0] === '3' || order.o_order_status.toString()[0] === '4') &&
+                              +order.o_take_type !== 3 &&
+                              (order.o_order_status.toString()[0] === '3' || order.o_order_status.toString() === '4') &&
                               <View className='good-info'>
                                 <View style={{display: +order.o_take_type !== 3 ? 'block' : 'none'}}>取餐号: <Text
                                   className={classnames('theme-c-' + theme)}>{order.o_take_no}</Text></View>

@@ -142,7 +142,7 @@ class ChooseAddress extends Component {
 
                 {
                   uselessAddress.length > 0 &&
-                  <View className='useless-title'>以下地址不可用</View>
+                  <View className='useless-title'>以下地址超出配送范围</View>
                 }
 
                 {
