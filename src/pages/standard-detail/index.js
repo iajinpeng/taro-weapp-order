@@ -119,8 +119,6 @@ class StandardDetail extends Component {
     const {theme, menu_cart} = this.props
     const {g_description, g_image, fixed, optional} = this.state
 
-    const baseUrl = this.props.ext.domain
-
     const g_price = +this.$router.params.g_price || 0
 
     this.optPrice = optional.reduce((total, opt) => {
@@ -135,7 +133,7 @@ class StandardDetail extends Component {
       <ScrollView className='standard-detail' scrollY>
         <View className='content'>
           <View className='banner'>
-            <Image src={g_image ? baseUrl + g_image : ''}/>
+            <Image src={g_image}/>
           </View>
           <View className='title'>{g_description}</View>
           <View className='goods'>
@@ -143,7 +141,7 @@ class StandardDetail extends Component {
             {
               fixed.map((good, index) => (
                 <View className='goods-item' key={index}>
-                  <Image className='pic' src={baseUrl + good.gn_image}/>
+                  <Image className='pic' src={good.gn_image}/>
                   <View className='info'>
                     <View className='name'>{good.gn_name}</View>
                     <View className='standard'>{good.gn_append}</View>
@@ -160,7 +158,7 @@ class StandardDetail extends Component {
                 {
                   opt.list && opt.list.map((good, i) => (
                     <View className='others-item' key={i}>
-                      <Image className='pic' src={baseUrl + good.gn_image}/>
+                      <Image className='pic' src={good.gn_image}/>
                       <View className='info'>
                         <View className='name'>{good.gn_name}</View>
                         <View className='standard'>{good.gn_append}</View>

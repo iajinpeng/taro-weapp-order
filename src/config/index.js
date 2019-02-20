@@ -1,5 +1,3 @@
-// 请求连接前缀
-export const baseUrl = 'https://wxapp.xiaomafeiteng.com'
 
 // 腾讯地图key
 export const tcmapKey = 'U2JBZ-UX635-4G7IU-QYUBV-CNGZT-DIFQT'

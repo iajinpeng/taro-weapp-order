@@ -249,7 +249,6 @@ class PresentGood extends Component {
 
   render() {
     const {theme, menu_cart, full_logo_goods} = this.props
-    const baseUrl = this.props.ext.domain
     const {goods, curGood, isShowOptions, isShowDetail, stanInfo, curCart,
       propertyTagIndex, optionalTagIndex, isShowCart} = this.state
     const carts = (this.props.carts[(this.$router.params.id)] || []).filter(item => item.fs_id)
@@ -257,7 +256,7 @@ class PresentGood extends Component {
     return (
       goods.length > 0 ?
         <View className='present-good'>
-          <Image className='banner' src={full_logo_goods ? baseUrl + full_logo_goods : ''}/>
+          <Image className='banner' src={full_logo_goods}/>
 
           <View className='good-list'>
             {
@@ -270,7 +269,7 @@ class PresentGood extends Component {
                         good.tag_name &&
                         <Text className={classnames('tag', 'theme-grad-bg-' + theme)}>{good.tag_name}</Text>
                       }
-                      <Image src={good.g_image_100 ? baseUrl + good.g_image_100 : ''}/>
+                      <Image src={good.g_image_100}/>
                     </View>
                     <View className='info'>
                       <View className='name'>{good.g_title}</View>
@@ -401,7 +400,7 @@ class PresentGood extends Component {
               curCart &&
               <View className='good-detail'>
                 <View className='image-wrap'>
-                  <Image src={curGood.g_image_300 ? baseUrl + curGood.g_image_300 : ''}/>
+                  <Image src={curGood.g_image_300}/>
                 </View>
                 <View className='info'>
                   <View className='title'>
@@ -471,6 +470,10 @@ class PresentGood extends Component {
           <View
             onTouchMove={this.stopPropagation}
             className={classnames('cart', isShowCart && carts.length > 0 ? 'active' : '')}>
+            <View className='cart-head'>
+              <Image src={require('../../assets/images/icon-trash.png')}/>
+              <Text onClick={this.showOrHideCartWarn.bind(this, true)}>清空购物车</Text>
+            </View>
             <ScrollView scrollY className='cart-list'>
               {
                 carts.map((good, index) => (

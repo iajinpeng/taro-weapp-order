@@ -56,13 +56,12 @@ class PayBox extends Component {
 
   render () {
     const {theme, carts, onOpenCart, themeInfo, simple, totalPrice, btnText, active} = this.props
-    const baseUrl = this.props.ext.domain
     const {isAlert} = this.state
 
     return (
       <View className={classnames('pay-box', (carts.length > 0 || active) ? 'active' : '', simple ? 'simple' : '')}>
         <View className='info' onClick={onOpenCart}>
-          <Image src={baseUrl + themeInfo.image} />
+          <Image src={themeInfo.image} />
           {
             carts.length && !totalPrice &&
             <View

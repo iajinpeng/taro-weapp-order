@@ -66,7 +66,6 @@ class OrderDetail extends Component {
 
   getOrderDetail = () => {
     const {b_logo} = this.props
-    const baseUrl = this.props.ext.domain
     return this.props.dispatch({
       type: 'order/getOrderDetail',
       payload: {
@@ -75,7 +74,7 @@ class OrderDetail extends Component {
     }).then((data) => {
       let mapAttrs = {
         markers: [{
-          iconPath: baseUrl + b_logo,
+          iconPath: b_logo,
           width: 40,
           height: 40,
           longitude: data.s_address_lng,
@@ -95,7 +94,7 @@ class OrderDetail extends Component {
 
       if (+data.o_order_status === 42) {
         mapAttrs.markers.push({
-          iconPath: baseUrl + data.u_avatar,
+          iconPath: data.u_avatar,
           width: 40,
           height: 40,
           id: '_' + data.o_id,

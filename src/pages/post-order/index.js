@@ -757,7 +757,7 @@ class Order extends Component {
                   goods.map((good, index) => (
                     !good.optionalnumstr ?
                       <View className='good' key={index}>
-                        <Image className='pic' src={baseUrl + (good.g_image_100 || good.g_image)}/>
+                        <Image className='pic' src={good.g_image_100 || good.g_image}/>
                         <View className='info'>
                           <View className='name'>
                             {good.g_title}
@@ -799,7 +799,7 @@ class Order extends Component {
                       </View>
                       :
                       <View className='good'>
-                        <Image className='pic' src={baseUrl + (good.g_image_100 || good.g_image)}/>
+                        <Image className='pic' src={good.g_image_100 || good.g_image}/>
                         <View className='info'>
                           <View className='name'>
                             {good.g_title}

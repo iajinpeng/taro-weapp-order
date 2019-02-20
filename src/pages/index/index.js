@@ -206,8 +206,6 @@ class Index extends Component {
   render () {
     const {theme, userInfo} = this.props
 
-    const baseUrl = this.props.ext.domain
-
     const { user_full_num, full_num, isShowModal, activeBannerIndex,
       home_banner, full_image, full_logo, full_logo_no, home_button,
       full_status, full_undefind, norm, isShowCoupon, isFirstShow,
@@ -235,7 +233,7 @@ class Index extends Component {
               home_banner.banner && home_banner.banner.filter(item => !!item.image).map((img, index) => (
                 <SwiperItem className='swiper-item' key={index}>
                   <View>
-                    <Image className='swiper-img' src={baseUrl + img.image} />
+                    <Image className='swiper-img' src={img.image} />
                   </View>
                 </SwiperItem>
               ))
@@ -263,14 +261,14 @@ class Index extends Component {
         <View className={classnames('icon-box clearfix', 'theme-c-' + theme, isIphoneX ? 'iphonex' : '')}>
           <View onClick={this.toOrderListPage}>
             <View>
-              <Image src={baseUrl + home_button.order_image} />
+              <Image src={home_button.order_image} />
               <Text>订单</Text>
             </View>
           </View>
           <View className='line'><View /></View>
           <View onClick={this.toCouponPage}>
             <View>
-              <Image src={baseUrl + home_button.coupon_image} />
+              <Image src={home_button.coupon_image} />
               <Text>优惠券</Text>
             </View>
           </View>
@@ -302,7 +300,7 @@ class Index extends Component {
                   totStarsArr.map((item, index) => (
                     <Image mode='widthFix'
                       className={full_num === 3 ? 'big' : ''}
-                      src={(user_full_num >= index + 1) ? baseUrl + full_logo : baseUrl + full_logo_no} key={index}
+                      src={(user_full_num >= index + 1) ? full_logo : full_logo_no} key={index}
                     />
                   ))
                 }
@@ -311,13 +309,13 @@ class Index extends Component {
                 <AtIcon value='chevron-right' size='17' />
               </View>
             </View>
-            <Image src={baseUrl + full_image} />
+            <Image src={full_image} />
           </View>
         }
 
         {
           full_status === 2 &&
-          <Image src={baseUrl + full_undefind} className='full-image' />
+          <Image src={full_undefind} className='full-image' />
         }
 
         <Modal title='活动规则'

@@ -365,7 +365,6 @@ class ShopIndex extends Component {
 
   render() {
     const {theme, menu_banner, menu_cart} = this.props
-    const baseUrl = this.props.ext.domain
     const {id, fs_id} = this.$router.params
     const carts = (this.props.carts[+id] || []).filter(item => !item.fs_id || item.fs_id === +fs_id)
 
@@ -393,7 +392,7 @@ class ShopIndex extends Component {
               menu_banner.banner.map((img, index) => (
                 <SwiperItem className='swiper-item' key={index}>
                   <View>
-                    <Image className='swiper-img' src={img.image ? baseUrl + img.image : ''}/>
+                    <Image className='swiper-img' src={img.image || ''}/>
                   </View>
                 </SwiperItem>
               ))
@@ -428,7 +427,7 @@ class ShopIndex extends Component {
                       key={index} id={'asid-' + classify.group_id}
                     >
                       <View>
-                        <Image src={classify.gg_image ? baseUrl + classify.gg_image : ''}/>
+                        <Image src={classify.gg_image || ''}/>
                         <Text>{classify.gg_name}</Text>
                       </View>
                     </View>
@@ -450,7 +449,7 @@ class ShopIndex extends Component {
                       <View className={scrollCurGroupId === classify.group_id ? 'top-show' : ''}
                         style={{zIndex: 20 + index}}
                       >
-                        <Image src={classify.gg_image ? baseUrl + classify.gg_image : ''}/>
+                        <Image src={classify.gg_image || ''}/>
                         <Text>{classify.gg_name}</Text>
                       </View>
                     </View>
@@ -465,7 +464,7 @@ class ShopIndex extends Component {
                                   good.tag_name &&
                                   <Text className={classnames('tag')} style={{background: good.tag_color}}>{good.tag_name}</Text>
                                 }
-                                <Image src={good.g_image_100 ? baseUrl + good.g_image_100 : ''}/>
+                                <Image src={good.g_image_100 || ''}/>
                               </View>
                               <View className='info'>
                                 <View className='name'>
@@ -651,7 +650,7 @@ class ShopIndex extends Component {
             curCart &&
             <View className='good-detail'>
               <View className='image-wrap'>
-                <Image src={curGood.g_image_300 ? baseUrl + curGood.g_image_300 : ''}/>
+                <Image src={curGood.g_image_300}/>
               </View>
               <View className='info'>
                 <View className='title'>

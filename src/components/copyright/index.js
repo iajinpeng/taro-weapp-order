@@ -8,11 +8,10 @@ class Copyright extends Component {
 
   render () {
     const {bottom_logo, b_bottom_status, b_bottom_content} = this.props
-    const baseUrl = this.props.ext.domain
 
     return (
       <View className='copyright'>
-        <Image src={bottom_logo ? baseUrl + bottom_logo : ''} mode='widthFix' />
+        <Image src={bottom_logo} mode='widthFix' />
         {
           b_bottom_status === 1 &&
           <View className='name'>

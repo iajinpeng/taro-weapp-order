@@ -141,13 +141,11 @@ class Choose extends Component {
   showShopMakers = ({brand, store}) => {
     if (store.length === 0) return
 
-    const baseUrl = this.props.ext.domain
-
     let markers = []
 
     store.map(item => {
       markers.push({
-        iconPath: baseUrl + brand.b_logo,
+        iconPath: brand.b_logo,
         width: 40,
         height: 40,
         longitude: item.s_address_lng,

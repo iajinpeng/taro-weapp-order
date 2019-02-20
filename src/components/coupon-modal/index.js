@@ -44,14 +44,12 @@ class CouponModal extends Component {
 
   render () {
     const {show, coupon, onClose, userInfo} = this.props
-    const baseUrl = this.props.ext.domain
-
     const {background_color, butto_color, font_color, image, list} = coupon
 
     return (
       <Curtain show={show} className='coupon-modal' onClose={onClose} contentWidth='90%'>
         <View className='coupon-modal-content'>
-          <Image src={image ? baseUrl + image : ''} />
+          <Image src={image} />
           <View className='list' style={{backgroundColor: background_color}}>
             {
               list && list.map((item, index) => (
