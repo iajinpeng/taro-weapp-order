@@ -407,7 +407,6 @@ class OrderList extends Component {
                             }
 
                             {
-                              +order.o_take_type !== 3 &&
                               (order.o_order_status.toString()[0] === '3' || order.o_order_status.toString() === '4') &&
                               <View className='good-info'>
                                 <View style={{display: +order.o_take_type !== 3 ? 'block' : 'none'}}>取餐号: <Text
@@ -422,7 +421,7 @@ class OrderList extends Component {
                             {
                               +order.o_take_type === 3 &&
                               +order.take_status !== 9 && +order.take_status !== 10 &&
-                              (order.o_order_status.toString()[0] === '4') &&
+                              (order.o_order_status.toString() === '41' || order.o_order_status.toString() === '42') &&
                               !!order.status_remark &&
                               <View className='good-info'>
                                 <View className={classnames('out', 'theme-c-' + theme)}>{order.status_remark}</View>
@@ -431,7 +430,7 @@ class OrderList extends Component {
 
                             {
                               (+order.take_status === 9 || +order.take_status === 10) &&
-                              order.o_order_status.toString()[0] === '4' &&
+                              (order.o_order_status.toString() === '41' || order.o_order_status.toString() === '42') &&
                               <View className='good-info'>
                                 <View className={classnames('out', 'red')}>{order.status_remark}</View>
                               </View>

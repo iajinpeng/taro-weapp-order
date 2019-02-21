@@ -97,9 +97,12 @@ export default {
           title: '获取定位失败',
           icon: 'none'
         })
-        Taro.redirectTo({
-          url: '/pages/auth-setting/index'
-        })
+        let timer = setTimeout(() => {
+          clearTimeout(timer)
+          Taro.redirectTo({
+            url: '/pages/auth-setting/index'
+          })
+        }, 1500)
         return
       }
       yield put({

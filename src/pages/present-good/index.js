@@ -267,7 +267,7 @@ class PresentGood extends Component {
                     <View className='img-wrap'>
                       {
                         good.tag_name &&
-                        <Text className={classnames('tag', 'theme-grad-bg-' + theme)}>{good.tag_name}</Text>
+                        <Text style={{backgroundColor: good.tag_color}} className={classnames('tag', 'theme-grad-bg-' + theme)}>{good.tag_name}</Text>
                       }
                       <Image src={good.g_image_100}/>
                     </View>
@@ -406,7 +406,7 @@ class PresentGood extends Component {
                   <View className='title'>
                     {
                       curGood.tag_name &&
-                      <Text className={classnames('tag', 'theme-grad-bg-' + theme)}>{curGood.tag_name}</Text>
+                      <Text style={{backgroundColor: curGood.tag_color}} className={classnames('tag', 'theme-grad-bg-' + theme)}>{curGood.tag_name}</Text>
                     }
                     <Text className='name'>{curGood.g_title}</Text>
                   </View>

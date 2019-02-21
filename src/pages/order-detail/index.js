@@ -559,7 +559,7 @@ class OrderDetail extends Component {
                   </View>
                 }
                 {
-                  data.o_take_type === 3 &&
+                  data.o_take_type === 3 && data.take_id &&
                   <View className='item'>
                     <Text>配送方式</Text>
                     <Text>
@@ -585,7 +585,7 @@ class OrderDetail extends Component {
                   <Text>{data.o_order_no}</Text>
                 </View>
                 <View className='memo item'>
-                  <Text style={{width: '66px'}}>备注：</Text>
+                  <Text className='label'>备注：</Text>
                   {data.o_remark}
                 </View>
               </View>
