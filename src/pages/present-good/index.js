@@ -48,6 +48,11 @@ class PresentGood extends Component {
         store_id: this.$router.params.id
       }
     }).then(({goods, image, fs_id}) => {
+      if (+fs_id === 0) {
+        Taro.reLaunch({
+          url: '/pages/index/index'
+        })
+      }
       this.setState({goods, image, fs_id})
     })
   }
@@ -525,7 +530,10 @@ class PresentGood extends Component {
                               }
                             </Text>
                           </Text>
-                          <Text className='pre-price'>&yen;{good.g_original_price}</Text>
+                          {
+                            good.g_original_price && (good.g_original_price - 0) !== 0 &&
+                            <Text className='pre-price'>&yen;{good.g_original_price}</Text>
+                          }
                         </View>
 
                         <Numbox
