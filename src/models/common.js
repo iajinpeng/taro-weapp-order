@@ -65,6 +65,7 @@ export default {
         return new Promise((resolve, reject) => {
           const myAmapFun = new amapFile.AMapWX({key: mapKey})
           myAmapFun.getRegeo({
+            // location: '107.97,26.58',
             success(data) {
               if (!data || !data[0] || !data[0].regeocodeData || !data[0].regeocodeData.addressComponent
               ||!data[0].regeocodeData.addressComponent.city || !data[0].regeocodeData.addressComponent.province) {

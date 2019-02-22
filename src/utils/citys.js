@@ -73,9 +73,9 @@ export default [{
 }, {
   "title": "Y",
   "key": "Y",
-  "items": [{"name": "扬州"}, {"name": "宜春"}, {"name": "岳阳"}, {"name": "玉林"}]
+  "items": [{"name": "扬州"}, {"name": "宜春"}, {"name": "岳阳"}, {"name": "玉林"}, {"name": "烟台"}]
 }, {
   "title": "Z",
   "key": "Z",
-  "items": [{"name": "张家口"}, {"name": "樟树"}]
+  "items": [{"name": "珠海"}, {"name": "樟树"}]
 }]

@@ -27,7 +27,8 @@ class OrderList extends Component {
     page_size: 5,
     lists1: [],
     lists2: [],
-    total: 0,
+    total1: 0,
+    total2: 0,
     firstId: '',
     isShowCancelWarn: false,
     isShowOrderAgainWarn: false,
@@ -42,10 +43,10 @@ class OrderList extends Component {
 
   componentDidMount() {
     this.requestOrderList().then(({total, rows}) => {
-      this.setState({total, lists1: rows, requested: true})
+      this.setState({total1: total, lists1: rows, requested: true})
     })
     this.requestOrderList(null, 2).then(({total, rows}) => {
-      this.setState({total, lists2: rows, requested: true})
+      this.setState({total2: total, lists2: rows, requested: true})
     })
   }
 
@@ -60,7 +61,7 @@ class OrderList extends Component {
       this.requestOrderList().then(({total, rows}) => {
         Taro.hideNavigationBarLoading()
         this.setState({
-          total,
+          ['total' + i]: total,
           ['lists' + i]: rows,
           firstId: rows && rows.length > 0 && ('o-' + rows[0].o_id),
         })
@@ -78,7 +79,7 @@ class OrderList extends Component {
       this.requestOrderList().then(({total, rows}) => {
         Taro.hideNavigationBarLoading()
         this.setState({
-          total,
+          ['total' + type]: total,
           ['lists' + type]: rows,
           firstId: rows && rows.length > 0 && ('o-' + rows[0].o_id),
         })
@@ -108,9 +109,9 @@ class OrderList extends Component {
   }
 
   requestMore = () => {
-    const {total, page, page_size, type} = this.state
+    const {page, page_size, type} = this.state
 
-    if (!this.canRequestMore || page * page_size >= total) return
+    if (!this.canRequestMore || page * page_size >= this.state[['total' + type]]) return
 
     this.canRequestMore = true
 
@@ -119,7 +120,7 @@ class OrderList extends Component {
       this.requestOrderList().then(({total: tot, rows}) => {
         this.setState({
           ['lists' + type]: [...this.state['lists' + type], ...rows],
-          total: tot,
+          ['total' + type]: tot,
           firstId: rows && rows.length > 0 && ('o-' + rows[0].o_id),
         })
         Taro.hideLoading()

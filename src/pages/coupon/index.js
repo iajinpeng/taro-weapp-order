@@ -22,7 +22,8 @@ class Coupon extends Component {
     page_size: 5,
     lists1: [],
     lists2: [],
-    total: 0,
+    total1: 0,
+    total2: 0,
     openIndex: null,
     firstId: null
   }
@@ -33,13 +34,13 @@ class Coupon extends Component {
     this.requestCouponList().then(({total, rows}) => {
       this.setState({
         lists1: rows,
-        total
+        total1: total
       })
     })
     this.requestCouponList(2).then(({total, rows}) => {
       this.setState({
         lists2: rows,
-        total
+        total2: total
       })
     })
   }
@@ -55,7 +56,7 @@ class Coupon extends Component {
           openIndex: null,
           type: i,
           ['lists' + i]: rows,
-          total,
+          ['total' + i]: total,
           firstId: rows && rows.length > 0 ? 'uc-' + rows[0].uc_id : null
         })
       })
@@ -79,7 +80,7 @@ class Coupon extends Component {
   requestMore = () => {
     const {page, page_size, type} = this.state
 
-    if (!this.canRequestMore || page * page_size >= this.state.total) return
+    if (!this.canRequestMore || page * page_size >= this.state['total' + type]) return
 
     this.canRequestMore = true
 
@@ -88,7 +89,7 @@ class Coupon extends Component {
       this.requestCouponList().then(({total, rows}) => {
         this.setState({
           ['lists' + type]: [...this.state['lists' + type], ...rows],
-          total
+          ['total' + type]: total
         }, Taro.hideLoading)
         this.canRequestMore = true
       })
