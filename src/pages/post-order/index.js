@@ -467,41 +467,42 @@ class Order extends Component {
           title: res.message,
           icon: 'none'
         })
-      }
-      const isPayed = await Taro.requestPayment({
-        ...res,
-        timeStamp: res.timestamp
-      }).then(r => {
-        console.log(r)
-        return true
-      }).catch(err => {
-        console.log(err)
-        return false
-      })
-
-      Taro.showLoading({mask: true})
-
-      if (isPayed) {
-        await this.props.dispatch({
-          type: 'order/getOrderPayStatus',
-          payload: {
-            store_id,
-            order_id
-          }
-        })
-
-        Taro.hideLoading()
-
-        Taro.showToast({
-          title: '下单成功',
-          mask: true
-        })
       } else {
-        Taro.showToast({
-          title: '您已取消支付',
-          icon: 'none',
-          mask: true
+        const isPayed = await Taro.requestPayment({
+          ...res,
+          timeStamp: res.timestamp
+        }).then(r => {
+          console.log(r)
+          return true
+        }).catch(err => {
+          console.log(err)
+          return false
         })
+
+        Taro.showLoading({mask: true})
+
+        if (isPayed) {
+          await this.props.dispatch({
+            type: 'order/getOrderPayStatus',
+            payload: {
+              store_id,
+              order_id
+            }
+          })
+
+          Taro.hideLoading()
+
+          Taro.showToast({
+            title: '下单成功',
+            mask: true
+          })
+        } else {
+          Taro.showToast({
+            title: '您已取消支付',
+            icon: 'none',
+            mask: true
+          })
+        }
       }
 
       setTimeout(() => {

@@ -278,36 +278,44 @@ class OrderList extends Component {
       }
     })
 
-    await Taro.requestPayment({
-      ...res,
-      timeStamp: res.timestamp
-    })
+    if (+res.code === 500) {
+      Taro.showToast({
+        title: res.message,
+        icon: 'none'
+      })
+    } else {
+      await Taro.requestPayment({
+        ...res,
+        timeStamp: res.timestamp
+      })
 
-    Taro.showLoading({mask: true})
+      Taro.showLoading({mask: true})
 
-    await this.props.dispatch({
-      type: 'order/getOrderPayStatus',
-      payload: {
-        store_id,
-        order_id: o_id
-      }
-    })
+      await this.props.dispatch({
+        type: 'order/getOrderPayStatus',
+        payload: {
+          store_id,
+          order_id: o_id
+        }
+      })
 
-    Taro.hideLoading()
+      Taro.hideLoading()
 
-    Taro.showToast({
-      title: '下单成功'
-    })
+      Taro.showToast({
+        title: '支付成功'
+      })
 
-    let lists = this.state['lists' + type]
-    const index = lists.findIndex(item => item.o_id === o_id)
-    const targetPage = Math.floor(index / page_size)
+      let lists = this.state['lists' + type]
+      const index = lists.findIndex(item => item.o_id === o_id)
+      const targetPage = Math.floor(index / page_size)
 
-    this.requestOrderList(targetPage).then(({rows}) => {
-      let i = rows.findIndex(item => item.o_id === o_id)
-      lists[index] = rows[i]
-      this.setState({['lists' + type]: lists})
-    })
+      this.requestOrderList(targetPage).then(({rows}) => {
+        let i = rows.findIndex(item => item.o_id === o_id)
+        lists[index] = rows[i]
+        this.setState({['lists' + type]: lists})
+      })
+    }
+
   }
 
   render() {

@@ -199,28 +199,34 @@ class OrderDetail extends Component {
       }
     })
 
-    await Taro.requestPayment({
-      ...res,
-      timeStamp: res.timestamp
-    })
+    if (+res.code === 500) {
+      Taro.showToast({
+        title: res.message,
+        icon: 'none'
+      })
+    } else {
+      await Taro.requestPayment({
+        ...res,
+        timeStamp: res.timestamp
+      })
 
-    Taro.showLoading({mask: true})
+      Taro.showLoading({mask: true})
 
-    await this.props.dispatch({
-      type: 'order/getOrderPayStatus',
-      payload: {
-        store_id,
-        order_id
-      }
-    })
+      await this.props.dispatch({
+        type: 'order/getOrderPayStatus',
+        payload: {
+          store_id,
+          order_id
+        }
+      })
 
-    Taro.hideLoading()
+      Taro.hideLoading()
 
-    Taro.showToast({
-      title: '下单成功'
-    })
-
-    this.getOrderDetail()
+      Taro.showToast({
+        title: '支付成功'
+      })
+      this.getOrderDetail()
+    }
   }
 
   cancelOrder = () => {

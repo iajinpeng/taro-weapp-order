@@ -59,6 +59,8 @@ class AddAddress extends Component {
   }
 
   postAddress = () => {
+    if (this.addingAddress) return
+
     const {curAddress} = this.props
     const {da_id, address_detail, user_name, user_telephone} = this.state
     const {name, longitude, latitude, address } = curAddress
@@ -71,6 +73,7 @@ class AddAddress extends Component {
       return
     }
 
+    this.addingAddress = true
     this.props.dispatch({
       type: 'address/postAddress',
       payload: {
@@ -96,6 +99,7 @@ class AddAddress extends Component {
 
       setTimeout(() => {
         Taro.navigateBack()
+        this.addingAddress = false
         this.props.dispatch({
           type: 'address/setCurAddress',
           payload: {}
@@ -105,6 +109,8 @@ class AddAddress extends Component {
   }
 
   delAddress = () => {
+    if (this.delingAddress) return
+    this.delingAddress = true
     this.props.dispatch({
       type: 'address/delAddress',
       payload: {
@@ -121,7 +127,10 @@ class AddAddress extends Component {
         }
       })
 
-      setTimeout(Taro.navigateBack, 1500)
+      setTimeout(() => {
+        Taro.navigateBack()
+        this.delingAddress = false
+      }, 1500)
     })
   }
 

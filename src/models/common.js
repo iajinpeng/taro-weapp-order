@@ -115,7 +115,7 @@ export default {
         if (localInfo.err.errCode == 0 && localInfo.err.errMsg.indexOf('auth') > -1) {
           let timer = setTimeout(() => {
             clearTimeout(timer)
-            Taro.redirectTo({
+            Taro.reLaunch({
               url: '/pages/auth-setting/index'
             })
           }, 1500)
