@@ -1,7 +1,7 @@
 import Taro from '@tarojs/taro';
 
 import {requestLogin, postUserInfo, requestHomeInfo,
-  requestCouponList, postFormId, getUserMobile, getNotice} from '../services/common';
+  requestCouponList, postFormId, getUserMobile, getNotice, updateAiPush} from '../services/common';
 
 import amapFile from '../utils/amap-wx'
 import {mapKey} from '../config'
@@ -60,6 +60,9 @@ export default {
     * getNotice({payload}, {put, call}) {
       return yield call(getNotice, payload)
     },
+    * updateAiPush({payload}, {put, call}) {
+      return yield call(updateAiPush, payload)
+    },
     * getSetLocalInfo({}, {put, call}) {
       const getRegeo  = () => {
         return new Promise((resolve, reject) => {
@@ -109,7 +112,7 @@ export default {
           icon: 'none'
         })
 
-        if (localInfo.err.errMsg === 'getLocation:fail auth deny') {
+        if (localInfo.err.errCode == 0 && localInfo.err.errMsg.indexOf('auth') > -1) {
           let timer = setTimeout(() => {
             clearTimeout(timer)
             Taro.redirectTo({
@@ -117,6 +120,7 @@ export default {
             })
           }, 1500)
         }
+
         return
       }
       yield put({
@@ -129,10 +133,12 @@ export default {
 
       const data = yield call(requestHomeInfo)
 
+      Taro.setStorageSync('themeInfo', JSON.stringify(data))
+
       const {menu_banner, menu_cart, bottom_logo, b_logo, b_bottom_content, b_bottom_status, full_logo_goods, ...indexState} = data
       yield put({
         type: 'setThemeInfo',
-        payload: {menu_banner, menu_cart, theme: data.style_color, bottom_logo, b_logo, b_bottom_content, b_bottom_status, full_logo_goods}
+        payload: {menu_banner, menu_cart, theme: data.style_color || 1, bottom_logo, b_logo, b_bottom_content, b_bottom_status, full_logo_goods}
       })
 
       return indexState

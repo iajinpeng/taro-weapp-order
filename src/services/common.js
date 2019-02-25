@@ -64,3 +64,12 @@ export const getNotice = data => request({
   data
 })
 
+/**
+ * 更新智能推送浏览量
+ * */
+export const updateAiPush = data => request({
+  url: '/addons.diancan.api.Home_updateAipushVisitTotal',
+  method: 'POST',
+  data
+})
+

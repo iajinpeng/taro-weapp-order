@@ -272,7 +272,7 @@ class PresentGood extends Component {
                     <View className='img-wrap'>
                       {
                         good.tag_name &&
-                        <Text style={{backgroundColor: good.tag_color}} className={classnames('tag', 'theme-grad-bg-' + theme)}>{good.tag_name}</Text>
+                        <Text style={{backgroundColor: good.tag_color}} className={classnames('tag')}>{good.tag_name}</Text>
                       }
                       <Image src={good.g_image_100}/>
                     </View>

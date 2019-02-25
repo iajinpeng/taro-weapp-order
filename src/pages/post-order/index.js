@@ -95,9 +95,6 @@ class Order extends Component {
 
     Taro.showNavigationBarLoading()
     this.initPage(orderType === 3 ? 3 : this.state.takeType).then(() => {
-      this.setState({
-        orderType,
-      })
       Taro.hideNavigationBarLoading()
     })
   }
@@ -105,17 +102,20 @@ class Order extends Component {
   initPage = async (orderType) => {
     const {amount, couponList, address} = await this.getPreOrderInfo(orderType)
 
-    this.getReserveTime(amount, orderType, address)
+    await this.getReserveTime(amount, orderType, address)
 
     const index = amount > 0 && couponList.findIndex(item => item.available) > -1 ?
       couponList.findIndex(item => item.available) : -1
 
-    return this.props.dispatch({
+    this.props.dispatch({
       type: 'order/setCouponIndex',
       payload: {
         curCouponIndex: index
       }
     })
+
+    orderType && this.setState({orderType})
+    return
   }
 
   changeTakeType = takeType => {
@@ -201,7 +201,6 @@ class Order extends Component {
       })
 
       if (take_type) {
-        this.setState({orderType: take_type})
       } else {
         if (s_take.indexOf(1) > -1 || s_take.indexOf(2) > -1) {
           this.setState({orderType: 1})
@@ -221,7 +220,7 @@ class Order extends Component {
       }
 
       this.setState({selectedAddress: address})
-      return {amount, couponList, address}
+      return {amount, couponList, address, s_take}
     })
   }
 
@@ -835,7 +834,7 @@ class Order extends Component {
                         <Text className='num'>x{good.num}</Text>
                         <View className='price'>
                           {
-                            good.g_original_price &&
+                            good.g_original_price && good.g_original_price * 1 !== 0 &&
                             <View className='pre'>
                               <Text>&yen;</Text>
                               {good.g_original_price}

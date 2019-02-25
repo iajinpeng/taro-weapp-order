@@ -97,6 +97,23 @@ class OrderList extends Component {
         page: targetPage || page,
         page_size
       }
+    }).then(res => {
+      if (!this.alertedCoupon) {
+        this.alertedCoupon = true
+        this.coupon = res.coupon
+        this.curCouponIndex = 0
+
+        if (res.coupon.length > 0) {
+          let timer = setTimeout(() => {
+            this.setState({
+              isShowCoupon: true,
+              curCoupon: res.coupon[0],
+            })
+            clearTimeout(timer)
+          }, 500)
+        }
+      }
+      return res
     })
   }
 

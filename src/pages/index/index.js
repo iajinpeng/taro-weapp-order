@@ -44,6 +44,14 @@ class Index extends Component {
     Taro.showShareMenu({
       withShareTicket: true
     })
+    if (this.$router.params.push_id) {
+      this.props.dispatch({
+        type: 'common/updateAiPush',
+        payload: {
+          push_id: this.$router.params.push_id
+        }
+      })
+    }
   }
 
   componentWillUnmount () { }

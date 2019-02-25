@@ -166,7 +166,7 @@ class ChooseAddress extends Component {
 
           </ScrollView>
           {
-            show && useAddress.length > 0 &&
+            show && address.length > 0 &&
             <View className='add' onClick={this.handleAdd}>
               <Image className='icon' src={`${baseUrl}/static/addons/diancan/img/style/style_${theme}_8.png`} />
               <Text>新增收货地址</Text>

@@ -15,11 +15,16 @@ class Notice extends Component {
   state = {
     diancan: {},
     quxiao: {},
-    question: []
+    question: [],
+    showMsg: 0
   }
 
   componentWillMount () {
     this.getNotice()
+  }
+
+  show = () => {
+    this.setState({showMsg: this.state.showMsg + 1})
   }
 
   getNotice = () => {
@@ -63,7 +68,7 @@ class Notice extends Component {
 
   render() {
     const {theme, userInfo} = this.props
-    const {diancan, quxiao, question} = this.state
+    const {diancan, quxiao, question, showMsg} = this.state
 
     return (
       diancan.title &&
@@ -88,7 +93,7 @@ class Notice extends Component {
 
           </View>
 
-          <View className='block'>
+          <View className='block' onClick={this.show}>
             <View className={classnames('title-1', 'theme-c-' + theme)}>常见问题</View>
 
             {
@@ -100,6 +105,15 @@ class Notice extends Component {
               ))
             }
           </View>
+
+          {
+            showMsg >= 3 &&
+            <View style={{wordBreak: 'break-all'}}>
+              {
+                Taro.getStorageSync('themeInfo')
+              }
+            </View>
+          }
 
           <Button
             className={classnames('do-btn', 'theme-grad-bg-' + theme)}

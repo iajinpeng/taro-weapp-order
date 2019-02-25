@@ -494,7 +494,10 @@ class OrderDetail extends Component {
                       <View className='main'>
                         <View className='name'>{good.od_title}</View>
                         <View className='price'>
-                          <Text className='pre'>&yen;{good.od_original_price}</Text>
+                          {
+                            good.od_original_price * 1 !== 0 &&
+                            <Text className='pre'>&yen;{good.od_original_price}</Text>
+                          }
                           <Text className='cur'>
                             <Text>&yen;</Text>
                             {good.od_price}

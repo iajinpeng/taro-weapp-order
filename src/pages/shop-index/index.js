@@ -265,7 +265,10 @@ class ShopIndex extends Component {
       type: 'cart/setComboCart',
       payload: {
         id: +this.$router.params.id,
-        good,
+        good: {
+          ...good,
+          again_id: undefined,
+        },
         num
       }
     })
