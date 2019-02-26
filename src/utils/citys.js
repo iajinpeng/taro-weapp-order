@@ -45,7 +45,7 @@ export default [{
 }, {
   "title": "N",
   "key": "N",
-  "items": [{"name": "南京"}, {"name": "南昌"}, {"name": "南宁"}, {"name": "南充"}, {"name": "南阳"}]
+  "items": [{"name": "宁波"}, {"name": "南京"}, {"name": "南昌"}, {"name": "南宁"}, {"name": "南充"}, {"name": "南阳"}]
 }, {
   "title": "P",
   "key": "P",
@@ -65,7 +65,7 @@ export default [{
 }, {
   "title": "W",
   "key": "W",
-  "items": [{"name": "武汉"}, {"name": "芜湖"}]
+  "items": [{"name": "武汉"}, {"name": "芜湖"}, {"name": "无锡"}]
 }, {
   "title": "X",
   "key": "X",
@@ -77,5 +77,5 @@ export default [{
 }, {
   "title": "Z",
   "key": "Z",
-  "items": [{"name": "珠海"}, {"name": "樟树"}]
+  "items": [{"name": "珠海"}, {"name": "樟树"}, {"name": "郑州"}]
 }]
