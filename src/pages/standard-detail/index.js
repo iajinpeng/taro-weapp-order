@@ -1,5 +1,5 @@
 import Taro, {Component} from '@tarojs/taro'
-import {View, Text, Block, Image, ScrollView} from '@tarojs/components'
+import {View, Text, ScrollView, Image} from '@tarojs/components'
 import {connect} from '@tarojs/redux'
 import classnames from 'classnames'
 import PayBox from '../../components/pay-box'
@@ -20,7 +20,8 @@ class StandardDetail extends Component {
     g_description: '',
     g_image: null,
     fixed: [],
-    optional: []
+    optional: [],
+    intoViewId: null
   }
 
   componentWillMount() {
@@ -65,20 +66,28 @@ class StandardDetail extends Component {
     const {fixed, optional, g_image} = this.state
 
     let noFull = false
-    optional.forEach((op) => {
-      let curnum = op.list.reduce((t, gn) => {
-        return t += (gn.num || 0)
-      }, 0)
+    try {
+      optional.forEach((op) => {
+        let curnum = op.list.reduce((t, gn) => {
+          return t += (gn.num || 0)
+        }, 0)
 
-      if (curnum < op.gn_num) {
-        Taro.showToast({
-          title: `你还可以选择${op.gn_num - curnum}份${op.title}哦～`,
-          icon: 'none'
-        })
-        noFull = true
-        return
-      }
-    })
+        if (curnum < op.gn_num) {
+          Taro.showToast({
+            title: `你还可以选择${op.gn_num - curnum}份${op.title}哦～`,
+            icon: 'none'
+          })
+
+          this.setState({intoViewId: 'id-' + op.parent_id})
+
+          noFull = true
+          throw new Error('no full')
+        }
+      })
+    } catch (err) {
+
+    }
+
 
     if (noFull) return
 
@@ -117,7 +126,7 @@ class StandardDetail extends Component {
 
   render() {
     const {theme, menu_cart} = this.props
-    const {g_description, g_image, fixed, optional} = this.state
+    const {g_description, g_image, fixed, optional, intoViewId} = this.state
 
     const g_price = +this.$router.params.g_price || 0
 
@@ -130,60 +139,62 @@ class StandardDetail extends Component {
 
     return (
       g_description &&
-      <ScrollView className='standard-detail' scrollY>
-        <View className='content'>
-          <View className='banner'>
-            <Image src={g_image}/>
-          </View>
-          <View className='title'>{g_description}</View>
-          <View className='goods'>
-            <View className='goods-title'>已选商品</View>
-            {
-              fixed.map((good, index) => (
-                <View className='goods-item' key={index}>
-                  <Image className='pic' src={good.gn_image}/>
-                  <View className='info'>
-                    <View className='name'>{good.gn_name}</View>
-                    <View className='standard'>{good.gn_append}</View>
+      <View>
+        <ScrollView className='standard-detail' scrollY scrollWithAnimation scrollIntoView={intoViewId}>
+          <View className='content'>
+            <View className='banner'>
+              <Image src={g_image}/>
+            </View>
+            <View className='title'>{g_description}</View>
+            <View className='goods'>
+              <View className='goods-title'>已选商品</View>
+              {
+                fixed.map((good, index) => (
+                  <View className='goods-item' key={index}>
+                    <Image className='pic' src={good.gn_image}/>
+                    <View className='info'>
+                      <View className='name'>{good.gn_name}</View>
+                      <View className='standard'>{good.gn_append}</View>
+                    </View>
+                    <View className='num'>x{good.gn_num}份</View>
                   </View>
-                  <View className='num'>x{good.gn_num}份</View>
-                </View>
-              ))
-            }
-          </View>
-          {
-            optional.map((opt, index) => (
-              <View className='goods' key={index}>
-                <View className='goods-title'>请选择{opt.title}{opt.gn_num}份</View>
-                {
-                  opt.list && opt.list.map((good, i) => (
-                    <View className='others-item' key={i}>
-                      <Image className='pic' src={good.gn_image}/>
-                      <View className='info'>
-                        <View className='name'>{good.gn_name}</View>
-                        <View className='standard'>{good.gn_append}</View>
-                        <View className='price'>加&yen;
-                          <Text className='font-xin-normal'>{good.gn_price}</Text>
+                ))
+              }
+            </View>
+            {
+              optional.map((opt, index) => (
+                <View className='goods' key={index} id={'id-' + opt.parent_id}>
+                  <View className='goods-title'>请选择{opt.title}{opt.gn_num}份</View>
+                  {
+                    opt.list && opt.list.map((good, i) => (
+                      <View className='others-item' key={i}>
+                        <Image className='pic' src={good.gn_image}/>
+                        <View className='info'>
+                          <View className='name'>{good.gn_name}</View>
+                          <View className='standard'>{good.gn_append}</View>
+                          <View className='price'>加&yen;
+                            <Text className='font-xin-normal'>{good.gn_price}</Text>
+                          </View>
+                        </View>
+
+                        <View className='num-wrap'>
+                          <Numbox
+                            num={good.num}
+                            showNum={good.num && good.num > 0}
+                            onReduce={this.selectOther.bind(this, index, i, -1)}
+                            onAdd={this.selectOther.bind(this, index, i, 1)}
+                          />
                         </View>
                       </View>
+                    ))
+                  }
+                </View>
+              ))
 
-                      <View className='num-wrap'>
-                        <Numbox
-                          num={good.num}
-                          showNum={good.num && good.num > 0}
-                          onReduce={this.selectOther.bind(this, index, i, -1)}
-                          onAdd={this.selectOther.bind(this, index, i, 1)}
-                        />
-                      </View>
-                    </View>
-                  ))
-                }
-              </View>
-            ))
+            }
+          </View>
 
-          }
-        </View>
-
+        </ScrollView>
         <View className='pay-wrap'>
           <PayBox
             active onClick={this.addCart}
@@ -192,9 +203,7 @@ class StandardDetail extends Component {
             themeInfo={menu_cart} btnText='选好了'
           />
         </View>
-
-
-      </ScrollView>
+      </View>
     )
   }
 }

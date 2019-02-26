@@ -250,6 +250,10 @@ class PresentGood extends Component {
         num
       }
     })
+    this.setState({
+      isShowOptions: false,
+      isShowDetail: false
+    })
   }
 
   render() {
@@ -475,10 +479,6 @@ class PresentGood extends Component {
           <View
             onTouchMove={this.stopPropagation}
             className={classnames('cart', isShowCart && carts.length > 0 ? 'active' : '')}>
-            <View className='cart-head'>
-              <Image src={require('../../assets/images/icon-trash.png')}/>
-              <Text onClick={this.showOrHideCartWarn.bind(this, true)}>清空购物车</Text>
-            </View>
             <ScrollView scrollY className='cart-list'>
               {
                 carts.map((good, index) => (
