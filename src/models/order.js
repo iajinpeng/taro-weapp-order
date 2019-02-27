@@ -82,11 +82,13 @@ export default {
             }
           } else {
             delete good.optionalTagIndex
+
             good.optionalnumstr = optionalnumstr[0]
 
             good.optional.map((opt, _i) => {
               opt.list.map((g, i) => {
-                return g.num = good.optionalnumstr.split(',')[_i].split('|')[i]
+                let preSelectedGood = good.od_optional_array.find(od => od.parent_id === opt.parent_id).list[g.gn_id]
+                return g.num = preSelectedGood ? preSelectedGood.gn_num : 0
               })
             })
 
