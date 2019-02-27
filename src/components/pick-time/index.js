@@ -20,31 +20,40 @@ class PickTime extends Component {
   }
 
   state = {
-    dayIndex: null,
+    _dayIndex: null,
     timeViewId: null
   }
 
   componentDidMount () {
-    this.setState({dayIndex: 0})
+    this.setState({_dayIndex: 0})
   }
 
   chooseDay = index => {
-    this.setState({
-      dayIndex: index,
-      timeViewId: index === this.props.dayIndex ? 'time-' + this.props.timeIndex : 'time-' + 0
-    })
+    this.setState({_dayIndex: index})
+    if (index === this.props.dayIndex) {
+      this.setState({
+        timeViewId: 'time-' + this.props.timeIndex
+      })
+    } else {
+      this.setState({
+        timeViewId: 'time-' + 'null'
+      }, () => {
+        this.setState({
+          timeViewId: 'time-' + 0
+        })
+      })
+    }
   }
 
   chooseTime = index => {
-    // if ((this.state.dayIndex === this.props.dayIndex) && index === this.props.timeIndex) return
-    this.props.onChangeTime(this.state.dayIndex, index)
+    this.props.onChangeTime(this.state._dayIndex, index)
     this.setState({timeViewId: null})
   }
 
   handleClose = () => {
     this.props.onClose()
     this.setState({
-      dayIndex: this.props.dayIndex,
+      _dayIndex: this.props.dayIndex,
       timeViewId: null
     })
   }
@@ -55,8 +64,8 @@ class PickTime extends Component {
 
   render() {
     const {show, reserveTime, theme, showPrice, timeIndex, isIphoneX} = this.props
-    const {dayIndex, timeViewId} = this.state
-    const realDay = dayIndex === null ? (this.props.dayIndex || 0) : dayIndex
+    const {_dayIndex, timeViewId} = this.state
+    const realDay = _dayIndex === null ? (this.props.dayIndex || 0) : _dayIndex
 
     return (
       <Block>

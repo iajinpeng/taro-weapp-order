@@ -18,7 +18,7 @@ class AuthSetting extends Component {
       this.props.dispatch({
         type: 'common/getSetLocalInfo'
       })
-      Taro.reLaunch({
+      Taro.redirectTo({
         url: '/pages/index/index'
       })
     }

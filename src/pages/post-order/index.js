@@ -114,7 +114,9 @@ class Order extends Component {
       }
     })
 
-    orderType && this.setState({orderType})
+    this.setState({selectedAddress: address})
+
+    orderType && this.setState({orderType: orderType === 3 ? 3 : 1})
     return
   }
 
@@ -219,7 +221,7 @@ class Order extends Component {
         address = useAddress || {}
       }
 
-      this.setState({selectedAddress: address})
+      // this.setState({selectedAddress: address})
       return {amount, couponList, address, s_take}
     })
   }
