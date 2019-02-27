@@ -214,6 +214,7 @@ class ShopIndex extends Component {
   closeOptions = () => {
     this.setState({
       isShowOptions: false,
+      stanInfo: {}
     })
   }
 

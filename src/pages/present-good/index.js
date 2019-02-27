@@ -138,7 +138,8 @@ class PresentGood extends Component {
   closeOptions = () => {
     this.setState({
       isShowOptions: false,
-      isShowCart: false
+      isShowCart: false,
+      stanInfo: {}
     })
   }
 
