@@ -37,7 +37,7 @@ class Index extends Component {
     norm: [],
     isShowCoupon: false,
     curCoupon: {},
-    isFirstShow: ''
+    // isFirstShow: ''
   }
 
   componentDidMount () {
@@ -58,11 +58,11 @@ class Index extends Component {
 
   componentDidShow () {
     this.getIndexInfo()
-    if (this.state.isFirstShow === '') {
-      this.setState({isFirstShow: true})
-    } else {
-      this.setState({isFirstShow: false})
-    }
+    // if (this.state.isFirstShow === '') {
+    //   this.setState({isFirstShow: true})
+    // } else {
+    //   this.setState({isFirstShow: false})
+    // }
   }
 
   componentDidHide () { }
@@ -83,12 +83,12 @@ class Index extends Component {
       }
     }).then(res => {
 
-      // if (res.under_review) {
-      //   Taro.redirectTo({
-      //     url: '/pages/alias/index'
-      //   })
-      //   return
-      // }
+      if (res.under_review) {
+        Taro.redirectTo({
+          url: '/pages/alias/index'
+        })
+        return
+      }
 
       this.setState({
         ...res
@@ -216,7 +216,7 @@ class Index extends Component {
 
     const { user_full_num, full_num, isShowModal, activeBannerIndex,
       home_banner, full_image, full_logo, full_logo_no, home_button,
-      full_status, full_undefind, norm, isShowCoupon, isFirstShow,
+      full_status, full_undefind, norm, isShowCoupon,
       curCoupon} = this.state
 
     const totStarsArr = new Array(full_num);
@@ -338,7 +338,7 @@ class Index extends Component {
         </Modal>
 
         <CouponModal
-          show={isShowCoupon && isFirstShow} coupon={curCoupon}
+          show={isShowCoupon} coupon={curCoupon}
           onClose={this.couponClose}
         />
 
