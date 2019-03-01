@@ -100,11 +100,25 @@ class Order extends Component {
   }
 
   initPage = async (orderType) => {
-    const {amount, couponList, address} = await this.getPreOrderInfo(orderType)
+    const {amount, couponList, address, store} = await this.getPreOrderInfo(orderType)
 
-    await this.getReserveTime(amount, orderType, address)
+    const reserveTime = await this.getReserveTime(amount, orderType, address)
 
-    const index = amount > 0 && couponList.findIndex(item => item.available) > -1 ?
+    let totalAmount = +amount
+
+    if (orderType === 1 && this.state.takeType === 2) {
+      totalAmount += +store.s_take_money
+    }
+
+    if (orderType === 3) {
+      totalAmount += +store.s_take_money
+
+      if (reserveTime.length) {
+        totalAmount += +reserveTime[this.state.dayIndex].time[this.state.timeIndex].price
+      }
+    }
+
+    const index = totalAmount > 0 && couponList.findIndex(item => item.available) > -1 ?
       couponList.findIndex(item => item.available) : -1
 
     this.props.dispatch({
@@ -123,7 +137,30 @@ class Order extends Component {
   changeTakeType = takeType => {
     const s_take = this.state.store.s_take.map(v => +v)
     if (s_take.indexOf(takeType) === -1) return
+
     this.setState({takeType})
+
+    if (takeType === 2) {
+      const {store, couponList} = this.state
+
+      if (+store.s_take_money > 0 && this.props.curCouponIndex === -1) {
+        this.props.dispatch({
+          type: 'order/setCouponIndex',
+          payload: {
+            curCouponIndex: couponList.findIndex(item => item.available)
+          }
+        })
+      }
+    } else {
+      if (+this.state.amount === 0) {
+        this.props.dispatch({
+          type: 'order/setCouponIndex',
+          payload: {
+            curCouponIndex: -1
+          }
+        })
+      }
+    }
   }
 
   closeTimePicker = () => {
@@ -222,7 +259,7 @@ class Order extends Component {
       }
 
       // this.setState({selectedAddress: address})
-      return {amount, couponList, address, s_take}
+      return {amount, couponList, address, store}
     })
   }
 
@@ -595,8 +632,8 @@ class Order extends Component {
     if (orderType === 1 && takeType === 2) {
       totalAmout += +store.s_take_money
     }
-    if (couponList[curCouponIndex] && couponList[curCouponIndex].uc_price) {
-      totalAmout -= +couponList[curCouponIndex].uc_price
+    if (couponList[curCouponIndex] && couponList[curCouponIndex].effective_price) {
+      totalAmout -= +couponList[curCouponIndex].effective_price
 
       totalAmout < 0 && (totalAmout = 0)
     }
@@ -934,8 +971,8 @@ class Order extends Component {
                 <View className='discount'>
                   已优惠￥
                   {
-                    (couponList[curCouponIndex].uc_price || 0) >= noConponAmount ? noConponAmount :
-                      (couponList[curCouponIndex].uc_price || 0)
+                    (couponList[curCouponIndex].effective_price || 0) >= noConponAmount ? noConponAmount :
+                      (couponList[curCouponIndex].effective_price || 0)
                   }
                 </View>
                 <View className='total'>

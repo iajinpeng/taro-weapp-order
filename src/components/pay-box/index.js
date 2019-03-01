@@ -88,7 +88,7 @@ class PayBox extends Component {
                       }, 0))
                     good.num && (total += +price)
                   } else {
-                    total += good.total_price
+                    total += (good.total_price * good.num)
                   }
                   return total
                 }, 0)).toFixed(2)
