@@ -2,6 +2,7 @@ import Taro, {Component} from '@tarojs/taro'
 import {View, Text, Button, ScrollView} from '@tarojs/components'
 import {connect} from '@tarojs/redux'
 import classnames from 'classnames'
+import BackToHome from '../../components/back-to-home'
 import './index.less'
 
 
@@ -20,7 +21,16 @@ class Notice extends Component {
   }
 
   componentWillMount () {
+    Taro.showShareMenu({
+      withShareTicket: true
+    })
     this.getNotice()
+  }
+
+  onShareAppMessage = () => {
+    return {
+      path: 'pages/notice/index?isShare=1'
+    }
   }
 
   show = () => {
@@ -72,7 +82,7 @@ class Notice extends Component {
 
     return (
       diancan.title &&
-      <ScrollView scrollY className='notice'>
+      <View scrollY className='notice'>
         <View className='wrap'>
           <View className='block'>
             <View>您在使用此平台前应仔细阅读如下须知：</View>
@@ -125,7 +135,12 @@ class Notice extends Component {
             开始点餐</Button>
         </View>
 
-      </ScrollView>
+        {
+          this.$router.params.isShare === '1' &&
+          <BackToHome />
+        }
+
+      </View>
     )
   }
 }

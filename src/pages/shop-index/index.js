@@ -10,7 +10,8 @@ import Loading from '../../components/Loading'
 import Numbox from '../../components/num-box'
 import Curtain from '../../components/curtain'
 import './index.less'
-import IdButton from "../../components/id-button/index";
+import IdButton from "../../components/id-button/index"
+import BackToHome from '../../components/back-to-home'
 
 
 @connect(({common, cart}) => ({...common, ...cart}))
@@ -40,6 +41,10 @@ class ShopIndex extends Component {
   }
 
   componentWillMount() {
+    Taro.showShareMenu({
+      withShareTicket: true
+    })
+
     this.setState({isShowCart: !!this.$router.params.showcart})
     const id = +this.$router.params.id
 
@@ -51,6 +56,12 @@ class ShopIndex extends Component {
         id
       }
     })
+  }
+
+  onShareAppMessage = () => {
+    return {
+      path: `pages/shop-index/index?id=${this.$router.params.id}&isShare=1`
+    }
   }
 
   componentDidShow() {
@@ -821,6 +832,11 @@ class ShopIndex extends Component {
           className='null-toast'
           isOpened={isGoodNull} hasMask
           text='部分原商品已下架，请重新挑选'/>
+
+        {
+          this.$router.params.isShare === '1' &&
+          <BackToHome />
+        }
 
       </View>
 
