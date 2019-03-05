@@ -7,8 +7,6 @@ import classnames from 'classnames'
 import IdButton from '../../components/id-button'
 import PickTime from '../../components/pick-time'
 import ChooseAddress from '../../components/choose-address'
-// import Copyright from '../../components/copyright'
-// import Loading from '../../components/Loading'
 
 import './index.less'
 

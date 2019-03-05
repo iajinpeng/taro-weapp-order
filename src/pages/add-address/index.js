@@ -1,10 +1,9 @@
 import Taro, {Component} from '@tarojs/taro'
-import {View, Button, Text, Image, Input} from '@tarojs/components'
+import {View, Button, Image, Input} from '@tarojs/components'
 import {connect} from '@tarojs/redux'
 import {AtToast} from 'taro-ui'
 import classnames from 'classnames'
 import {themeBtnShadowColors} from '../../config/index';
-import Copyright from '../../components/copyright'
 import './index.less'
 
 @connect(({common, address}) => ({...common, ...address}))

@@ -3,7 +3,6 @@ import {View, Text, Image} from '@tarojs/components'
 import {connect} from '@tarojs/redux'
 import {AtIcon} from 'taro-ui'
 import classnames from 'classnames'
-// import Copyright from '../../components/copyright'
 
 import '../coupon/index.less'
 import './index.less'

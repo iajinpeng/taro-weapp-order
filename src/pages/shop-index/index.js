@@ -1,6 +1,6 @@
 import Taro, {Component} from '@tarojs/taro'
-import {View, Text, Button, Image, Swiper, SwiperItem, ScrollView, Block} from '@tarojs/components'
-import {AtToast, AtCurtain} from 'taro-ui'
+import {View, Text, Image, Swiper, SwiperItem, ScrollView, Block} from '@tarojs/components'
+import {AtToast} from 'taro-ui'
 import {connect} from '@tarojs/redux'
 import classnames from 'classnames'
 import Modal from '../../components/modal'

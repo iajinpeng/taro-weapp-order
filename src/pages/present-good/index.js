@@ -15,7 +15,6 @@ import './index.less'
 class PresentGood extends Component {
   config = {
     navigationBarTitleText: '满单即送',
-    // disableScroll: true
   }
 
   state = {

@@ -58,11 +58,6 @@ class Index extends Component {
 
   componentDidShow () {
     this.getIndexInfo()
-    // if (this.state.isFirstShow === '') {
-    //   this.setState({isFirstShow: true})
-    // } else {
-    //   this.setState({isFirstShow: false})
-    // }
   }
 
   componentDidHide () { }

@@ -1,5 +1,5 @@
 import Taro, {Component} from '@tarojs/taro'
-import {View, Text, Button, ScrollView} from '@tarojs/components'
+import {View, Text, Button} from '@tarojs/components'
 import {connect} from '@tarojs/redux'
 import classnames from 'classnames'
 import BackToHome from '../../components/back-to-home'

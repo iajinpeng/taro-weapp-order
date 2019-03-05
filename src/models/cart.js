@@ -10,9 +10,6 @@ export default {
   effects: {},
 
   reducers: {
-    setStorageCart(state, {payload}) {
-      return {...state, ...payload}
-    },
     setCart(state, {payload}) {
       const {id, good, num} = payload
       let curCart = state.carts[id]
@@ -124,15 +121,12 @@ export default {
 
       state.carts[id] = curCart
 
-      // Taro.setStorageSync('carts', state.carts)
       return {...state, whatEver: state.whatEver + num};
 
     },
     clearOneCart(state, {payload}) {
       const {id} = payload
       state.carts[id] = []
-
-      // Taro.setStorageSync('carts', state.carts)
 
       return {...state}
     },
