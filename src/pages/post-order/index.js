@@ -111,7 +111,7 @@ class Order extends Component {
     if (orderType === 3) {
       totalAmount += +store.s_take_money
 
-      if (reserveTime.length) {
+      if (reserveTime.length && reserveTime[this.state.dayIndex].time[this.state.timeIndex]) {
         totalAmount += +reserveTime[this.state.dayIndex].time[this.state.timeIndex].price
       }
     }
@@ -291,7 +291,23 @@ class Order extends Component {
         title: '由于配送地址/时间变化，您的配送费也发生了变化',
         icon: 'none'
       })
-      this.getReserveTime(this.state.amount, 3, address)
+      this.getReserveTime(this.state.amount, 3, address).then(res => {
+        if (Array.isArray(res)) {
+          this.setState({
+            reserveTime: res.filter(item => item.time.length > 0),
+          })
+        } else {
+          this.setState({
+            reserveTime: [],
+          })
+          if (+res.code === 301) {
+            this.setState({
+              isFullPrice: false,
+              fullPrice: +res.data.price
+            })
+          }
+        }
+      })
     }
     this.setState({
       isShowAddress: false,
