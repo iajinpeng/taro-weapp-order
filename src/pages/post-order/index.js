@@ -128,6 +128,22 @@ class Order extends Component {
 
     this.setState({selectedAddress: address})
 
+    if (Array.isArray(reserveTime)) {
+      this.setState({
+        reserveTime: reserveTime.filter(item => item.time.length > 0),
+      })
+    } else {
+      this.setState({
+        reserveTime: [],
+      })
+      if (+reserveTime.code === 301) {
+        this.setState({
+          isFullPrice: false,
+          fullPrice: +reserveTime.data.price
+        })
+      }
+    }
+
     orderType && this.setState({orderType: orderType === 3 ? 3 : 1})
     return
   }
@@ -333,24 +349,6 @@ class Order extends Component {
         take_type: orderType,
         amount
       }
-    }).then(res => {
-      if (Array.isArray(res)) {
-        this.setState({
-          reserveTime: res.filter(item => item.time.length > 0),
-        })
-      } else {
-        this.setState({
-          reserveTime: [],
-        })
-        if (+res.code === 301) {
-          this.setState({
-            isFullPrice: false,
-            fullPrice: +res.data.price
-          })
-        }
-      }
-
-      return res
     })
   }
 
