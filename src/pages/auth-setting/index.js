@@ -17,10 +17,12 @@ class AuthSetting extends Component {
     if (res.authSetting['scope.userLocation']) {
       this.props.dispatch({
         type: 'common/getSetLocalInfo'
+      }).then(() => {
+        Taro.redirectTo({
+          url: '/pages/index/index'
+        })
       })
-      Taro.redirectTo({
-        url: '/pages/index/index'
-      })
+
     }
   }
 

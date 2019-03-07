@@ -19,7 +19,6 @@ class Index extends Component {
   config = {
     navigationBarTitleText: '首页',
     enablePullDownRefresh: true
-    // disableScroll: true
   }
 
   state = {
@@ -37,7 +36,6 @@ class Index extends Component {
     norm: [],
     isShowCoupon: false,
     curCoupon: {},
-    // isFirstShow: ''
   }
 
   componentDidMount () {
@@ -57,7 +55,14 @@ class Index extends Component {
   componentWillUnmount () { }
 
   componentDidShow () {
-    this.getIndexInfo()
+    this.getIndexInfo();
+
+    this.props.localInfo.error === 1 && this.props.localInfo.err.errCode == 0
+    && this.props.localInfo.err.errMsg.indexOf('auth') > -1 &&
+    Taro.reLaunch({
+      url: '/pages/auth-setting/index'
+    })
+
   }
 
   componentDidHide () { }

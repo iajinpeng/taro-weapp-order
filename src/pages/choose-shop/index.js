@@ -42,11 +42,19 @@ class Choose extends Component {
   }
 
   componentWillMount() {
-    if (!this.props.localInfo.longitude && !this.props.localInfo.district) {
+    if (this.props.localInfo.error !== 1 && !this.props.localInfo.longitude && !this.props.localInfo.district) {
       Taro.eventCenter.on('hadLocalInfo', this.getStoreList)
       return
     }
-    this.getStoreList()
+    if (this.props.localInfo.error === 1) {
+      this.props.dispatch({
+        type: 'common/getSetLocalInfo'
+      }).then(() => {
+        this.getStoreList()
+      })
+    } else {
+      this.getStoreList()
+    }
   }
 
   componentDidShow() {
@@ -336,6 +344,7 @@ class Choose extends Component {
                 longitude={longitude}
                 markers={markers}
                 onMarkerTap={this.handleMarkerClick}
+                onCallouttap={this.handleMarkerClick}
                 showLocation
               />
             }

@@ -711,8 +711,9 @@ class Order extends Component {
                       {
                         reserveTime.length > 0 ?
                           (
-                            (dayIndex === 0 ? '' : reserveTime[dayIndex].title + ' ')
-                            + ' ' + reserveTime[dayIndex].time[timeIndex].time
+                            (dayIndex === 0 && reserveTime[dayIndex].title.indexOf('今天') > -1 ?
+                              '' : reserveTime[dayIndex].title)
+                            + reserveTime[dayIndex].time[timeIndex].time
                           ) : ''
                       }
                       <Image src={`${baseUrl}/static/addons/diancan/img/style/style_${theme}_3.png`}/>
@@ -783,7 +784,8 @@ class Order extends Component {
                       {
                         selectedAddress.address && isFullPrice && reserveTime.length > 0 ?
                           (
-                            (dayIndex === 0 ? '' : reserveTime[dayIndex].title)
+                            (dayIndex === 0 && reserveTime[dayIndex].title.indexOf('今天') > -1 ?
+                              '' : reserveTime[dayIndex].title)
                             + reserveTime[dayIndex].time[timeIndex].time
                           ) : ''
                       }
@@ -828,7 +830,7 @@ class Order extends Component {
                         <Text className='num'>x{good.num}</Text>
                         <View className='price'>
                           {
-                            good.g_original_price &&
+                            good.g_original_price && good.g_original_price * 1 !== 0 &&
                             <View className='pre'>
                               <Text>&yen;</Text>
                               {good.g_original_price}

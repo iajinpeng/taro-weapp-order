@@ -121,12 +121,13 @@ export default {
           }, 1500)
         }
 
-        return
       }
       yield put({
         type: 'setLocalInfo',
         payload: {localInfo}
       })
+
+      return
     },
 
     * initRequest ({}, {put, call}) {
