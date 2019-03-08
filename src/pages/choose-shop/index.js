@@ -187,9 +187,9 @@ class Choose extends Component {
       })
     } else {
       if (this.$router.params.type) {
-        this.toPresentPage()
+        this.toPresentPage(store.s_id)
       } else {
-        this.toShopIndex()
+        this.toShopIndex(store.s_id)
       }
     }
 
@@ -232,18 +232,18 @@ class Choose extends Component {
     store.s_business !== 2 && this.startOrder(store)
   }
 
-  toShopIndex = () => {
+  toShopIndex = (s_id) => {
     const {store, selectedStoreIndex} = this.state
-    const id = store[selectedStoreIndex].s_id
+    const id = s_id || store[selectedStoreIndex].s_id
 
     Taro.navigateTo({
       url: '/pages/shop-index/index?id=' + id
     })
   }
 
-  toPresentPage = () => {
+  toPresentPage = (s_id) => {
     const {store, selectedStoreIndex} = this.state
-    const id = store[selectedStoreIndex].s_id
+    const id = s_id || store[selectedStoreIndex].s_id
     Taro.navigateTo({
       url: '/pages/present-good/index?id=' + id
     })

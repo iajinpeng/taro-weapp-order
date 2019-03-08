@@ -374,7 +374,10 @@ class ShopIndex extends Component {
   }
 
   handlePay = () => {
-    this.setState({isShowOptions: false})
+    this.setState({
+      isShowOptions: false,
+      isShowDetail: false
+    })
   }
 
 
