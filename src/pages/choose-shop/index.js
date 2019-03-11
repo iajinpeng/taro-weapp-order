@@ -29,7 +29,7 @@ class Choose extends Component {
     isSearching: false,
     isShowDistanceWarn: false,
     isShowNullWarn: false,
-    isShowMap: true,
+    isShowMap: false,
     keyword: '',
     markers: [],
     store: null,
@@ -175,7 +175,9 @@ class Choose extends Component {
     this.setState({
       markers,
       latitude,
-      longitude
+      longitude,
+    }, () => {
+      this.setState({isShowMap: true})
     })
   }
 
