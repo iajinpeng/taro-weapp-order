@@ -21,9 +21,6 @@ class ChooseAddress extends Component {
     address: []
   }
 
-  state = {
-    defaultIndex: 0
-  }
 
   handleClose = (isChange, address) => {
     this.props.onClose(isChange ? address : null)
@@ -50,7 +47,6 @@ class ChooseAddress extends Component {
   choose = (index, optional) => {
     if (!optional) return
 
-    this.setState({defaultIndex: index})
     const {address} = this.props
     const useAddress = address.length > 0 ? address.filter(v => v.optional) : []
     this.handleClose(true, useAddress[index])
@@ -86,11 +82,9 @@ class ChooseAddress extends Component {
   }
 
   render() {
-    const {show, theme, address} = this.props
+    const {show, theme, address, selectedId} = this.props
 
     const baseUrl = this.props.ext.domain
-
-    const {defaultIndex} = this.state
 
     const useAddress = address.length > 0 ? address.filter(v => v.optional) : []
 
@@ -122,7 +116,7 @@ class ChooseAddress extends Component {
                   useAddress.map((item, index) => (
                     <View className='address-item' key={index} onClick={this.choose.bind(this, index, item.optional)}>
                       {
-                        defaultIndex === index ?
+                        selectedId === item.da_id ?
                           <Image src={`${baseUrl}/static/addons/diancan/img/style/style_${theme}_2.png`} />
                           :
                           <View className='alias' />

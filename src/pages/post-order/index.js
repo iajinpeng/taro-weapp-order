@@ -98,7 +98,9 @@ class Order extends Component {
   }
 
   initPage = async (orderType) => {
-    const {amount, couponList, address, store} = await this.getPreOrderInfo(orderType)
+    const {amount, couponList, userAddress, store} = await this.getPreOrderInfo(orderType)
+
+    let address = userAddress.find(item => item.optional) || {}
 
     const reserveTime = await this.getReserveTime(amount, orderType, address)
 
@@ -114,6 +116,16 @@ class Order extends Component {
       if (reserveTime.length && reserveTime[this.state.dayIndex].time[this.state.timeIndex]) {
         totalAmount += +reserveTime[this.state.dayIndex].time[this.state.timeIndex].price
       }
+
+      let canUseAddress = userAddress.filter(item => item.optional)
+      let curAddressId = this.state.selectedAddress.da_id
+
+      if (!curAddressId || curAddressId && !canUseAddress.some(item => item.da_id === curAddressId)) {
+        this.setState({selectedAddress: address})
+      }
+      if (canUseAddress.length === 0) {
+        this.setState({selectedAddress: {}})
+      }
     }
 
     const index = totalAmount > 0 && couponList.findIndex(item => item.available) > -1 ?
@@ -126,7 +138,6 @@ class Order extends Component {
       }
     })
 
-    this.setState({selectedAddress: address})
 
     if (Array.isArray(reserveTime)) {
       this.setState({
@@ -265,15 +276,7 @@ class Order extends Component {
         }
       }
 
-      let address = {}
-      if (userAddress.length === 0) {
-      } else {
-        const useAddress = userAddress.find(item => item.optional) || []
-        address = useAddress || {}
-      }
-
-      // this.setState({selectedAddress: address})
-      return {amount, couponList, address, store}
+      return {amount, couponList, userAddress, store}
     })
   }
 
@@ -1028,7 +1031,10 @@ class Order extends Component {
           isIphoneX={isIphoneX}
         />
 
-        <ChooseAddress show={isShowAddress} address={userAddress} theme={theme} onClose={this.hideAddress}/>
+        <ChooseAddress
+          show={isShowAddress} address={userAddress} theme={theme}
+          selectedId={selectedAddress.da_id}
+          onClose={this.hideAddress}/>
 
         <AtToast
           isOpened={alertPhone} text={alertPhoneText} iconSize={40} duration={2000}
