@@ -116,16 +116,7 @@ class Order extends Component {
       if (reserveTime.length && reserveTime[this.state.dayIndex].time[this.state.timeIndex]) {
         totalAmount += +reserveTime[this.state.dayIndex].time[this.state.timeIndex].price
       }
-
-      let canUseAddress = userAddress.filter(item => item.optional)
-      let curAddressId = this.state.selectedAddress.da_id
-
-      if (!curAddressId || curAddressId && !canUseAddress.some(item => item.da_id === curAddressId)) {
-        this.setState({selectedAddress: address})
-      }
-      if (canUseAddress.length === 0) {
-        this.setState({selectedAddress: {}})
-      }
+      this.setAddress(userAddress)
     }
 
     const index = totalAmount > 0 && couponList.findIndex(item => item.available) > -1 ?
@@ -273,11 +264,24 @@ class Order extends Component {
           }
         } else {
           this.setState({orderType: 3})
+          this.setAddress(userAddress)
         }
       }
 
       return {amount, couponList, userAddress, store}
     })
+  }
+
+  setAddress = userAddress => {
+    let canUseAddress = userAddress.filter(item => item.optional)
+    let curAddressId = this.state.selectedAddress.da_id
+
+    if (!curAddressId || curAddressId && !canUseAddress.some(item => item.da_id === curAddressId)) {
+      this.setState({selectedAddress: userAddress.find(item => item.optional) || {}})
+    }
+    if (canUseAddress.length === 0) {
+      this.setState({selectedAddress: {}})
+    }
   }
 
   handleMemoChange = e => {
