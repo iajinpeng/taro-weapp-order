@@ -25,11 +25,12 @@ class Choose extends Component {
 
   state = {
     city: '',
+    isRenderMap: false,
     isShowCitys: false,
     isSearching: false,
     isShowDistanceWarn: false,
     isShowNullWarn: false,
-    isShowMap: false,
+    isShowMap: true,
     keyword: '',
     markers: [],
     store: null,
@@ -177,7 +178,7 @@ class Choose extends Component {
       latitude,
       longitude,
     }, () => {
-      this.setState({isShowMap: true})
+      this.setState({isRenderMap: true})
     })
   }
 
@@ -261,7 +262,7 @@ class Choose extends Component {
       keyword, city,
       isShowCitys, isSearching, markers,
       store, selectedStoreIndex, isShowDistanceWarn, warnDistance,
-      isShowNullWarn, isShowMap, scrollStoreId, storeFilter
+      isShowNullWarn, isShowMap, scrollStoreId, storeFilter, isRenderMap
     } = this.state
 
     const isIphoneX = !!(this.props.systemInfo.model &&
@@ -339,7 +340,7 @@ class Choose extends Component {
 
           <Block>
             {
-              !isShowCitys && isShowMap &&
+              !isShowCitys && isShowMap && isRenderMap &&
               <Map
                 className='map'
                 latitude={latitude}
@@ -349,6 +350,9 @@ class Choose extends Component {
                 onCallouttap={this.handleMarkerClick}
                 showLocation
               />
+            }
+            {
+              !isRenderMap && <View className='map-alias' />
             }
             <View className='hide-map' onClick={this.toggleShowMap}><Text/></View>
             <ScrollView scrollWithAnimation

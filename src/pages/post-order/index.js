@@ -21,7 +21,7 @@ class Order extends Component {
   }
 
   state = {
-    orderType: 1,  // 1: 自取   3：外卖
+    orderType: null,  // 1: 自取   3：外卖
     takeType: 1,   // 1: 堂食   2：外带
     s_take: [1, 2, 3],
 
@@ -669,7 +669,7 @@ class Order extends Component {
 
     const availableCoupons = couponList.filter(item => item.available)
     return (
-      theme && goods && goods.length > 0 &&
+      theme && orderType && goods && goods.length > 0 &&
       <View className='post-order'>
         {/*<ScrollView onScroll={this.handleScroll}
           scrollY={!isShowPicker} className={classnames('scroll-view', isIphoneX ? 'iphonex' : '')}

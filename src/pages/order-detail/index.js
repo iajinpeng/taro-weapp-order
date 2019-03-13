@@ -6,7 +6,6 @@ import classnames from 'classnames'
 import './index.less'
 import {orderTypes, outOrderTypes} from '../../config'
 import ConfirmModal from '../../components/confirm-modal'
-import IdButton from '../../components/id-button'
 import BackToHome from '../../components/back-to-home'
 import CouponModal from '../../components/coupon-modal'
 
@@ -26,7 +25,7 @@ class OrderDetail extends Component {
     },
     isShowCancelWarn: false,
     isShowOrderAgainWarn: false,
-    markers: [],
+    markers: null,
     includePoints: [],
     polyline: [],
     addCartPayload: {},
@@ -312,7 +311,7 @@ class OrderDetail extends Component {
               && data.o_order_status !== 8 &&
               <Block>
                 {
-                  isShowMap ?
+                  isShowMap && markers ?
                     <Map
                       className='map'
                       latitude={data.s_address_lat}
