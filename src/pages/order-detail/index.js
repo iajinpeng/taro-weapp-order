@@ -26,12 +26,11 @@ class OrderDetail extends Component {
     isShowCancelWarn: false,
     isShowOrderAgainWarn: false,
     markers: null,
-    includePoints: [],
     polyline: [],
     addCartPayload: {},
     curCoupon: {},
     isShowCoupon: false,
-    isShowMap: true
+    isShowMap: false
   }
 
   componentWillMount() {
@@ -88,7 +87,8 @@ class OrderDetail extends Component {
             // bgColor: 'transparent',
             borderRadius: 4
           }
-        }]
+        }],
+        polyline: []
       }
 
       if (+data.o_order_status === 42) {
@@ -100,7 +100,6 @@ class OrderDetail extends Component {
           longitude: data.o_address_lng,
           latitude: data.o_address_lat,
         })
-        mapAttrs.includePoints = mapAttrs.markers
 
         if (+data.take_id === 1) {
           mapAttrs.polyline = [{
@@ -144,13 +143,23 @@ class OrderDetail extends Component {
       this.setState({
         data,
         ...mapAttrs
+      }, () => {
+        if (+data.o_order_status === 42) {
+          Taro.createMapContext('map').includePoints({
+            padding: [80, 50, 60, 50],
+            points: mapAttrs.markers
+          })
+        }
+        +data.o_take_type === 3 && this.setState({isShowMap: true})
       })
 
       if (data.o_order_status !== 1 && data.o_order_status !== 5 &&
         data.o_order_status !== 6 && data.o_order_status !== 7 &&
         data.o_order_status !== 8) {
-        this.timeOut = setTimeout(() => {
-          this.getOrderDetail()
+        this.timeOut = setTimeout(async () => {
+          Taro.showNavigationBarLoading()
+          await this.getOrderDetail()
+          Taro.hideNavigationBarLoading()
           clearTimeout(this.timeOut)
         }, 10000)
       }
@@ -296,7 +305,7 @@ class OrderDetail extends Component {
     const {theme, systemInfo} = this.props
     const isIphoneX = !!(systemInfo.model && systemInfo.model.replace(' ', '').toLowerCase().indexOf('iphonex') > -1)
 
-    const {data, isShowCancelWarn, markers, isShowOrderAgainWarn, includePoints,
+    const {data, isShowCancelWarn, markers, isShowOrderAgainWarn,
       polyline, curCoupon, isShowCoupon, isShowMap} = this.state
 
     return (
@@ -311,13 +320,13 @@ class OrderDetail extends Component {
               && data.o_order_status !== 8 &&
               <Block>
                 {
-                  isShowMap && markers ?
+                  isShowMap ?
                     <Map
+                      id='map'
                       className='map'
                       latitude={data.s_address_lat}
                       longitude={data.s_address_lng}
                       markers={markers}
-                      includePoints={includePoints}
                       polyline={polyline}
                       showLocation={false}
                     />
@@ -326,7 +335,7 @@ class OrderDetail extends Component {
                 }
 
                 {
-                  data.o_order_status === 42 && data.take_id === 1 &&
+                  data.o_order_status === 42 && data.take_id === 1 && isShowMap &&
                   <CoverView className='map-tip'>
                     <CoverImage src={require('../../assets/images/icon-bike.png')} />
                    <CoverView className='text'>
@@ -568,6 +577,7 @@ class OrderDetail extends Component {
                 }
                 {
                   data.o_take_type === 3 && data.take_id &&
+                  (data.o_order_status == 42 || data.o_order_status == 5 || data.o_order_status == 8) &&
                   <View className='item'>
                     <Text>配送方式</Text>
                     <Text>

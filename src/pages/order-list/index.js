@@ -41,21 +41,8 @@ class OrderList extends Component {
   canRequestMore = true
 
   componentDidMount() {
-    this.requestOrderList().then(({total, rows, coupon}) => {
+    this.requestOrderList().then(({total, rows}) => {
       this.setState({total1: total, lists1: rows, requested: true})
-      this.alertedCoupon = true
-      this.coupon = coupon
-      this.curCouponIndex = 0
-
-      if (coupon && coupon.length > 0) {
-        let timer = setTimeout(() => {
-          this.setState({
-            isShowCoupon: true,
-            curCoupon: coupon[0],
-          })
-          clearTimeout(timer)
-        }, 500)
-      }
     })
     this.requestOrderList(null, 2).then(({total, rows}) => {
       this.setState({total2: total, lists2: rows, requested: true})
@@ -109,6 +96,23 @@ class OrderList extends Component {
         page: targetPage || page,
         page_size
       }
+    }).then(res => {
+      if (_type === 1 || type === 1) {
+        let coupon = res.coupon
+        this.coupon = coupon
+        this.curCouponIndex = 0
+
+        if (coupon && coupon.length > 0) {
+          let timer = setTimeout(() => {
+            this.setState({
+              isShowCoupon: true,
+              curCoupon: coupon[0],
+            })
+            clearTimeout(timer)
+          }, 500)
+        }
+      }
+      return res
     })
   }
 
