@@ -336,7 +336,9 @@ class ShopIndex extends Component {
     })
     this.setState({
       isShowCart: false,
-      isShowCartWarn: false
+      isShowCartWarn: false,
+      isShowOptions: false,
+      isShowDetail: false
     })
   }
 
