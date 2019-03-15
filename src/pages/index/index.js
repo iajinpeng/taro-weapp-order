@@ -194,20 +194,20 @@ class Index extends Component {
   calcHourZone = () => {
     let hour = new Date().getHours()
 
-    if (hour < 6) {
-      return '凌晨好';
+    if (hour >=3 && hour < 6) {
+      return '黎明将至，准备迎接日出了吗？';
     } else if (hour > 6 && hour < 9) {
-      return '早上好';
+      return '早安，又是美好的一天!';
     } else if (hour >= 9 && hour < 12) {
-      return '上午好';
-    } else if (hour >= 12 && hour < 14) {
-      return '中午好';
-    } else if (hour >= 14 && hour < 18) {
-      return '下午好';
-    } else if (hour >= 18 && hour < 22) {
-      return '晚上好';
-    } else {
-      return '夜里好'
+      return '上午好，今天也要加油呀！';
+    } else if (hour >= 12 && hour < 15) {
+      return '中午好，越努力越幸运哟！';
+    } else if (hour >= 15 && hour < 18) {
+      return '下午茶时间到啦！';
+    } else if (hour >= 18 && hour < 21) {
+      return '今天你很棒棒哟！';
+    } else if (hour >=21 || hour < 3) {
+      return '夜里夜深了，今晚月色真美！'
     }
   }
 
@@ -228,7 +228,7 @@ class Index extends Component {
       home_banner && home_banner.banner ?
       <View className='index-page' style={{display: home_banner.banner ? 'block' : 'none'}}>
         <View className={classnames('icon-help-wrap', 'theme-c-' + theme)} onClick={this.toNoticePage}>
-          <Text className='greed'>{this.calcHourZone()}!</Text>
+          <Text className='greed'>{this.calcHourZone()}</Text>
           <AtIcon value='help' size='14' />
         </View>
 

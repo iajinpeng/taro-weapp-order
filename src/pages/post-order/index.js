@@ -8,6 +8,7 @@ import IdButton from '../../components/id-button'
 import PickTime from '../../components/pick-time'
 import ChooseAddress from '../../components/choose-address'
 import Loading from '../../components/Loading'
+import ConfirmModal from '../../components/confirm-modal'
 
 import './index.less'
 
@@ -33,7 +34,6 @@ class Order extends Component {
     couponList: [],
     userAddress: [],
     amount: '',
-    // isShowTextarea: false,
     memo: '',
     reserveTime: [],
     dayIndex: 0,
@@ -45,7 +45,8 @@ class Order extends Component {
     goods: [],
     isFullPrice: true,
     fullPrice: null,
-    memoFocus: false
+    memoFocus: false,
+    isShowPresentWarn: false
   }
 
   componentWillMount() {
@@ -373,6 +374,13 @@ class Order extends Component {
         take_type: orderType,
         amount
       }
+    }).then(res => {
+      this.setState({
+        dayIndex: 0,
+        timeIndex: 0
+      })
+
+      return res
     })
   }
 
@@ -462,7 +470,14 @@ class Order extends Component {
     })
   }
 
-  stepPay = async () => {
+  stepPay = async (noWarn) => {
+
+    if (noWarn !== 1 && this.props.carts[this.$router.params.store_id].some(item => item.fs_id)) {
+      this.showOrHidePresentWarn(true)
+      return
+    }
+
+    this.showOrHidePresentWarn(false)
 
     const {userPhoneNum, orderType, selectedAddress} = this.state
     const store_id = this.$router.params.store_id
@@ -583,6 +598,10 @@ class Order extends Component {
     }
   }
 
+  showOrHidePresentWarn = bool => {
+    this.setState({isShowPresentWarn: bool})
+  }
+
   alertPhoneClose = () => {
     this.setState({
       alertPhone: false,
@@ -627,7 +646,7 @@ class Order extends Component {
       couponList, userAddress, amount, reserveTime,
       isShowAddress, userPhoneNum, selectedAddress,
       alertPhone, alertPhoneText, goods, dayIndex, timeIndex, isFullPrice,
-      fullPrice, memoFocus
+      fullPrice, memoFocus, isShowPresentWarn
     } = this.state
 
     const isIphoneX = !!(this.props.systemInfo.model &&
@@ -719,7 +738,7 @@ class Order extends Component {
                       {
                         reserveTime.length > 0 ?
                           (
-                            (dayIndex === 0 && reserveTime[dayIndex].title.indexOf('今天') > -1 ?
+                            (dayIndex === 0 && timeIndex === 0 ?
                               '' : reserveTime[dayIndex].title)
                             + reserveTime[dayIndex].time[timeIndex].time
                           ) : ''
@@ -792,7 +811,7 @@ class Order extends Component {
                       {
                         selectedAddress.address && isFullPrice && reserveTime.length > 0 ?
                           (
-                            (dayIndex === 0 && reserveTime[dayIndex].title.indexOf('今天') > -1 ?
+                            (dayIndex === 0 && timeIndex === 0 ?
                               '' : reserveTime[dayIndex].title)
                             + reserveTime[dayIndex].time[timeIndex].time
                           ) : ''
@@ -1046,6 +1065,16 @@ class Order extends Component {
           icon='iphone' hasMask onClose={this.alertPhoneClose}
         />
 
+        <ConfirmModal
+          show={isShowPresentWarn}
+          title='提示'
+          theme={theme}
+          onCancel={this.showOrHidePresentWarn.bind(this, false)}
+          onOk={this.stepPay.bind(this, 1)}
+        >
+          成功下单后，若取消订单则
+          不会退返满单资格
+        </ConfirmModal>
       </View>
       :
       <Loading />

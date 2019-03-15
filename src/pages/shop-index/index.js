@@ -453,7 +453,9 @@ class ShopIndex extends Component {
                     </View>
                   ))
                 }
-                <View className='null-block'/>
+                <View className={classnames('null-block', curClassifyIndex === group.length - 1 ? 'radius' : '')}>
+                  <View />
+                </View>
               </ScrollView>
             </View>
             <ScrollView

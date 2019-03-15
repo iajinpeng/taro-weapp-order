@@ -473,6 +473,16 @@ class OrderDetail extends Component {
                   <Button onClick={this.showOrHideWarn.bind(this, true)} className={'theme-grad-bg-' + theme}>取消订单</Button>
                 }
 
+                {
+                  (data.o_order_status === 3 || data.o_order_status === 4) &&
+                  <View className={classnames('contact')}
+                    onClick={this.contactVendor.bind(this, data.s_telephone)}
+                  >
+                    <Image src={require('../../assets/images/icon-contact.png')} />
+                    <View>联系商家</View>
+                  </View>
+                }
+
               </View>
             }
 

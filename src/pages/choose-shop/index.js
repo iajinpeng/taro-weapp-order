@@ -433,11 +433,14 @@ class Choose extends Component {
                   })
                 }
 
+
                 {
-                  !isShowMap &&
+                  !isShowMap ?
                   <View style={{marginTop: '100px'}}>
                     <Copyright />
                   </View>
+                    :
+                  <View className='fix-height' />
                 }
 
               </View>
