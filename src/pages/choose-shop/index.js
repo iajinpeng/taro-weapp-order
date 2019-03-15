@@ -51,6 +51,23 @@ class Choose extends Component {
       this.props.dispatch({
         type: 'common/getSetLocalInfo'
       }).then(() => {
+        if (this.props.localInfo.error === 1) {
+          Taro.showToast({
+            title: '获取定位失败，已进入默认城市',
+            icon: 'none'
+          })
+          this.props.dispatch({
+            type: 'common/setLocalInfo',
+            payload: {
+              localInfo: {
+                location: '115.857963,28.683016',
+                latitude: '28.683016',
+                longitude: '115.857963',
+                locationCity: '南昌'
+              }
+            }
+          })
+        }
         this.getStoreList()
       })
     } else {

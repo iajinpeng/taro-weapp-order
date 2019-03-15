@@ -35,6 +35,14 @@ class OrderDetail extends Component {
 
   componentWillMount() {
 
+    if (!this.props.b_logo) {
+      Taro.eventCenter.on('hadThemeInfo', this.init)
+    } else {
+      this.init()
+    }
+  }
+
+  init = () => {
     this.getOrderDetail().then(res => {
       this.coupon = res.coupon
       this.curCouponIndex = 0
@@ -50,7 +58,6 @@ class OrderDetail extends Component {
         }, 500)
       }
     })
-
   }
 
   componentWillUnmount () {

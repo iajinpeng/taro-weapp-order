@@ -28,9 +28,18 @@ export default async (options = { method: 'GET', data: {} }) => {
     })
   }
 
-  let resp = await request();
+  let resp = await request().then(res => res).catch(err => ({error: 1, ...err}));
 
-  return loopFetch(resp)
+  if (resp.error !== 1) {
+    return loopFetch(resp)
+  } else {
+    Taro.showToast({
+      title: '您当前网络似乎有些问题',
+      icon: 'none',
+      duration: 1500
+    })
+    return {error: 1, timeout: 1}
+  }
 
   async function loopFetch(res) {
 
@@ -74,7 +83,7 @@ export default async (options = { method: 'GET', data: {} }) => {
 
     } else {
       console.log(`网络请求错误，状态码${statusCode}`);
-      return {error: 0}
+      return {error: 1}
     }
   }
 

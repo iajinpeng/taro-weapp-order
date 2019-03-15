@@ -6,6 +6,7 @@ import classnames from 'classnames'
 import ConfirmModal from '../../components/confirm-modal'
 import Copyright from '../../components/copyright'
 import CouponModal from '../../components/coupon-modal'
+import Loading from '../../components/Loading'
 import {getTouchData} from '../../utils/utils'
 import './index.less'
 
@@ -330,7 +331,7 @@ class OrderList extends Component {
     const listArr = [lists1, lists2]
 
     return (
-      requested &&
+      requested ?
       <View className='order-list' onTouchStart={this.handleTouchStart} onTouchEnd={this.handleTouchEnd}>
         <View className='title'>
           <View
@@ -531,6 +532,8 @@ class OrderList extends Component {
           onClose={this.couponClose}
         />
       </View>
+        :
+      <Loading />
     )
   }
 }

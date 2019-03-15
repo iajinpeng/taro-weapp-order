@@ -39,6 +39,9 @@ class App extends Component {
       navigationBarTextStyle: 'black',
       backgroundColor: '#f5f5f5',
     },
+    networkTimeout: {
+      request: 5000
+    }
   }
 
 
@@ -96,6 +99,8 @@ class App extends Component {
 
     store.dispatch({
       type: 'common/initRequest'
+    }).then(() => {
+      Taro.eventCenter.trigger('hadThemeInfo')
     })
     Taro.getSystemInfo().then(res => {
       store.dispatch({

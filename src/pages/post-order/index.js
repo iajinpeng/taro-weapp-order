@@ -7,6 +7,7 @@ import classnames from 'classnames'
 import IdButton from '../../components/id-button'
 import PickTime from '../../components/pick-time'
 import ChooseAddress from '../../components/choose-address'
+import Loading from '../../components/Loading'
 
 import './index.less'
 
@@ -669,7 +670,7 @@ class Order extends Component {
 
     const availableCoupons = couponList.filter(item => item.available)
     return (
-      theme && orderType && goods && goods.length > 0 &&
+      theme && orderType && goods && goods.length > 0 ?
       <View className='post-order'>
         {/*<ScrollView onScroll={this.handleScroll}
           scrollY={!isShowPicker} className={classnames('scroll-view', isIphoneX ? 'iphonex' : '')}
@@ -1046,6 +1047,8 @@ class Order extends Component {
         />
 
       </View>
+      :
+      <Loading />
     )
   }
 }

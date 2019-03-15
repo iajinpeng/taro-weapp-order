@@ -112,7 +112,7 @@ export default {
           icon: 'none'
         })
 
-        if (localInfo.err.errCode == 0 && localInfo.err.errMsg.indexOf('auth') > -1) {
+        if (localInfo.err && localInfo.err.errCode == 0 && localInfo.err.errMsg.indexOf('auth') > -1) {
           let timer = setTimeout(() => {
             clearTimeout(timer)
             Taro.reLaunch({
