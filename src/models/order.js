@@ -115,12 +115,13 @@ export default {
 
       })
 
-      for (let i=0;i<cartGoods.length;i++) {
-        yield put({
-          type: 'cart/setCart',
-          payload: cartGoods[i]
-        })
-      }
+      yield put({
+        type: 'cart/setAgainCart',
+        payload: {
+          goods: cartGoods,
+          id: +store_id,
+        }
+      })
     }
   },
 

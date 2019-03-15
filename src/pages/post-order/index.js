@@ -691,13 +691,6 @@ class Order extends Component {
     return (
       theme && orderType && goods && goods.length > 0 ?
       <View className='post-order'>
-        {/*<ScrollView onScroll={this.handleScroll}
-          scrollY={!isShowPicker} className={classnames('scroll-view', isIphoneX ? 'iphonex' : '')}
-        >
-
-        </ScrollView>*/}
-
-
         <View className={classnames('wrap', isIphoneX ? 'iphonex' : '')}>
           <View className='content'>
             <View className='order-type'>
@@ -739,7 +732,7 @@ class Order extends Component {
                         reserveTime.length > 0 ?
                           (
                             (dayIndex === 0 && timeIndex === 0 ?
-                              '' : reserveTime[dayIndex].title)
+                              '（现在下单）' : reserveTime[dayIndex].title)
                             + reserveTime[dayIndex].time[timeIndex].time
                           ) : ''
                       }
@@ -812,7 +805,7 @@ class Order extends Component {
                         selectedAddress.address && isFullPrice && reserveTime.length > 0 ?
                           (
                             (dayIndex === 0 && timeIndex === 0 ?
-                              '' : reserveTime[dayIndex].title)
+                              '（现在下单）' : reserveTime[dayIndex].title)
                             + reserveTime[dayIndex].time[timeIndex].time
                           ) : ''
                       }

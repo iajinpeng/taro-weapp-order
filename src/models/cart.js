@@ -10,6 +10,20 @@ export default {
   effects: {},
 
   reducers: {
+    setAgainCart(state, {payload}) {
+      const {id, goods} = payload
+      let curCart = state.carts[id]
+
+      !curCart && (curCart = [])
+      goods.map(good => {
+        if (!curCart.some(item => item.again_id === good.good.again_id)) {
+          curCart.push({...good.good, num: good.num})
+        }
+      })
+      state.carts[id] = curCart
+
+      return {...state, whatEver: state.whatEver + 1};
+    },
     setCart(state, {payload}) {
       const {id, good, num} = payload
       let curCart = state.carts[id]
@@ -73,7 +87,6 @@ export default {
 
       state.carts[id] = curCart
 
-      // Taro.setStorageSync('carts', state.carts)
       return {...state, whatEver: state.whatEver + num};
     },
     setComboCart(state, {payload}) {
