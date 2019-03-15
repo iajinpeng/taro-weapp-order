@@ -689,7 +689,10 @@ class ShopIndex extends Component {
                     <Text>&yen;</Text>
                     <Text className='font-xin-normal'>{curGood.g_price}</Text>
                   </View>
-                  <View className='pre-price'><Text>&yen;</Text>{curGood.g_original_price}</View>
+                  {
+                    curGood.g_original_price * 1 !== 0 &&
+                    <View className='pre-price'><Text>&yen;</Text>{curGood.g_original_price}</View>
+                  }
                   {
                     curGood.g_has_norm === 2 &&
                     (!curCart.num || curCart.num === 0) &&
@@ -791,10 +794,13 @@ class ShopIndex extends Component {
                     }
                   </Text>
                 </View>
-                <View className='pre-price'>
-                  <Text>&yen;</Text>
-                  {curGood.g_original_price}
-                </View>
+                {
+                  curGood.g_original_price * 1 !== 0 &&
+                  <View className='pre-price'>
+                    <Text>&yen;</Text>
+                    {curGood.g_original_price}
+                  </View>
+                }
               </View>
               {
                 (curCart.optionalstr !== (propertyTagIndex.join('') + optionalTagIndex.join('')) &&

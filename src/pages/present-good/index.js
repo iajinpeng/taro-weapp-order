@@ -282,7 +282,10 @@ class PresentGood extends Component {
                     </View>
                     <View className='info'>
                       <View className='name'>{good.g_title}</View>
-                      <View className='pre-price'>&yen;{good.g_original_price}</View>
+                      {
+                        good.g_original_price * 1 !== 0 &&
+                        <View className='pre-price'>&yen;{good.g_original_price}</View>
+                      }
                       <View className='price'><Text>&yen;</Text>
                         <Text className='font-xin-normal'>{good.g_price}</Text>
                       </View>
@@ -380,10 +383,13 @@ class PresentGood extends Component {
                       }
                     </Text>
                   </View>
-                  <View className='pre-price'>
-                    <Text>&yen;</Text>
-                    {curGood.g_original_price}
-                  </View>
+                  {
+                    curGood.g_original_price * 1 !== 0 &&
+                    <View className='pre-price'>
+                      <Text>&yen;</Text>
+                      {curGood.g_original_price}
+                    </View>
+                  }
                 </View>
                 {
                   (curCart.optionalstr !== (propertyTagIndex.join('') + optionalTagIndex.join('')) &&
@@ -425,7 +431,10 @@ class PresentGood extends Component {
                       <Text>&yen;</Text>
                       <Text className='font-xin-normal'>{curGood.g_price}</Text>
                     </View>
-                    <View className='pre-price'><Text>&yen;</Text>{curGood.g_original_price}</View>
+                    {
+                      curGood.g_original_price * 1 !== 0 &&
+                      <View className='pre-price'><Text>&yen;</Text>{curGood.g_original_price}</View>
+                    }
                     {
                       curGood.g_has_norm === 2 &&
                       (!curCart.num || curCart.num === 0) &&
@@ -531,7 +540,7 @@ class PresentGood extends Component {
                             </Text>
                           </Text>
                           {
-                            good.g_original_price && (good.g_original_price - 0) !== 0 &&
+                            good.g_original_price && good.g_original_price * 1 !== 0 &&
                             <Text className='pre-price'>&yen;{good.g_original_price}</Text>
                           }
                         </View>
