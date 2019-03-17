@@ -3,7 +3,6 @@ import {View, Text, Button, Image, ScrollView} from '@tarojs/components'
 import {connect} from '@tarojs/redux'
 import classnames from 'classnames'
 
-import ConfirmModal from '../../components/confirm-modal'
 import Copyright from '../../components/copyright'
 import CouponModal from '../../components/coupon-modal'
 import Loading from '../../components/Loading'
@@ -29,9 +28,9 @@ class OrderList extends Component {
     lists2: [],
     total1: 0,
     total2: 0,
-    firstId: '',
-    isShowCancelWarn: false,
-    isShowOrderAgainWarn: false,
+    // firstId: '',
+    // isShowCancelWarn: false,
+    // isShowOrderAgainWarn: false,
     addCartPayload: {},
     curOrder: {},
     requested: false,
@@ -117,13 +116,13 @@ class OrderList extends Component {
     })
   }
 
-  showOrHideWarn = (bool, order, e) => {
-    e && e.stopPropagation()
-    this.setState({
-      isShowCancelWarn: bool,
-      curOrder: order
-    })
-  }
+  // showOrHideWarn = (bool, order, e) => {
+  //   e && e.stopPropagation()
+  //   this.setState({
+  //     isShowCancelWarn: bool,
+  //     curOrder: order
+  //   })
+  // }
 
   requestMore = () => {
     const {page, page_size, type} = this.state
@@ -162,9 +161,9 @@ class OrderList extends Component {
         order_id: o_id
       }
     }).then(() => {
-      this.setState({
-        isShowCancelWarn: false
-      })
+      // this.setState({
+      //   isShowCancelWarn: false
+      // })
       Taro.showToast({
         title: '取消成功'
       })
@@ -196,7 +195,11 @@ class OrderList extends Component {
       }
     }).then(({change, payload}) => {
       if (change) {
-        this.showOrHideAgainWarn(true)
+        Taro.showModal({
+          content: '商品规格属性已变更，是否重新选择？'
+        }).then(({confirm}) => {
+          confirm && this.againOk()
+        })
         this.setState({
           addCartPayload: payload,
           curOrder: order
@@ -214,7 +217,6 @@ class OrderList extends Component {
     Taro.navigateTo({
       url: '/pages/shop-index/index?id=' + this.state.curOrder.store_id + '&showcart=1'
     })
-    this.showOrHideAgainWarn(false)
   }
 
   handleTouchStart = e => {
@@ -263,9 +265,9 @@ class OrderList extends Component {
     })
   }
 
-  showOrHideAgainWarn = bool => {
-    this.setState({isShowOrderAgainWarn: bool})
-  }
+  // showOrHideAgainWarn = bool => {
+  //   this.setState({isShowOrderAgainWarn: bool})
+  // }
 
   stepPay = async (order, e) => {
 
@@ -322,10 +324,20 @@ class OrderList extends Component {
 
   }
 
+  askCancel = (order, e) => {
+    e.stopPropagation()
+    Taro.showModal({
+      title: '取消订单',
+      content: '确定要取消吗？'
+    }).then(({confirm}) => {
+      confirm && this.setState({curOrder: order}, this.cancelOrder)
+    })
+  }
+
   render() {
     const {theme} = this.props
     const baseUrl = this.props.ext.domain
-    const {type, requested, isShowCancelWarn, isShowOrderAgainWarn,
+    const {type, requested,
       lists1, lists2, curCoupon, isShowCoupon, firstId} = this.state
 
     const listArr = [lists1, lists2]
@@ -427,7 +439,7 @@ class OrderList extends Component {
                               <View className='good-info'>
                                 <View
                                   className={classnames('cancel', 'theme-c-' + theme)}
-                                  onClick={this.showOrHideWarn.bind(this, true, order)}
+                                  onClick={this.askCancel.bind(this, order)}
                                 >取消订单</View>
                               </View>
                             }
@@ -506,7 +518,7 @@ class OrderList extends Component {
           ))
         }
 
-        <ConfirmModal
+        {/*<ConfirmModal
           show={isShowCancelWarn}
           className='clear-cart-modal'
           theme={theme}
@@ -515,9 +527,9 @@ class OrderList extends Component {
           onOk={this.cancelOrder}
         >
           确定要取消吗
-        </ConfirmModal>
+        </ConfirmModal>*/}
 
-        <ConfirmModal
+       {/* <ConfirmModal
           show={isShowOrderAgainWarn}
           className='order-again-modal'
           theme={theme}
@@ -525,7 +537,7 @@ class OrderList extends Component {
           onOk={this.againOk}
         >
           商品规格属性已变更，是否重新选择？
-        </ConfirmModal>
+        </ConfirmModal>*/}
 
         <CouponModal
           show={isShowCoupon} coupon={curCoupon}

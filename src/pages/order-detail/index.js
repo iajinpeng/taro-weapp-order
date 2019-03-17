@@ -5,7 +5,6 @@ import {AtIcon} from 'taro-ui'
 import classnames from 'classnames'
 import './index.less'
 import {orderTypes, outOrderTypes} from '../../config'
-import ConfirmModal from '../../components/confirm-modal'
 import BackToHome from '../../components/back-to-home'
 import CouponModal from '../../components/coupon-modal'
 
@@ -23,8 +22,6 @@ class OrderDetail extends Component {
     data: {
       o_order_status: ''
     },
-    isShowCancelWarn: false,
-    isShowOrderAgainWarn: false,
     markers: null,
     polyline: [],
     addCartPayload: {},
@@ -182,14 +179,6 @@ class OrderDetail extends Component {
     Taro.hideLoading()
   }
 
-  showOrHideWarn = bool => {
-    this.setState({isShowCancelWarn: bool})
-  }
-
-  showOrHideAgainWarn = bool => {
-    this.setState({isShowOrderAgainWarn: bool})
-  }
-
   againOk = () => {
     this.props.dispatch({
       type: 'order/repeatOrderAddCart',
@@ -198,7 +187,6 @@ class OrderDetail extends Component {
     Taro.navigateTo({
       url: '/pages/shop-index/index?id=' + this.state.data.store_id + '&showcart=1'
     })
-    this.showOrHideAgainWarn(false)
   }
 
   stepPay = async () => {
@@ -255,9 +243,6 @@ class OrderDetail extends Component {
         order_id
       }
     }).then(() => {
-      this.setState({
-        isShowCancelWarn: false
-      })
       Taro.showToast({
         title: '取消成功'
       })
@@ -280,7 +265,11 @@ class OrderDetail extends Component {
       }
     }).then(({change, payload}) => {
       if (change) {
-        this.showOrHideAgainWarn(true)
+        Taro.showModal({
+          content: '商品规格属性已变更，是否重新选择？'
+        }).then(({confirm}) => {
+          confirm && this.againOk()
+        })
         this.setState({addCartPayload: payload})
       }
     })
@@ -308,11 +297,20 @@ class OrderDetail extends Component {
     }
   }
 
+  askCacel = () => {
+    Taro.showModal({
+      title:'取消订单',
+      content: '确定要取消吗?'
+    }).then(({confirm}) => {
+      confirm && this.cancelOrder()
+    })
+  }
+
   render() {
     const {theme, systemInfo} = this.props
     const isIphoneX = !!(systemInfo.model && systemInfo.model.replace(' ', '').toLowerCase().indexOf('iphonex') > -1)
 
-    const {data, isShowCancelWarn, markers, isShowOrderAgainWarn,
+    const {data, markers,
       polyline, curCoupon, isShowCoupon, isShowMap} = this.state
 
     return (
@@ -395,7 +393,7 @@ class OrderDetail extends Component {
 
                   {
                     (data.o_order_status === 1 || data.o_order_status === 2) &&
-                    <View className='cancel' onClick={this.showOrHideWarn.bind(this, true)}>
+                    <View className='cancel' onClick={this.askCacel}>
                       <AtIcon size='24' value='add-circle' />
                       <View>取消订单</View>
                     </View>
@@ -470,7 +468,7 @@ class OrderDetail extends Component {
 
                 {
                   data.o_order_status === 2 &&
-                  <Button onClick={this.showOrHideWarn.bind(this, true)} className={'theme-grad-bg-' + theme}>取消订单</Button>
+                  <Button onClick={this.askCacel} className={'theme-grad-bg-' + theme}>取消订单</Button>
                 }
 
                 {
@@ -494,7 +492,7 @@ class OrderDetail extends Component {
                   className={classnames('ok', 'theme-grad-bg-' + theme)}
                 >立即支付</Button>
                 <Button
-                  onClick={this.showOrHideWarn.bind(this, true)}
+                  onClick={this.askCacel}
                   className={classnames('no', 'theme-c-' + theme)}
                 >取消订单</Button>
               </View>
@@ -642,27 +640,6 @@ class OrderDetail extends Component {
             </View>
           </View>
         }
-
-        <ConfirmModal
-          show={isShowCancelWarn}
-          className='clear-cart-modal'
-          theme={theme}
-          title='取消订单'
-          onCancel={this.showOrHideWarn.bind(this, false)}
-          onOk={this.cancelOrder}
-        >
-          确定要取消吗
-        </ConfirmModal>
-
-        <ConfirmModal
-          show={isShowOrderAgainWarn}
-          className='order-again-modal'
-          theme={theme}
-          onCancel={this.showOrHideAgainWarn.bind(this, false)}
-          onOk={this.againOk}
-        >
-          商品规格属性已变更，是否重新选择？
-        </ConfirmModal>
 
         {
           this.$router.params.from === '1' &&

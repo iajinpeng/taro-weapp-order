@@ -3,7 +3,7 @@ import {connect} from '@tarojs/redux'
 import {View, Text, Map, ScrollView, Input, Block} from '@tarojs/components'
 import {AtIcon, AtIndexes} from 'taro-ui'
 import classnames from 'classnames'
-import ConfirmModal from '../../components/confirm-modal'
+// import ConfirmModal from '../../components/confirm-modal'
 import IdButton from '../../components/id-button'
 import Copyright from '../../components/copyright'
 import Loading from '../../components/Loading'
@@ -28,8 +28,8 @@ class Choose extends Component {
     isRenderMap: false,
     isShowCitys: false,
     isSearching: false,
-    isShowDistanceWarn: false,
-    isShowNullWarn: false,
+    // isShowDistanceWarn: false,
+    // isShowNullWarn: false,
     isShowMap: true,
     keyword: '',
     markers: [],
@@ -109,8 +109,15 @@ class Choose extends Component {
     }).then(res => {
       this.setState({
         store: res.store,
-        isShowNullWarn: res.store.length === 0
+        // isShowNullWarn: res.store.length === 0
       })
+
+      res.store.length === 0 &&
+        Taro.showModal({
+          title: '提示',
+          content: '当前城市还没有门店！敬请期待。',
+          showCancel: false
+        })
 
       this.showShopMakers(res)
 
@@ -201,9 +208,20 @@ class Choose extends Component {
 
   startOrder = store => {
     if (store.distance > warningDistance) {
-      this.setState({
-        warnDistance: (store.distance / 1000).toFixed(2),
-        isShowDistanceWarn: true
+      // this.setState({
+      //   warnDistance: (store.distance / 1000).toFixed(2),
+      //   isShowDistanceWarn: true
+      // })
+      Taro.showModal({
+        title: '提示',
+        content: `我这好像离你有点儿远，还继续点吗(${(store.distance / 1000).toFixed(2)}km)`
+      }).then(({confirm}) => {
+        if (!confirm) return
+        if (this.$router.params.type) {
+          this.toPresentPage(store.s_id)
+        } else {
+          this.toShopIndex(store.s_id)
+        }
       })
     } else {
       if (this.$router.params.type) {
@@ -234,13 +252,13 @@ class Choose extends Component {
     this.showOrHideDistanceWarn(false)
   }
 
-  showOrHideDistanceWarn = bool => {
-    this.setState({isShowDistanceWarn: bool})
-  }
-
-  showOrHideNullWarn = bool => {
-    this.setState({isShowNullWarn: bool})
-  }
+  // showOrHideDistanceWarn = bool => {
+  //   this.setState({isShowDistanceWarn: bool})
+  // }
+  //
+  // showOrHideNullWarn = bool => {
+  //   this.setState({isShowNullWarn: bool})
+  // }
 
   toggleShowMap = () => {
     this.setState({isShowMap: !this.state.isShowMap})
@@ -278,8 +296,7 @@ class Choose extends Component {
     const {
       keyword, city,
       isShowCitys, isSearching, markers,
-      store, selectedStoreIndex, isShowDistanceWarn, warnDistance,
-      isShowNullWarn, isShowMap, scrollStoreId, storeFilter, isRenderMap
+      store, selectedStoreIndex, isShowMap, scrollStoreId, storeFilter, isRenderMap
     } = this.state
 
     const isIphoneX = !!(this.props.systemInfo.model &&
@@ -450,23 +467,23 @@ class Choose extends Component {
 
         }
 
-        <ConfirmModal
+       {/* <ConfirmModal
           show={isShowDistanceWarn}
           theme={theme}
           warnDistance={warnDistance}
           onCancel={this.showOrHideDistanceWarn.bind(this, false)}
           onOk={this.confirmOrder}
         >
-        </ConfirmModal>
+        </ConfirmModal>*/}
 
-        <ConfirmModal
+        {/*<ConfirmModal
           show={isShowNullWarn}
           type={2}
           theme={theme}
           onCancel={this.showOrHideNullWarn.bind(this, false)}
         >
           当前城市还没有门店！敬请期待。
-        </ConfirmModal>
+        </ConfirmModal>*/}
 
       </View>
         :

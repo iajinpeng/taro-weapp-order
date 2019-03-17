@@ -8,7 +8,6 @@ import IdButton from '../../components/id-button'
 import PickTime from '../../components/pick-time'
 import ChooseAddress from '../../components/choose-address'
 import Loading from '../../components/Loading'
-import ConfirmModal from '../../components/confirm-modal'
 
 import './index.less'
 
@@ -46,7 +45,6 @@ class Order extends Component {
     isFullPrice: true,
     fullPrice: null,
     memoFocus: false,
-    isShowPresentWarn: false
   }
 
   componentWillMount() {
@@ -473,11 +471,15 @@ class Order extends Component {
   stepPay = async (noWarn) => {
 
     if (noWarn !== 1 && this.props.carts[this.$router.params.store_id].some(item => item.fs_id)) {
-      this.showOrHidePresentWarn(true)
+      Taro.showModal({
+        title: '提示',
+        content: '成功下单后，若取消订单则\n' +
+        '          不会退返满单资格'
+      }).then(({confirm}) => {
+        confirm && this.stepPay(1)
+      })
       return
     }
-
-    this.showOrHidePresentWarn(false)
 
     const {userPhoneNum, orderType, selectedAddress} = this.state
     const store_id = this.$router.params.store_id
@@ -598,10 +600,6 @@ class Order extends Component {
     }
   }
 
-  showOrHidePresentWarn = bool => {
-    this.setState({isShowPresentWarn: bool})
-  }
-
   alertPhoneClose = () => {
     this.setState({
       alertPhone: false,
@@ -646,7 +644,7 @@ class Order extends Component {
       couponList, userAddress, amount, reserveTime,
       isShowAddress, userPhoneNum, selectedAddress,
       alertPhone, alertPhoneText, goods, dayIndex, timeIndex, isFullPrice,
-      fullPrice, memoFocus, isShowPresentWarn
+      fullPrice, memoFocus
     } = this.state
 
     const isIphoneX = !!(this.props.systemInfo.model &&
@@ -1058,16 +1056,6 @@ class Order extends Component {
           icon='iphone' hasMask onClose={this.alertPhoneClose}
         />
 
-        <ConfirmModal
-          show={isShowPresentWarn}
-          title='提示'
-          theme={theme}
-          onCancel={this.showOrHidePresentWarn.bind(this, false)}
-          onOk={this.stepPay.bind(this, 1)}
-        >
-          成功下单后，若取消订单则
-          不会退返满单资格
-        </ConfirmModal>
       </View>
       :
       <Loading />

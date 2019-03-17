@@ -282,10 +282,9 @@ class PresentGood extends Component {
                     </View>
                     <View className='info'>
                       <View className='name'>{good.g_title}</View>
-                      {
-                        good.g_original_price * 1 !== 0 &&
-                        <View className='pre-price'>&yen;{good.g_original_price}</View>
-                      }
+                      <View className='pre-price' style={{visibility: good.g_original_price * 1 === 0 ? 'hidden' : 'visible'}}>
+                        &yen;{good.g_original_price}
+                      </View>
                       <View className='price'><Text>&yen;</Text>
                         <Text className='font-xin-normal'>{good.g_price}</Text>
                       </View>

@@ -5,7 +5,7 @@ import {connect} from '@tarojs/redux'
 import classnames from 'classnames'
 import Modal from '../../components/modal'
 import PayBox from '../../components/pay-box'
-import ConfirmModal from '../../components/confirm-modal'
+// import ConfirmModal from '../../components/confirm-modal'
 import Loading from '../../components/Loading'
 import Numbox from '../../components/num-box'
 import Curtain from '../../components/curtain'
@@ -31,7 +31,7 @@ class ShopIndex extends Component {
     isGoodNull: false,
     isShowDetail: false,
     isShowOptions: false,
-    isShowCartWarn: false,
+    // isShowCartWarn: false,
     curCart: {},
     curGood: {},
     stanInfo: {},
@@ -323,9 +323,9 @@ class ShopIndex extends Component {
     })
   }
 
-  showOrHideCartWarn = (bool) => {
-    this.setState({isShowCartWarn: bool})
-  }
+  // showOrHideCartWarn = (bool) => {
+  //   this.setState({isShowCartWarn: bool})
+  // }
 
   clearCart = () => {
     this.props.dispatch({
@@ -336,7 +336,7 @@ class ShopIndex extends Component {
     })
     this.setState({
       isShowCart: false,
-      isShowCartWarn: false,
+      // isShowCartWarn: false,
       isShowOptions: false,
       isShowDetail: false
     })
@@ -382,6 +382,14 @@ class ShopIndex extends Component {
     })
   }
 
+  askClearCart = () => {
+    Taro.showModal({
+      content: '清空购物车？'
+    }).then(({confirm}) => {
+      confirm && this.clearCart()
+    })
+  }
+
 
   render() {
     const {theme, menu_banner, menu_cart} = this.props
@@ -391,7 +399,7 @@ class ShopIndex extends Component {
     const {
       group, curClassifyIndex, isShowCart, isGoodNull,
       isShowDetail, isShowOptions, curGroupId, curGood, curCart,
-      curGroupGoodId, isShowCartWarn, stanInfo, propertyTagIndex,
+      curGroupGoodId, stanInfo, propertyTagIndex,
       optionalTagIndex, scrollCurGroupId
     } = this.state
 
@@ -552,7 +560,7 @@ class ShopIndex extends Component {
           className={classnames('cart', isShowCart && carts.length > 0 ? 'active' : '')}>
           <View className='cart-head'>
             <Image src={require('../../assets/images/icon-trash.png')}/>
-            <Text onClick={this.showOrHideCartWarn.bind(this, true)}>清空购物车</Text>
+            <Text onClick={this.askClearCart}>清空购物车</Text>
           </View>
           <ScrollView scrollY className='cart-list'>
             {
@@ -830,7 +838,7 @@ class ShopIndex extends Component {
           onOpenCart={this.ToggleShowCart}
         />
 
-        <ConfirmModal
+        {/*<ConfirmModal
           show={isShowCartWarn}
           className='clear-cart-modal'
           theme={theme}
@@ -839,7 +847,7 @@ class ShopIndex extends Component {
           onOk={this.clearCart}
         >
           清空购物车?
-        </ConfirmModal>
+        </ConfirmModal>*/}
 
         <AtToast
           className='null-toast'
