@@ -606,6 +606,9 @@ class ShopIndex extends Component {
                               + (
                                 good.optional ?
                                   good.optional.reduce((total, item, i) => {
+                                  console.log(item.list)
+                                    console.log(good.optionalTagIndex, i)
+                                    return total += 1.1
                                     return total += +item.list[good.optionalTagIndex[i]].gn_price
                                   }, 0)
                                   : 0

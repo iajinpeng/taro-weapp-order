@@ -282,12 +282,10 @@ class OrderDetail extends Component {
 
     this.setState({
       isShowCoupon: false,
-      isShowMap: true
     })
 
     if (curCouponIndex + 2 <= coupon.length) {
       this.curCouponIndex  ++
-      this.setState({isShowMap: false})
       setTimeout(() => {
         this.setState({
           isShowCoupon: true,
@@ -325,7 +323,7 @@ class OrderDetail extends Component {
               && data.o_order_status !== 8 &&
               <Block>
                 {
-                  isShowMap ?
+                  isShowMap && !isShowCoupon ?
                     <Map
                       id='map'
                       className='map'
