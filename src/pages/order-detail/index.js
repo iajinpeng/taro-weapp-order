@@ -472,7 +472,8 @@ class OrderDetail extends Component {
                 }
 
                 {
-                  (data.o_order_status === 3 || data.o_order_status === 4) &&
+                  (data.o_order_status === 3 || data.o_order_status === 4 || data.o_order_status === 31
+                  || data.o_order_status === 32 || data.o_order_status === 41 || data.o_order_status === 42) &&
                   <View className={classnames('contact')}
                     onClick={this.contactVendor.bind(this, data.s_telephone)}
                   >

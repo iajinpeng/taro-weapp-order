@@ -39,9 +39,9 @@ class App extends Component {
       navigationBarTextStyle: 'black',
       backgroundColor: '#f5f5f5',
     },
-    networkTimeout: {
-      request: 5000
-    }
+    // networkTimeout: {
+    //   request: 5000
+    // }
   }
 
 

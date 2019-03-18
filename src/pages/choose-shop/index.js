@@ -3,7 +3,6 @@ import {connect} from '@tarojs/redux'
 import {View, Text, Map, ScrollView, Input, Block} from '@tarojs/components'
 import {AtIcon, AtIndexes} from 'taro-ui'
 import classnames from 'classnames'
-// import ConfirmModal from '../../components/confirm-modal'
 import IdButton from '../../components/id-button'
 import Copyright from '../../components/copyright'
 import Loading from '../../components/Loading'
@@ -28,15 +27,12 @@ class Choose extends Component {
     isRenderMap: false,
     isShowCitys: false,
     isSearching: false,
-    // isShowDistanceWarn: false,
-    // isShowNullWarn: false,
     isShowMap: true,
     keyword: '',
     markers: [],
     store: null,
     storeFilter: [],
     selectedStoreIndex: 0,
-    warnDistance: '',
     scrollStoreId: '',
     longitude: '',
     latitude: '',
@@ -109,7 +105,6 @@ class Choose extends Component {
     }).then(res => {
       this.setState({
         store: res.store,
-        // isShowNullWarn: res.store.length === 0
       })
 
       res.store.length === 0 &&

@@ -322,25 +322,30 @@ class Order extends Component {
     })
   }
 
-  autoInputMobile = (e) => {
+  autoInputMobile = async (e) => {
     if (!e.detail.encryptedData) return
 
     const {encryptedData, iv} = e.detail
-    this.props.dispatch({
+    let res = await this.props.dispatch({
       type: 'common/getUserMobile',
       payload: {
         encryptedData, iv
       }
-    }).then(res => {
-      if (typeof res === 'number' || typeof res === 'string') {
-        this.setState({userPhoneNum: res})
-      } else {
-        Taro.showToast({
-          title: '获取手机号失败，请重试或手动填写！',
-          icon: 'none'
-        })
-      }
     })
+
+    if (typeof res === 'number' || typeof res === 'string') {
+      this.setState({userPhoneNum: res})
+    } else {
+
+      await this.props.dispatch({type: 'common/requestLogin'})
+
+      this.autoInputMobile(e)
+
+      // Taro.showToast({
+      //   title: '获取手机号失败，请重试或手动填写！',
+      //   icon: 'none'
+      // })
+    }
   }
 
   phoneNumInput = e => {
@@ -470,6 +475,8 @@ class Order extends Component {
 
   stepPay = async (noWarn) => {
 
+    if (this.paying) return
+
     if (noWarn !== 1 && this.props.carts[this.$router.params.store_id].some(item => item.fs_id)) {
       Taro.showModal({
         title: '提示',
@@ -512,6 +519,7 @@ class Order extends Component {
       }
     }
 
+    this.paying = true
     const response = await this.requestSaveOrder()
 
     if (!response) {
@@ -543,6 +551,7 @@ class Order extends Component {
           title: res.message,
           icon: 'none'
         })
+        this.paying = false
       } else {
         const isPayed = await Taro.requestPayment({
           ...res,
@@ -582,6 +591,7 @@ class Order extends Component {
       }
 
       setTimeout(() => {
+        this.paying = false
         Taro.redirectTo({
           url: '/pages/order-detail/index?id=' + order_id + '&store_id=' + store_id
         })
@@ -593,6 +603,7 @@ class Order extends Component {
         mask: true
       })
       setTimeout(() => {
+        this.paying = false
         Taro.redirectTo({
           url: '/pages/order-detail/index?id=' + order_id + '&store_id=' + store_id
         })

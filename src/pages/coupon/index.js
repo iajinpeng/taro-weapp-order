@@ -30,7 +30,7 @@ class Coupon extends Component {
 
   canRequestMore = true
 
-  componentDidShow() {
+  componentDidMount() {
     this.requestCouponList().then(({total, rows}) => {
       this.setState({
         lists1: rows,
