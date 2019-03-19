@@ -81,7 +81,7 @@ class ChooseCoupon extends Component {
                   }
                   <View>
                     <View className='entity'>
-                      <View className={classnames('deno', coupon.available ? 'theme-bg-' + theme : '')}>
+                      <View className={classnames('deno', coupon.available ? 'theme-grad-bg-' + theme : '')}>
                         <View className='price'>
                           <Text>&yen;</Text>
                           <Text className='num font-xin-bold'>{coupon.uc_price}</Text>

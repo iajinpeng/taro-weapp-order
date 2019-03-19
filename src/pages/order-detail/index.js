@@ -73,10 +73,14 @@ class OrderDetail extends Component {
       payload: {
         id: this.$router.params.id
       }
-    }).then((data) => {
+    }).then(async (data) => {
+      if (!this.b_logo_img) {
+        let imgInfo = await Taro.getImageInfo({src: b_logo})
+        this.b_logo_img = imgInfo.path
+      }
       let mapAttrs = {
         markers: [{
-          iconPath: b_logo,
+          iconPath: this.b_logo_img,
           width: 40,
           height: 40,
           longitude: data.s_address_lng,
@@ -96,8 +100,9 @@ class OrderDetail extends Component {
       }
 
       if (+data.o_order_status === 42) {
+        let { path: u_avatar } = await Taro.getImageInfo({src: data.u_avatar})
         mapAttrs.markers.push({
-          iconPath: data.u_avatar,
+          iconPath: u_avatar,
           width: 40,
           height: 40,
           id: '_' + data.o_id,

@@ -389,12 +389,12 @@ class Order extends Component {
 
   requestSaveOrder = () => {
 
-    const {carts, curCouponIndex} = this.props
+    const { curCouponIndex} = this.props
 
     const {orderType, takeType, userPhoneNum, reserveTime, memo, couponList,
       dayIndex, timeIndex, selectedAddress} = this.state
 
-    const goods = carts[this.$router.params.store_id].map(cart => {
+    const goods = this.state.goods.map(cart => {
       let {g_id, num, send_goods, fs_id} = cart
       let g_property = [], optional = [], g_property_array = []
 
@@ -480,8 +480,7 @@ class Order extends Component {
     if (noWarn !== 1 && this.props.carts[this.$router.params.store_id].some(item => item.fs_id)) {
       Taro.showModal({
         title: '提示',
-        content: '成功下单后，若取消订单则\n' +
-        '          不会退返满单资格'
+        content: '成功下单后，若取消订单则\n不会退返满单资格'
       }).then(({confirm}) => {
         confirm && this.stepPay(1)
       })

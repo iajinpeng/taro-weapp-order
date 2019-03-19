@@ -5,6 +5,7 @@ import {AtIcon} from 'taro-ui'
 import classnames from 'classnames'
 import Copyright from '../../components/copyright'
 import BackToHome from '../../components/back-to-home'
+import Loading from '../../components/Loading'
 import {getTouchData} from '../../utils/utils'
 import './index.less'
 import nullImage from '../../assets/images/icon-coupon-null.png'
@@ -20,6 +21,7 @@ class Coupon extends Component {
     type: 1,
     page: 1,
     page_size: 5,
+    isRequested: false,
     lists1: [],
     lists2: [],
     total1: 0,
@@ -34,7 +36,8 @@ class Coupon extends Component {
     this.requestCouponList().then(({total, rows}) => {
       this.setState({
         lists1: rows,
-        total1: total
+        total1: total,
+        isRequested: true
       })
     })
     this.requestCouponList(2).then(({total, rows}) => {
@@ -156,11 +159,12 @@ class Coupon extends Component {
 
   render() {
     const {theme, userInfo} = this.props
-    const {type, openIndex, lists1, lists2, firstId} = this.state
+    const {type, openIndex, lists1, lists2, firstId, isRequested} = this.state
 
     const listArr = [lists1, lists2]
 
     return (
+      isRequested ?
       <View className='coupon' onTouchStart={this.handleTouchStart} onTouchEnd={this.handleTouchEnd}>
         <View className='title'>
           <View
@@ -248,6 +252,8 @@ class Coupon extends Component {
           <BackToHome />
         }
       </View>
+        :
+        <Loading />
     )
   }
 }
