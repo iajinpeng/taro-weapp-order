@@ -122,6 +122,8 @@ export default {
           id: +store_id,
         }
       })
+
+      return cartGoods
     }
   },
 

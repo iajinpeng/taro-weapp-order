@@ -83,12 +83,12 @@ class Index extends Component {
       }
     }).then(res => {
 
-      // if (res.under_review) {
-      //   Taro.redirectTo({
-      //     url: '/pages/alias/index'
-      //   })
-      //   return
-      // }
+      if (res.under_review) {
+        Taro.redirectTo({
+          url: '/pages/alias/index'
+        })
+        return
+      }
 
       this.setState({
         ...res

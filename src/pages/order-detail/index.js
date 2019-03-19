@@ -87,7 +87,7 @@ class OrderDetail extends Component {
             content: data.o_store_name,
             fontSize: 12,
             padding: 8,
-            display: 'ALWAYS',
+            display: +data.o_order_status === 42 && +data.take_id === 2 ? '' : 'ALWAYS',
             // bgColor: 'transparent',
             borderRadius: 4
           }
@@ -179,13 +179,15 @@ class OrderDetail extends Component {
     Taro.hideLoading()
   }
 
-  againOk = () => {
-    this.props.dispatch({
+  againOk = async () => {
+    const goods = await this.props.dispatch({
       type: 'order/repeatOrderAddCart',
       payload: this.state.addCartPayload
     })
+    let url = '/pages/shop-index/index?id=' + this.state.data.store_id
+    goods.length > 0 && (url += '&showcart=1')
     Taro.navigateTo({
-      url: '/pages/shop-index/index?id=' + this.state.data.store_id + '&showcart=1'
+      url
     })
   }
 

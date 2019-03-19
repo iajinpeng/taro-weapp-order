@@ -166,14 +166,15 @@ class Choose extends Component {
     })
   }
 
-  showShopMakers = ({brand, store}) => {
+  showShopMakers = async ({brand, store}) => {
     if (store.length === 0) return
 
+    const { path: iconPath } = await Taro.getImageInfo({src: brand.b_logo})
     let markers = []
 
     store.map(item => {
       markers.push({
-        iconPath: brand.b_logo,
+        iconPath,
         width: 40,
         height: 40,
         longitude: item.s_address_lng,
@@ -196,9 +197,9 @@ class Choose extends Component {
       markers,
       latitude,
       longitude,
-    }, () => {
-      this.setState({isRenderMap: true})
+      isRenderMap: true
     })
+
   }
 
   startOrder = store => {
@@ -238,14 +239,6 @@ class Choose extends Component {
     isScroll && this.setState({scrollStoreId: 'id' + item.s_id})
   }
 
-  confirmOrder = () => {
-    if (this.$router.params.type) {
-      this.toPresentPage()
-    } else {
-      this.toShopIndex()
-    }
-    this.showOrHideDistanceWarn(false)
-  }
 
   // showOrHideDistanceWarn = bool => {
   //   this.setState({isShowDistanceWarn: bool})
