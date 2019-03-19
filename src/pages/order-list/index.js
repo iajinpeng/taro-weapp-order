@@ -210,11 +210,11 @@ class OrderList extends Component {
   }
 
   againOk = async () => {
-    const goods = await this.props.dispatch({
+    const goods = this.props.dispatch({
       type: 'order/repeatOrderAddCart',
       payload: this.state.addCartPayload
     })
-    let url = '/pages/shop-index/index?id=' + this.state.data.store_id
+    let url = '/pages/shop-index/index?id=' + this.state.curOrder.store_id
     goods.length > 0 && (url += '&showcart=1')
     Taro.navigateTo({
       url
