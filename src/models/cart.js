@@ -1,4 +1,5 @@
 import Taro from '@tarojs/taro';
+import { sortCartGood } from '../utils/utils'
 
 export default {
   namespace: 'cart',
@@ -7,7 +8,9 @@ export default {
     whatEver: 0
   },
 
-  effects: {},
+  effects: {
+
+  },
 
   reducers: {
     setAgainCart(state, {payload}) {
@@ -17,7 +20,7 @@ export default {
       !curCart && (curCart = [])
       goods.map(good => {
         if (!curCart.some(item => item.again_id === good.good.again_id)) {
-          curCart.push({...good.good, num: good.num})
+          curCart = sortCartGood(curCart, good.good, good.num)
         }
       })
       state.carts[id] = curCart
@@ -51,37 +54,7 @@ export default {
           curCart.push({...good, num})
         }
       } else {
-        if (!good.propertyTagIndex) {
-          let index = curCart.findIndex(item => !item.fs_id && (item.g_id === good.g_id))
-
-          if (index > -1) {
-            !curCart[index].num && (curCart[index].num = 0)
-            curCart[index].num += num
-
-            curCart[index].num === 0 && curCart.splice(index, 1)
-          } else {
-            curCart.push({...good, num})
-          }
-        } else {
-          curCart.map((item, index) => item.index = index)
-          let idAlikes = curCart.filter(item => item.g_id === good.g_id)
-
-          if (idAlikes.length === 0) {
-            curCart.push({...good, num})
-          } else{
-            let index = idAlikes.findIndex(item => !item.fs_id && (item.optionalstr === good.optionalstr))
-            if (index > -1) {
-
-              let i = idAlikes[index].index
-              curCart[i].num += num
-              curCart[i].num === 0 && curCart.splice(i, 1)
-
-            } else {
-              curCart.push({...good, num})
-            }
-          }
-
-        }
+        curCart = sortCartGood(curCart, good, num)
 
       }
 
