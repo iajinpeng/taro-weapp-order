@@ -72,7 +72,7 @@ class CouponModal extends Component {
                   <View className='right'>
                     <View className='price'>
                       <Text>&yen;</Text>
-                      <Text className='font-xin-bold num'>{parseInt(item.uc_price)}</Text>
+                      <Text className='font-xin-bold num'>{item.uc_price}</Text>
                     </View>
                     <Button
                       openType={userInfo.userInfo ? '' : 'getUserInfo'}

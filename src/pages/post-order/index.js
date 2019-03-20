@@ -322,7 +322,7 @@ class Order extends Component {
     })
   }
 
-  autoInputMobile = async (e) => {
+  autoInputMobile = async (e, count) => {
     if (!e.detail.encryptedData) return
 
     const {encryptedData, iv} = e.detail
@@ -337,9 +337,12 @@ class Order extends Component {
       this.setState({userPhoneNum: res})
     } else {
 
-      await this.props.dispatch({type: 'common/requestLogin'})
+      if (!count) {
+        await this.props.dispatch({type: 'common/requestLogin'})
 
-      this.autoInputMobile(e)
+        this.autoInputMobile(e, 2)
+
+      }
 
       // Taro.showToast({
       //   title: '获取手机号失败，请重试或手动填写！',
